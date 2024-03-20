@@ -1,0 +1,35 @@
+.streakerGridItem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ebebeb;
+    opacity: 0.6;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.streakerGridItemNoBg {
+background-color: #fff;
+}
+
+.streakerGridItemDoneTrue {
+    opacity: 1;
+    background: rgba(0, 255, 87, 0.42);
+}
+
+.streakerGridItemDoneFalse {
+    opacity: 1;
+    background: rgba(255, 23, 0, 0.52);;
+}
+
+.streakerGridItemHasMessage {
+    color: #530DA2;
+    position: absolute;
+    top: -8px;
+    right: 0;
+}
+
+.streakerGridItemToday {
+    border: 4px solid black;
+}
