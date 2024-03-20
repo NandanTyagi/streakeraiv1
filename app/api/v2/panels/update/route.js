@@ -20,23 +20,25 @@ export const POST = async (req, res) => {
   try {
     const updateField = `cells`;
     const existingPanel = await Panel.findByIdAndUpdate(
-      _id ,
-      {cells: cells,
+      _id,
+      {
+        cells: cells,
         goalToAchieve: goalToAchieve,
         habitsNames: habitsNames,
         habitsValues: habitsValues,
         days: days,
         history: history,
-        user: user},
+        user: user,
+      },
       { new: true, upsert: true }
     );
     console.log("Updated cells", existingPanel.cells);
     return new NextResponse(JSON.stringify(existingPanel), {
-        status: 201,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      status: 201,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   } catch (error) {
     console.error("Panel update cells failed", error);
     return new NextResponse(
