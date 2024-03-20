@@ -18,7 +18,6 @@ export const POST = async (req, res) => {
   await connectDB();
 
   try {
-    const updateField = `cells`;
     const existingPanel = await Panel.findByIdAndUpdate(
       _id,
       {
