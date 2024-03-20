@@ -12,7 +12,6 @@ import dayjs from "dayjs";
       cells: panel.cells,
     };
 
-  // debugger;
   console.log("in savePanelToDb panel", panel);
   console.log("in savePanelToDb user email", userEmail);
 
