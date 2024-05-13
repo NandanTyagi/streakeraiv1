@@ -1,11 +1,14 @@
-import OpenAI from "openai";
+import { OpenAI } from "openai";
 import { systemPrompt } from "@/utils/openai/prompt";
+import * as dotenv from "dotenv";
 
-const apiKey = process.env.NEXT_PUBLIC_AI_API_KEY;
 async function createCompleation(input) {
+  dotenv.config();
   const openai = new OpenAI({
-    apiKey,
-    dangerouslyAllowBrowser: true,
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    organization: process.env.OPENAI_API_STREAKER_AI_ORG_ID,
+    project: process.env.OPENAI_API_PROJECT_ID,
+    dangerouslyAllowBrowser: true
   });
   const compleation = await openai.chat.completions.create({
     model: "gpt-4-1106-preview",

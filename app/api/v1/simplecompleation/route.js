@@ -8,7 +8,7 @@ import {systemPrompt} from "@/utils/openai/prompt";
 export const maxDuration = 300;
 export const dynamic = "force-dynamic";
 
-const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+const apiKey = process.env.OPENAI_API_KEY;
 const openai = new OpenAI({
     apiKey: apiKey,
 });
