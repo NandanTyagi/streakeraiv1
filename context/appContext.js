@@ -1,14 +1,12 @@
 "use client";
 
 import { createContext, useState, useEffect } from "react";
-import createInitialState from "@/utils/createInitialState";
-import getBoardsFromDb from "@/utils/getBoardsFromDb";
-import { set } from "mongoose";
 import generateEmptyBoard from "../utils/generateEmptyBoard";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import getCurrentUserBoardFromDb from "@/utils/getCurrentUserBoardFromDb";
 import generateEmptyBoardCells from "@/utils/generateEmptyBoardCells";
 import getDaysInMonth from "@/utils/getDaysInMonth";
+import createPanelInDb from "@/utils/v2/createPanelInDb";
 
 export const AppContext = createContext({
   users: [],
@@ -79,33 +77,34 @@ export function AppContextProvider({ children }) {
   const getBoard = async () => {
     try {
       setisAppLoading(true);
-      let fetchedCurrentUserBoard = null;
-      if (user) {
-        fetchedCurrentUserBoard = await getCurrentUserBoardFromDb(user?.email);
-        setBoard((prev) => (prev = fetchedCurrentUserBoard));
-        console.log("user in context", user);
-        console.log("board in context", fetchedCurrentUserBoard);
-        return;
-      }
 
-      if (!fetchedCurrentUserBoard) {
-        console.log("no board in context", fetchedCurrentUserBoard);
-        const emptyBoard = await generateEmptyBoard(user?.email);
-        setBoard(emptyBoard);
-        // setBoard((prev) => (prev = emptyBoard));
-        // getCells(emptyBoard.habitsNames, emptyBoard.boardId)
-        console.log("empty board in context", emptyBoard);
-      } else {
-        console.log("fetched board in context", fetchedCurrentUserBoard);
-        setBoard((prev) => (prev = fetchedCurrentUserBoard));
-        getCells(
-          fetchedCurrentUserBoard.habitsNames,
-          fetchedCurrentUserBoard.boardId
+      if (!isLoading) {
+        if (!user) {
+          setBoard(await generateEmptyBoard());
+          return;
+        }
+
+        const fetchedCurrentUserBoard = await getCurrentUserBoardFromDb(
+          user.email
         );
+        console.log("fetchedCurrentUserBoard", fetchedCurrentUserBoard);
+        if (!fetchedCurrentUserBoard) {
+          console.log(
+            "fetchedCurrentUserBoard ********FAIL***********",
+            fetchedCurrentUserBoard
+          );
+          const newEmptyPanel = await createPanelInDb(
+            await generateEmptyBoard(),
+            user.email
+          );
+          setBoard(newEmptyPanel);
+          return;
+        }
+
+        setBoard(fetchedCurrentUserBoard);
       }
     } catch (error) {
       console.error("Failed to fetch board:", error);
-      // Handle the error appropriately
     } finally {
       setisAppLoading(false);
     }
@@ -114,21 +113,18 @@ export function AppContextProvider({ children }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setisAppLoading(true); // Consider setting this only once if both loadings are related
-        await getUser();
-        await getBoard();
-        // This should set the board and related states
+        setisAppLoading(true);
+        const [user, board] = await Promise.all([getUser(), getBoard()]);
       } catch (error) {
         console.error("Error fetching data:", error);
-        // Handle any errors here
       } finally {
-        setisAppLoading(false); // Reflect that overall app loading is done
-        setIsCellLoading(false); // Reflect that cell loading is done
+        setisAppLoading(false);
+        setIsCellLoading(false);
       }
     };
 
     fetchData();
-  }, [isLoading, user]); // Consider the correct dependencies based on your needs
+  }, [isLoading, user]);
 
   return (
     <AppContext.Provider

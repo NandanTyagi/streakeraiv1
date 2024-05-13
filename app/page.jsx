@@ -20,7 +20,6 @@
 
 "use client";
 import Intro from "@/components/Intro";
-import Image from "next/image";
 import {
   useEffect,
   useState,
@@ -29,15 +28,9 @@ import {
   useLayoutEffect,
 } from "react";
 import { AppContext } from "@/context/appContext";
-import Loading from "@/components/Loading";
-import About from "@/components/About";
 import Nav from "@/components/Nav";
 import { useRouter } from "next/navigation";
-import StreamComponent from "@/components/StreamComponent";
-import parseAndExtract from "@/utils/openai/parseAndExtract";
 import { Button } from "@/components/ui/button/Button";
-import GenerateStreakerBoardButton from "@/components/GenerateStreakerBoardButton";
-import Link from "next/link";
 import {
   RegisterLink,
   LoginLink,
@@ -51,21 +44,11 @@ export default function Home() {
   const [showDialog, setShowDialog] = useState(false);
   const {
     board,
-    setBoard,
-    isAppLoading,
-    setCellisAppLoading,
-    setisAppLoading,
-    openAIResponse,
     openAIResponseHeadersNames,
     openAIResponseHeadersValues,
   } = useContext(AppContext);
 
-  // const handelHabits = (habitKeys, habitValues) => {
-  //   setBoard({ ...board, habitsNames: habitKeys, habitsValues: habitValues });
-  // };
-
   useEffect(() => {
-    // handelHabits(parseAndExtract(openAIResponse).habitKeys, parseAndExtract(openAIResponse).habitValues);
     console.log("openairesponseheaders", openAIResponseHeadersNames);
     console.log("openairesponseheadersvalues", openAIResponseHeadersValues);
   }, [board, openAIResponseHeadersNames, openAIResponseHeadersValues]);
@@ -83,7 +66,6 @@ export default function Home() {
           <Nav />
         </div>
       </div>
-      {/* {!isAppLoading ? ( */}
       <main className="relative flex flex-col justify-center min-h-[fill-available] h-[calc(100vh - 160px)]">
         <>
           <div className="h-[100%]  bg-white">
@@ -95,16 +77,16 @@ export default function Home() {
               ref={signUpRef}
             >
               <h2 className="text-2xl font-bold mb-6 sm:w-[50%] sm:p-10 sm:text-4xl">
-                Empowering your journey towards excellence
+              Track the things you want to track
               </h2>
 
               <div className="text-lg sm:w-[50%] sm:p-10">
                 <p>
-                  At StreakerAi, we believe in the power of habit. Small, daily
+                  The power of repetition is immense. Small, daily
                   actions culminate into significant transformations, leading
-                  you closer to your personal aspirations. Our mission is to
-                  support you on this journey of self-improvement and goal
-                  achievement
+                  you closer to your aspirations. StreakerAi provides a framework to
+                  support you on the journey of improvement and goal
+                  achievement.
                 </p>
                 <div className="flex justify-around gap-10 pt-10">
                   <Button

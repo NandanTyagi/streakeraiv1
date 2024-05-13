@@ -30,7 +30,7 @@ const CellDialog = ({message, handleClick, handleDoubleClick, handleMouseDown, h
         </fieldset>
         <div style={{ display: 'flex', marginTop: 25, justifyContent: 'flex-end' }}>
           <Dialog.Close asChild>
-            <button className="Button green">Save changes</button>
+            {/* <button className="Button green">Save changes</button> */}
           </Dialog.Close>
         </div>
         <Dialog.Close asChild>

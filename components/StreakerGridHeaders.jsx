@@ -19,8 +19,6 @@ const StreakerGridHeaders = ({ isEmpty = false }) => {
   const params = useSearchParams();
 
   const handleNamesAndValues = (headerNames, headerValues, headerGoal) => {
-    // if (headerNamesLocal.length > 0 || headerValuesLocal.length > 0) return;
-
     const namesArray = headerNames.split(",");
     const valuesArray = headerValues.split(",");
     setHeaderNamesLocal(namesArray);
@@ -52,7 +50,7 @@ const StreakerGridHeaders = ({ isEmpty = false }) => {
       headerValuesParams,
       headerGoalParams
     );
-  }, [params]); // This will ensure the effect runs when the URL parameters change
+  }, [params]);
 
   useEffect(() => {
     const headerNamesParams = params.get("headerNames");
@@ -60,9 +58,9 @@ const StreakerGridHeaders = ({ isEmpty = false }) => {
       setHeaderNamesLocal(board?.habitsNames);
       setHeaderValuesLocal(board?.habitsValues);
     }
-  }, [board]); // This effect is dependent on board updates
+  }, [board]);
 
-  if (isAiGenerated) {
+  if (isAiGenerated || user) {
     return (
       <>
         <div className="flex flex-col justify-center items-center text-[0.65rem] sm:text-[0.8rem] sm:font-semibold">

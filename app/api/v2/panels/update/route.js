@@ -28,10 +28,11 @@ export const POST = async (req, res) => {
         days: days,
         history: history,
         user: user,
+        _id: _id,
       },
       { new: true, upsert: true }
     );
-    console.log("Updated cells", existingPanel.cells);
+    console.log("Updated cells", existingPanel);
     return new NextResponse(JSON.stringify(existingPanel), {
       status: 201,
       headers: {

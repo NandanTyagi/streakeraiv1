@@ -33,7 +33,7 @@ const DialogButton = ({habit = null, value, onChange }) => (
         </fieldset>
         <div style={{ display: 'flex', marginTop: 25, justifyContent: 'flex-end' }}>
           <Dialog.Close asChild>
-            <button className="Button green save hover:cursor-pointer">Save changes</button>
+            {/* <button className="Button green save hover:cursor-pointer">Save changes</button> */}
           </Dialog.Close>
         </div>
         <Dialog.Close asChild>

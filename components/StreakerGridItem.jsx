@@ -19,7 +19,7 @@ const StreakerGridItem = ({
   day,
   user,
   isLoading,
-  cell
+  cell,
 }) => {
   const {
     board,
@@ -44,7 +44,6 @@ const StreakerGridItem = ({
   const [currentCell, setCurrentCell] = useState(
     cells ? [currentCellIndexLocal ? currentCellIndexLocal : 0] : null
   );
-  // const { isAuthenticated, user, isLoading } = useKindeBrowserClient();
   const buttonIsClearRef = useRef(null);
   const buttonIsDoneRef = useRef(null);
   const todayRef = useRef(null);
@@ -81,7 +80,7 @@ const StreakerGridItem = ({
     // console.log("updated cell", updatedCell);
 
     setBoard((prevBoard) => {
-      if (prevBoard.boardUser && prevBoard.boardUser !== user?.email) {
+      if (prevBoard?.boardUser && prevBoard.boardUser !== user?.email) {
         prevBoard.boardUser = user?.email;
       }
       // Check if the cell already exists in the array
@@ -167,7 +166,7 @@ const StreakerGridItem = ({
       const newTimeout = setTimeout(() => {
         // Single-click logic
 
-        const currentCellIndex = board?.cells.findIndex(
+        const currentCellIndex = board?.cells?.findIndex(
           (cell) => cell.id === `${rowNr}-${colNr}`
         );
         setCurrentCellIndexLocal(currentCellIndex);
@@ -175,7 +174,7 @@ const StreakerGridItem = ({
         setIsDoneLocal(!isDoneLocal);
         let newD = dayjs();
         let date = newD.format();
-        let cellExists = board?.cells[currentCellIndexLocal];
+        let cellExists = board?.cells?.[currentCellIndexLocal];
         if (
           cellExists &&
           board.cells[currentCellIndexLocal].id === `${rowNr}-${colNr}`
@@ -212,7 +211,7 @@ const StreakerGridItem = ({
     setIsClearLocal(true);
     let newD = dayjs();
     let date = newD.format();
-    let cellExists = board?.cells[currentCellIndexLocal];
+    let cellExists = board?.cells?.[currentCellIndexLocal];
 
     if (
       cellExists &&
@@ -239,7 +238,7 @@ const StreakerGridItem = ({
     }
     console.log(
       `DoubleClicked current cell info`,
-      board.cells[currentCellIndexLocal]
+      board?.cells?.[currentCellIndexLocal]
     );
   };
 
@@ -258,7 +257,7 @@ const StreakerGridItem = ({
     // console.log("isDone", isDone);
     // console.log("isClearLocal", isClearLocal);
     // console.log("isClear", isClear);
-  }, [isClear, isDone,isDoneLocal,isClearLocal]);
+  }, [isClear, isDone, isDoneLocal, isClearLocal]);
 
   return (
     <>

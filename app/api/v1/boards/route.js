@@ -1,13 +1,10 @@
-// pages/api/boards.js (assuming you're working with a single file for simplicity)
 export const dynamic = "force-dynamic";
-import { NextResponse } from "next/server";
 import Board from "../../../../models/StreakerBoard";
 import connectDB from "../../../../utils/db";
 
 // Connect to the database once for all routes
 connectDB();
 
-// Handler for GET requests
 export const GET = async () => {
   try {
     const boards = await Board.find({});
@@ -28,7 +25,6 @@ export const GET = async () => {
   }
 };
 
-// Handler for POST requests
 export const POST = async (req) => {
   const { boardUser, ...boardDetails } = await req.json();
   
@@ -45,11 +41,9 @@ export const POST = async (req) => {
         },
       });
     } else {
-      // Create new board
-      const newBoard = new Board({ boardUser, ...boardDetails });
-      await newBoard.save();
-      return new Response(JSON.stringify({ board:newBoard, message: 'Board created' }), {
-        status: 201,
+      console.log('BLOCKED FOR TESTING');
+      return new Response(JSON.stringify({ error: 'BLOCKED FOR TESTING' }), {
+        status: 404,
         headers: {
           'Content-Type': 'application/json',
         },

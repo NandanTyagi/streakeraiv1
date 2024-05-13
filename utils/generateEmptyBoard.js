@@ -1,7 +1,5 @@
 import generateUUID from "@/utils/generateUUID";
 import generateEmptyBoardCells from "@/utils/generateEmptyBoardCells";
-import getBoardsFromDb from "./getBoardsFromDb";
-import getCurrentUserBoardFromDb from "./getCurrentUserBoardFromDb";
 
 const generateEmptyBoard = async (email) => {
   const currentBoard = null;

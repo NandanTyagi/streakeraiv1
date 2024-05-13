@@ -17,8 +17,14 @@ export const POST = async (request, { params }) => {
   }
 
   try {
-    const { goalToAchieve, habitsNames, habitsValues, days, history, cells, boardUser } =
-      await request.json();
+    const {
+      goalToAchieve,
+      habitsNames,
+      habitsValues,
+      days,
+      history,
+      cells
+    } = await request.json();
     await connectDB();
     const exisitingUser = await User.findOne({ email: user.email });
     if (!exisitingUser) {
