@@ -17,6 +17,10 @@ const Nav = ({ isNav = true }) => {
   const [dialogValue, setDialogValue] = useState(board?.goalToAchieve || "");
 
   const handelCtxMenu = async (e) => {
+    if(isSaved) {
+      alert("Board already saved");
+      return;
+    }
     e.preventDefault();
     
     console.log("ctx menu", board);
