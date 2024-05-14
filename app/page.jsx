@@ -1,22 +1,3 @@
-// import Nav from "@/components/Nav";
-
-// export default function Home() {
-
-//   return (
-//     <>
-//       <div className="flex justify-center items-center bg-[#EBEBEB] text-md font-semibold">
-//         <div className="">
-//           <Nav/>
-//         </div>
-//       </div>
-//       <main className="relative flex flex-col justify-center h-[100%]">
-//         <>
-//           <Intro />
-//         </>
-//       </main>
-//     </>
-//   );
-// }
 
 "use client";
 import Intro from "@/components/Intro";
@@ -92,14 +73,14 @@ export default function Home() {
                   <Button
                     id="button"
                     type="button"
-                    className="bg-[#EBEBEB] font-bold text-[1.1rem] sm:max-w-[300px] max-w-[200px] text-[#530DA2] cursor-pointer w-[stretch]"
+                    className="bg-[#EBEBEB] font-semibold text-[1.1rem] sm:max-w-[300px] max-w-[200px] text-[#530DA2] cursor-pointer w-[stretch]"
                   >
                     <LoginLink>Log in</LoginLink>
                   </Button>
                   <Button
                     id="button"
                     type="button"
-                    className="bg-[#530DA2] font-bold text-[1.1rem] sm:max-w-[300px] max-w-[200px] text-white cursor-pointer w-[stretch]"
+                    className="bg-[#530DA2] font-semibold text-[1.1rem] sm:max-w-[300px] max-w-[200px] text-white cursor-pointer w-[stretch]"
                   >
                     <RegisterLink>Sign up</RegisterLink>
                   </Button>
@@ -237,7 +218,7 @@ export default function Home() {
                     id="button"
                     type="button"
                     onClick={() => router.push("/generategoals")}
-                    className="bg-[#530DA2] font-bold text-[1.1rem] sm:max-w-[300px] max-w-[100%] text-white cursor-pointer w-[stretch]"
+                    className="bg-[#530DA2] font-semibold text-[1.1rem] sm:max-w-[300px] max-w-[100%] text-white cursor-pointer w-[stretch]"
                   >
                     Try free!
                   </Button>

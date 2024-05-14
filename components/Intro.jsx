@@ -60,7 +60,7 @@ const Intro = () => {
         <h1 className={`font-bold  text-5xl sm:text-9xl text-white opacity-[1] mb-4 sm:mb-20`} id="streaker">
           Streaker.ai
         </h1>
-        <Button id="button" type="button" onClick={() => router.push('/generategoals')} className="bg-[#530DA2] font-bold text-[1.1rem] sm:max-w-[300px] max-w-[200px] text-white cursor-pointer w-[stretch]">Identify your goals now!</Button>
+        <Button id="button" type="button" onClick={() => router.push('/generategoals')} className="bg-[#530DA2] font-semibold text-[1.1rem] sm:max-w-[300px] max-w-[200px] text-white cursor-pointer w-[stretch]">Identify your goals now!</Button>
       </div>
     </div>
   );
