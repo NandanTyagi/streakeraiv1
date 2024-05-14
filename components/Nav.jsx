@@ -32,7 +32,7 @@ const Nav = ({ isNav = true }) => {
         return;
       }
       if (!user) {
-        alert(`Board not saved. Please log in to save changes.`);
+        alert(`Not saved! Please login to save changes.`);
         setIsSaved(true);
         return;
       }
