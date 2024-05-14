@@ -7,7 +7,6 @@ import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useSearchParams } from "next/navigation";
 import HeaderItem from "./HeaderItem";
 import dayjs from "dayjs";
-import { set } from "mongoose";
 
 const StreakerGridHeaders = ({ isEmpty = false }) => {
   const { board, setBoard, isAppLoading, setisAppLoading, setIsCellLoading } =

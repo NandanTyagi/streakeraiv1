@@ -14,7 +14,7 @@ const HeaderItem = ({ column, description, value }) => {
   const handleClick = (e, field) => {
     const newValue = e.target.value;
     if(isSaved) {
-      
+      setIsSaved(false);
     }
 
     if (field === "activity") {

@@ -18,21 +18,22 @@ const Nav = ({ isNav = true }) => {
 
   const handelCtxMenu = async (e) => {
     if(isSaved) {
-      alert("Board already saved");
+      alert("No changes to save");
       return;
     }
     e.preventDefault();
     
     console.log("ctx menu", board);
 
-    const save = window.confirm("Do you want to save this board?");
+    const save = window.confirm("Do you want to save changes?");
     if (save) {
       console.log("save board", board);
       if (!board) {
         return;
       }
       if (!user) {
-        alert(`Board not saved. Please log in to save your board.`);
+        alert(`Board not saved. Please log in to save changes.`);
+        setIsSaved(true);
         return;
       }
       const panelSaved = await savePanelToDb(board, user?.email);
@@ -41,7 +42,7 @@ const Nav = ({ isNav = true }) => {
         return;
       }
       setIsSaved(true);
-      alert("Board saved");
+      alert("All changes saved!");
       console.log("panelSaved", panelSaved);
     }
   };

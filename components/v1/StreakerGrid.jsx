@@ -66,8 +66,8 @@ const StreakerGrid = () => {
             return {
               rowNr: dayIndex + 1,
               colNr: colIndex + 1,
-              isDone: cell?.isDone,
-              isClear: cell?.isClear,
+              isDone: cell ? cell.isDone : false,
+              isClear: cell ? cell.isClear: true,
               message: cell?.comment,
               isToday: dayIndex + 1 === today,
               cell: cell,
