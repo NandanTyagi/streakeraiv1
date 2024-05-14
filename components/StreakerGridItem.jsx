@@ -29,6 +29,8 @@ const StreakerGridItem = ({
     isCellLoading,
     setIsCellLoading,
     isAppLoading,
+    isSaved,
+    setIsSaved,
   } = useContext(AppContext);
 
   const [isDoneLocal, setIsDoneLocal] = useState(isDone);
@@ -112,6 +114,9 @@ const StreakerGridItem = ({
   };
 
   const handleMouseDown = () => {
+    if(isSaved) {
+      setIsSaved(false);
+    }
     const timeoutId = window.setTimeout(() => {
       let input;
 
@@ -157,6 +162,9 @@ const StreakerGridItem = ({
   };
 
   const handleClick = (e) => {
+    if(isSaved) {
+      setIsSaved(false);
+    }
     if (clickTimeout) {
       clearTimeout(clickTimeout);
       setClickTimeout(null);
@@ -208,6 +216,9 @@ const StreakerGridItem = ({
   };
 
   const handleDoubleClick = () => {
+    if(isSaved) {
+      setIsSaved(false);
+    }
     setIsClearLocal(true);
     let newD = dayjs();
     let date = newD.format();

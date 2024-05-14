@@ -28,6 +28,7 @@ export const AppContext = createContext({
   openAIResponseHeadersNames: [],
   openAIResponseHeadersValues: [],
   goalToAchieve: "",
+  isSaved: true,
   setGoalToAchieve: () => {},
   setisAppLoading: () => {},
   setOpenAIResponse: () => {},
@@ -37,6 +38,7 @@ export const AppContext = createContext({
   setBoardUser: () => {},
   setOpenAIResponseHeadersNames: () => {},
   setOpenAIResponseHeadersValues: () => {},
+  setIsSaved: () => {},
 });
 
 export function AppContextProvider({ children }) {
@@ -61,6 +63,7 @@ export function AppContextProvider({ children }) {
   const [openAIResponseHeadersValues, setOpenAIResponseHeadersValues] =
     useState();
   const [goalToAchieve, setGoalToAchieve] = useState();
+  const [isSaved, setIsSaved] = useState(true);
 
   const getCells = (habitsNames, boardId) => {
     const days = getDaysInMonth(new Date());
@@ -147,6 +150,7 @@ export function AppContextProvider({ children }) {
         openAIResponseHeadersNames,
         openAIResponseHeadersValues,
         goalToAchieve,
+        isSaved,
         setUsers,
         setBoardUser,
         setBoards,
@@ -166,6 +170,7 @@ export function AppContextProvider({ children }) {
         setOpenAIResponseHeadersNames,
         setOpenAIResponseHeadersValues,
         setGoalToAchieve,
+        setIsSaved
       }}
     >
       {children}

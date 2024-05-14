@@ -49,7 +49,6 @@ async function updatePanelInDb(panel, history) {
         _id: panel._id,
       }),
     });
-    debugger;
     if (res.status === 201) {
       return { saved: true, message: "Panel updated", panel: await res.json() };
     }

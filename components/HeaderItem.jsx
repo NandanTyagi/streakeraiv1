@@ -1,4 +1,3 @@
-import { set } from "mongoose";
 import { useEffect, useState, useContext } from "react";
 import { AppContext } from "@/context/appContext";
 import Dialog from "@/components/ui/Dialog";
@@ -9,43 +8,53 @@ const HeaderItem = ({ column, description, value }) => {
   const { isAuthenticated, user, isLoading } = useKindeBrowserClient();
   const [activityInputLocal, setActivityInputLocal] = useState(description);
   const [valueInputLocal, setValueInputLocal] = useState(value);
-  const { board, setBoard, isAppLoading, setisAppLoading, setIsCellLoading } =
+  const { board, setBoard, isAppLoading, setisAppLoading, setIsCellLoading, isSaved , setIsSaved } =
     useContext(AppContext);
-  const handelClick = (e, field) => {
-    // const activityInput = window.prompt("Enter activity name");
-   
-    if (field === "activity") {
-      setActivityInputLocal(e.target.value);
-    }
-    // if (!activityInputLocal) {
-    //   return;
-    // }
 
-    if (field === "value") {
-      setValueInputLocal(e.target.value);
+  const handleClick = (e, field) => {
+    const newValue = e.target.value;
+    if(isSaved) {
+      
     }
-    // if (!valueInputLocal) {
-    //   return;
-    // }
+
+    if (field === "activity") {
+      setActivityInputLocal(newValue);
+    }
+    
+    if (field === "value") {
+      setValueInputLocal(newValue);
+    }
+
     if (!isAuthenticated) {
       return;
     }
+
     setBoard((prevBoard) => {
       const nameIndex = prevBoard.habitsNames.indexOf(description);
       const valueIndex = prevBoard.habitsValues.indexOf(value);
-      prevBoard.habitsNames[nameIndex] = activityInputLocal;
-      prevBoard.habitsValues[valueIndex] = valueInputLocal;
-      return {
-        ...prevBoard,
-      };
+      const newBoard = { ...prevBoard };
+      newBoard.habitsNames[nameIndex] = field === "activity" ? newValue : activityInputLocal;
+      newBoard.habitsValues[valueIndex] = field === "value" ? newValue : valueInputLocal;
+      return newBoard;
     });
-    user && handelBoards(board, user?.email);
+
+    if (user) {
+      handelBoards(board, user.email);
+    }
   };
+
   useEffect(() => {
-  }, [activityInputLocal, valueInputLocal]);
+    // Example: console.log to demonstrate useEffect with dependencies
+    console.log("Activity or value changed", { activityInputLocal, valueInputLocal, board, user });
+  }, [activityInputLocal, valueInputLocal, board, user]);
+
   return (
     <div className="flex flex-col justify-center text-[0.5rem] items-center mb-[0]">
-      <Dialog habit={activityInputLocal ? activityInputLocal : description} value={valueInputLocal ? valueInputLocal : value} onChange={handelClick} />
+      <Dialog
+        habit={activityInputLocal || description || ' '}
+        value={valueInputLocal || value || ' '}
+        onChange={handleClick}
+      />
     </div>
   );
 };

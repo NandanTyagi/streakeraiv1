@@ -13,11 +13,12 @@ const Nav = ({ isNav = true }) => {
   const { user } = useKindeBrowserClient();
   const [isAppLoading, setisAppLoading] = useState(false);
   const [showPanelSavedDialog, setShowPanelSavedDialog] = useState(false);
-  const { board, setBoard } = useContext(AppContext);
+  const { board, setBoard, isSaved, setIsSaved } = useContext(AppContext);
   const [dialogValue, setDialogValue] = useState(board?.goalToAchieve || "");
 
   const handelCtxMenu = async (e) => {
     e.preventDefault();
+    
     console.log("ctx menu", board);
 
     const save = window.confirm("Do you want to save this board?");
@@ -35,6 +36,7 @@ const Nav = ({ isNav = true }) => {
         alert(`${panelSaved.message}`);
         return;
       }
+      setIsSaved(true);
       alert("Board saved");
       console.log("panelSaved", panelSaved);
     }
@@ -42,6 +44,9 @@ const Nav = ({ isNav = true }) => {
 
   const handelClick = (e) => {
     // const input = window.prompt("What do you want to achieve?");
+    if(isSaved) {
+      setIsSaved(false);
+    }
     const input = e.target.value;
     setisAppLoading(true);
     if (!input) {
@@ -60,6 +65,21 @@ const Nav = ({ isNav = true }) => {
   useEffect(() => {
     setDialogValue(board?.goalToAchieve || "");
   }, [board, user]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (!isSaved) {
+        const message = "You have unsaved changes. Are you sure you want to leave?";
+        event.returnValue = message; // Standard for most browsers
+        return message; // For some older browsers
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isSaved]);
 
   if (isNav) {
     return (
@@ -94,8 +114,8 @@ const Nav = ({ isNav = true }) => {
           />
         )}
         <div className="absolute right-6">
-          <div className="hidden sm:block">
-            <ThreeDButton text="Save" onClick={handelCtxMenu} title="save">
+          <div className={`hidden sm:block ${!isSaved ? "border-red-500 border-2 rounded-lg":null}`}>
+            <ThreeDButton isSaved={isSaved} text="Save" onClick={handelCtxMenu} title="save">
               {" "}
               <span className="w-[80%] font-semibold">Save</span>
               <span className="w-[20%] flex justify-center items-center">
@@ -105,7 +125,7 @@ const Nav = ({ isNav = true }) => {
               </span>
             </ThreeDButton>
           </div>
-          <button className="block sm:hidden w-[16px]" onClick={handelCtxMenu}>
+          <button className={`block sm:hidden w-[16px] ${!isSaved ? "outline-dotted outline-red-500 bg-red-500 p-[2px] rounded":null}`} onClick={handelCtxMenu}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
               <path d="M48 96V416c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16V170.5c0-4.2-1.7-8.3-4.7-11.3l33.9-33.9c12 12 18.7 28.3 18.7 45.3V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96C0 60.7 28.7 32 64 32H309.5c17 0 33.3 6.7 45.3 18.7l74.5 74.5-33.9 33.9L320.8 84.7c-.3-.3-.5-.5-.8-.8V184c0 13.3-10.7 24-24 24H104c-13.3 0-24-10.7-24-24V80H64c-8.8 0-16 7.2-16 16zm80-16v80H272V80H128zm32 240a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z" />
             </svg>
