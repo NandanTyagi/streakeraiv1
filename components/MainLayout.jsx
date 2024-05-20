@@ -16,7 +16,7 @@ export default function MainLayout({ children }) {
         </div>
       ) : (
         <>
-          <div className="w-[100%]">
+          <div className="w-[100%] min-h-[100dvh] h-[fit-content]">
           {children}
           <Footer />
           </div>

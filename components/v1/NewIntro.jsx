@@ -3,7 +3,7 @@ import Hero from "@/components/v1/Hero";
 
 const NewIntro = () => {
   return (
-    <div className="h-screen  bg-white flex flex-col justify-center items-center">
+    <div className="h-[95dvh] bg-white flex flex-col justify-center items-center">
       <section className="h-[50%] sm:h-[100%]  bg-white">
         <Hero />
       </section>
