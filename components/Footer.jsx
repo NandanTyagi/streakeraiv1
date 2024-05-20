@@ -6,7 +6,7 @@ const Footer = () => {
         <footer className="flex flex-col justify-center items-center relative z-[-1]">
           {" "}
           <Image
-            className="z-[-1] mt-[-24px]"
+            className="z-[-1] mt-[-14px]"
             src={"/devnty.png"}
             alt="menu-button"
             priority
