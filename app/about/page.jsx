@@ -1,5 +1,6 @@
+
 "use client";
-import Image from "next/image";
+import Intro from "@/components/Intro";
 import {
   useEffect,
   useState,
@@ -8,15 +9,9 @@ import {
   useLayoutEffect,
 } from "react";
 import { AppContext } from "@/context/appContext";
-import Loading from "@/components/Loading";
-import About from "@/components/About";
 import Nav from "@/components/Nav";
 import { useRouter } from "next/navigation";
-import StreamComponent from "@/components/StreamComponent";
-import parseAndExtract from "@/utils/openai/parseAndExtract";
 import { Button } from "@/components/ui/button/Button";
-import GenerateStreakerBoardButton from "@/components/GenerateStreakerBoardButton";
-import Link from "next/link";
 import {
   RegisterLink,
   LoginLink,
@@ -30,21 +25,11 @@ export default function Home() {
   const [showDialog, setShowDialog] = useState(false);
   const {
     board,
-    setBoard,
-    isAppLoading,
-    setCellisAppLoading,
-    setisAppLoading,
-    openAIResponse,
     openAIResponseHeadersNames,
     openAIResponseHeadersValues,
   } = useContext(AppContext);
 
-  // const handelHabits = (habitKeys, habitValues) => {
-  //   setBoard({ ...board, habitsNames: habitKeys, habitsValues: habitValues });
-  // };
-
   useEffect(() => {
-    // handelHabits(parseAndExtract(openAIResponse).habitKeys, parseAndExtract(openAIResponse).habitValues);
     console.log("openairesponseheaders", openAIResponseHeadersNames);
     console.log("openairesponseheadersvalues", openAIResponseHeadersValues);
   }, [board, openAIResponseHeadersNames, openAIResponseHeadersValues]);
@@ -52,7 +37,7 @@ export default function Home() {
   useLayoutEffect(() => {
     setTimeout(() => {
       signUpRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-    }, 14000);
+    }, 9000);
   }, []);
 
   return (
@@ -62,57 +47,56 @@ export default function Home() {
           <Nav />
         </div>
       </div>
-      {/* {!isAppLoading ? ( */}
       <main className="relative flex flex-col justify-center min-h-[fill-available] h-[calc(100vh - 160px)]">
         <>
           <div className="h-[100%]  bg-white">
             <section className="h-[100%]  bg-white">
-              <About />
+              <Intro />
             </section>
             <section
-              className="h-[fit-content]  bg-white px-6 pt-24 sm:flex"
+              className="h-[fit-content]  bg-white px-6 pt-10 sm:flex"
               ref={signUpRef}
             >
               <h2 className="text-2xl font-bold mb-6 sm:w-[50%] sm:p-10 sm:text-4xl">
-                Empowering Your Journey Towards Excellence
+              Track the things you want to track
               </h2>
 
               <div className="text-lg sm:w-[50%] sm:p-10">
                 <p>
-                  At StreakerAi, we believe in the power of habit. Small, daily
+                  The power of repetition is immense. Small, daily
                   actions culminate into significant transformations, leading
-                  you closer to your personal aspirations. Our mission is to
-                  support you on this journey of self-improvement and goal
-                  achievement
+                  you closer to your aspirations. StreakerAi provides a framework to
+                  support you on the journey of improvement and goal
+                  achievement.
                 </p>
                 <div className="flex justify-around gap-10 pt-10">
                   <Button
                     id="button"
                     type="button"
-                    className="bg-[#EBEBEB] font-bold text-[1.1rem] sm:max-w-[300px] max-w-[200px] text-[#530DA2] cursor-pointer w-[stretch]"
+                    className="bg-[#EBEBEB] font-semibold text-[1.1rem] sm:max-w-[300px] max-w-[200px] text-[#530DA2] cursor-pointer w-[stretch]"
                   >
                     <LoginLink>Log in</LoginLink>
                   </Button>
                   <Button
                     id="button"
                     type="button"
-                    className="bg-[#530DA2] font-bold text-[1.1rem] sm:max-w-[300px] max-w-[200px] text-white cursor-pointer w-[stretch]"
+                    className="bg-[#530DA2] font-semibold text-[1.1rem] sm:max-w-[300px] max-w-[200px] text-white cursor-pointer w-[stretch]"
                   >
                     <RegisterLink>Sign up</RegisterLink>
                   </Button>
                 </div>
               </div>
             </section>
-            <section className="h-[fit-content]  bg-white px-6 pt-24 sm:flex sm:flex-col">
+            <section className="h-[fit-content]  bg-white px-6 pt-10 sm:pt-24 sm:flex sm:flex-col">
               <div>
                 <h2 className="text-2xl font-bold mb-6 sm:w-[50%] sm:px-10 sm:text-4xl">
-                  The Essence of StreakerAi
+                  The essence of StreakerAi
                 </h2>
               </div>
               <div className="h-[fit-content]  bg-white sm:px-10 sm:pt-10 sm:flex justify-between gap-24">
                 <div className="mb-6 sm:max-w-[50%]">
                   <div>
-                    <h3 className="text-xl font-bold mb-2 sm:mb-6">
+                    <h3 className="text-xl font-bold mb-3 sm:mb-6">
                       Inspired by a profound personal journey
                     </h3>
                   </div>
@@ -132,7 +116,7 @@ export default function Home() {
                 </div>
                 <div className="mb-6 sm:max-w-[50%]">
                   <div>
-                    <h3 className="text-xl font-bold mb-6">
+                    <h3 className="text-xl font-bold mb-3 sm:mb-6">
                       Simplicity led to a remarkable transformation
                     </h3>
                   </div>
@@ -152,7 +136,7 @@ export default function Home() {
                 </div>
               </div>
             </section>
-            <section className="h-[fit-content]  bg-white px-6 pt-24 sm:flex">
+            <section className="h-[fit-content]  bg-white px-6 pt-10 sm:pt-24 sm:flex">
               <h2 className="text-2xl font-bold mb-6 sm:w-[50%] sm:p-10 sm:text-4xl">
                 Every day is a step closer to the person you want to become
               </h2>
@@ -166,7 +150,7 @@ export default function Home() {
                 inevitable.
               </p>
             </section>
-            <section className="h-[fit-content]  bg-white px-6 pt-24 sm:flex sm:flex-col">
+            <section className="h-[fit-content]  bg-white px-6 pt-10 sm:pt-24 sm:flex sm:flex-col">
               <div>
                 <h2 className="text-2xl font-bold mb-6 sm:w-[50%] sm:px-10 sm:text-4xl">
                   Why StreakerAi?
@@ -175,8 +159,8 @@ export default function Home() {
               <div className="h-[fit-content]  bg-white sm:px-10 sm:pt-10 sm:flex justify-between">
                 <div className="mb-6 sm:max-w-[300px]">
                   <div>
-                    <h3 className="text-xl font-bold mb-6">
-                      Personalized Tracking
+                    <h3 className="text-xl font-bold mb-3 sm:mb-6">
+                      Personalized tracking
                     </h3>
                   </div>
                   <div>
@@ -189,8 +173,8 @@ export default function Home() {
                 </div>
                 <div className="mb-6 sm:max-w-[300px]">
                   <div>
-                    <h3 className="text-xl font-bold mb-6">
-                      Simplicity at Its Core
+                    <h3 className="text-xl font-bold mb-3 sm:mb-6">
+                      Simplicity at its core
                     </h3>
                   </div>
                   <div>
@@ -204,8 +188,8 @@ export default function Home() {
                 </div>
                 <div div className="mb-6 sm:max-w-[300px]">
                   <div>
-                    <h3 className="text-xl font-bold mb-6">
-                      Science-Backed Strategies
+                    <h3 className="text-xl font-bold mb-3 sm:mb-6">
+                      Science-backed strategies
                     </h3>
                   </div>
                   <div>
@@ -217,9 +201,9 @@ export default function Home() {
                 </div>
               </div>
             </section>
-            <section className="h-[fit-content]  bg-white px-6 py-24 sm:flex">
+            <section className="h-[fit-content]  bg-white px-6 py-10 sm:py-24 sm:flex">
               <h2 className="text-2xl font-bold mb-6 sm:w-[50%] sm:p-10 sm:text-4xl">
-                Join Us on the Path to Transformation
+                Embark on the path to transformation
               </h2>
               <div className="flex flex-col sm:w-[50%]">
                 <p className="text-lg sm:w-[100%] sm:p-10">
@@ -234,9 +218,9 @@ export default function Home() {
                     id="button"
                     type="button"
                     onClick={() => router.push("/generategoals")}
-                    className="bg-[#530DA2] font-bold text-[1.1rem] sm:max-w-[300px] max-w-[100%] text-white cursor-pointer w-[stretch]"
+                    className="bg-[#530DA2] font-semibold text-[1.1rem] sm:max-w-[300px] max-w-[100%] text-white cursor-pointer w-[stretch]"
                   >
-                    Try Free!
+                    Try free!
                   </Button>
                 </div>
               </div>
