@@ -15,7 +15,7 @@ const NewIntro = () => {
               Identify. Track. Achieve.
             </h2>
           </div>
-          <div className="">
+          <div className="mb-6">
             <StandardButton text="Try free!" type="pill" />
           </div>
           <div>
