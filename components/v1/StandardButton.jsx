@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
 
-const StandardButton = ({ text, type = "pill" }) => {
+const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
   const buttonRef = useRef(text);
   const router = useRouter();
 
@@ -108,9 +108,11 @@ const StandardButton = ({ text, type = "pill" }) => {
 
   const handleClick = (id) => {
     console.log(id);
-    if(id === "Try free!") {
-        router.push("/generategoals");
-
+    if (pushTo) {
+      router.push(pushTo);
+    }
+    if (id === "Try free!") {
+      router.push("/generategoals");
     }
     if (id === "AiDentify") {
       router.push("/generategoals");

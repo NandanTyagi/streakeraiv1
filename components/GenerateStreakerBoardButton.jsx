@@ -8,26 +8,11 @@ import StandardButton from "./v1/StandardButton";
 
 const GenerateStreakerBoardButton = ({ openAIResponse, openAIResponseDescription }) => {
   const { goalToAchieve, board, setBoard} = useContext(AppContext);
-  const router = useRouter();
-  const handleClick = (e) => {
-    e.preventDefault();
-
-    // setBoard((prevBoard) => {
-    //   {
-    //     prevBoard, (prevBoard.habitsNames = null, prevBoard.habitsValues = null);
-    //   }
-    //   return {
-    //     ...prevBoard,
-    //   };
-    // });
-    const headerNames = openAIResponse.slice(0, 5);
+  const headerNames = openAIResponse.slice(0, 5);
     const headerValues = openAIResponse.slice(5, 10);
+  const [url, setUrl] = useState(`/panel?headerNames=${headerNames}&headerValues=${headerValues}&goalToAchieve=${goalToAchieve}`);
+  const router = useRouter();
 
-    // Use the router to navigate, adding query parameters
-    router.push(
-      `/panel?headerNames=${headerNames}&headerValues=${headerValues}&goalToAchieve=${goalToAchieve}`
-    );
-  };
   return (
     <div className="w-[100%] max-w-[95%] sm:max-w-[600px] rounded-lg  mb-2 sm:mb-6 flex-col px-2 py-6 bg-slate-100 h-[fit-content] min-h-[fit-content]">
       <div className="text-center text-[#530DA2] font-semibold text-lg mb-1 sm:mb-6">
@@ -59,7 +44,7 @@ const GenerateStreakerBoardButton = ({ openAIResponse, openAIResponseDescription
 
       </ul>
 
-      <StandardButton text="Start tracking now!" type="pill" />
+      <StandardButton text="Start tracking now!" type="pill" pushTo={url} />
 
       {/* <Button
         type="button"
