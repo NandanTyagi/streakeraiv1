@@ -34,9 +34,6 @@ export default function Home() {
 
   return (
     <>
-      {/* <div className="flex justify-center items-center bg-[#EBEBEB] text-md font-semibold">
-        <div className=""></div>
-      </div> */}
       <div className="h-[80px] bg-[#330594] grid content-center">
         <Header />
       </div>

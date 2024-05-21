@@ -7,7 +7,7 @@ const ButtonGroup = () => {
         <StandardButton text="Track" type="round" />
       </div>
       <div>
-        <StandardButton text="AiDentify" type="round" />
+        <StandardButton text="Identify" type="round" />
       </div>
       <div>
         <StandardButton text="Join" type="round" />

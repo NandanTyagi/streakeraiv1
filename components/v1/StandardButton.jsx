@@ -114,7 +114,7 @@ const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
     if (id === "Try free!") {
       router.push("/generategoals");
     }
-    if (id === "AiDentify") {
+    if (id === "Identify") {
       router.push("/generategoals");
     }
     if (id === "Track") {
@@ -151,9 +151,9 @@ const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
         ref={buttonRef}
         id={text}
       >
-        <span className="absolute h-0 w-0 rounded-full bg-white opacity-10 transition-all duration-300 ease-out group-hover:h-32 group-hover:w-32"></span>
+        <span className="absolute h-0 w-0 rounded-full bg-[#330594] opacity-10 transition-all duration-300 ease-out group-hover:h-40 group-hover:w-40"></span>
         <div className="flex flex-col justify-between items-center gap-2">
-          {text === "AiDentify" && AiDentifySvg}
+          {text === "Identify" && AiDentifySvg}
           {text === "Track" && trackSvg}
           {text === "Join" && joinSvg}
           <div className="text-black font-semibold text-md tracking-[1px]">
@@ -161,15 +161,6 @@ const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
           </div>
         </div>
       </button>
-
-      //   <button className="cursor-pointer">
-      //     <div className="flex flex-col justify-between items-center gap-2">
-      //       {text === "AiDentify" && AiDentifySvg }
-      //       {text === "Track" && trackSvg }
-      //       {text === "Join" && joinSvg }
-      //       <div className="text-black font-semibold text-md tracking-[1px]">{text}</div>
-      //     </div>
-      //   </button>
     );
   }
 };

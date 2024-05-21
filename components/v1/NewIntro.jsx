@@ -13,7 +13,7 @@ const NewIntro = () => {
           <div className="flex justify-center items-center text-xl">
             <h2 className="font-semibold tracking-[2px]">
               {" "}
-              AiDentify. Track. Achieve.
+              Identify. Track. Achieve.
             </h2>
           </div>
           <div className="mb-6">
