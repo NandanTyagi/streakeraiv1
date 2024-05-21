@@ -22,6 +22,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form/Form"
+import StandardButton from "./v1/StandardButton"
 
 
 const formSchema = z.object({
@@ -143,24 +144,25 @@ function AiInputForm() {
 
   return (
     <Form {...form} >
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 border border-[#530DA2] rounded bg-slate-100 p-2 mt-1  w-[95%] sm:max-w-[500px] h-[300px] flex flex-col justify-center items-center">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 border border-[#330594] rounded bg-slate-100 p-2 mt-1  w-[95%] sm:max-w-[500px] h-[300px] flex flex-col justify-center items-center">
         <FormField
           control={form.control}
           name="goal"
           render={({ field }) => (
-            <FormItem className="w-full text-center">
-              <FormLabel>What do you want to achieve?</FormLabel>
+            <FormItem className="w-full text-center tracking-wide">
+              <FormLabel className="font-semibold">What&apos;s your goal?</FormLabel>
               <FormControl>
                 <Input type="textarea" className="bg-white p-1 text-left" placeholder="I want to live a healthy life." {...field} />
               </FormControl>
               <FormMessage />
-              <FormDescription>
-                Let&apos;s break down your goal and suggest 5 daily habits that will serve as a framework to help you achieve it.
+              <FormDescription className="text-[1.4rem] font-semibold tracking-wide">
+              We&apos;ll help you achieve this by recommending 5 daily habits tailored to your goal.
               </FormDescription>
             </FormItem>
           )}
         />
-        <Button type="submit" className="bg-[#530DA2] text-white cursor-pointer w-[stretch]">Generate streak items</Button>
+        <StandardButton type="pill" text="Generate streak items" />
+        {/* <Button type="submit" className="bg-[#330594] text-white cursor-pointer w-[stretch]">Generate streak items</Button> */}
       </form>
     </Form>
   )

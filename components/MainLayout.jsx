@@ -8,19 +8,19 @@ export default function MainLayout({ children }) {
 
   return (
     <>
-      {pathname !== "/" ? (
+      {pathname === "/" || pathname === "/generategoals" || pathname === "/suggestions" ? (
+        <>
+          <div className="w-[100%] min-h-[100dvh] h-[fit-content] flex flex-col justify-between">
+            {children}
+            <Footer />
+          </div>
+        </>
+      ) : (
         <div className="main-layout">
           <Header />
           {children}
           <Footer />
         </div>
-      ) : (
-        <>
-          <div className="w-[100%] min-h-[100dvh] h-[fit-content]">
-          {children}
-          <Footer />
-          </div>
-        </>
       )}
     </>
   );

@@ -9,6 +9,8 @@ import StreamComponent from "@/components/StreamComponent";
 import parseAndExtract from "@/utils/openai/parseAndExtract";
 import { Button } from "@/components/ui/button/Button";
 import GenerateStreakerBoardButton from "@/components/GenerateStreakerBoardButton";
+import Header from "@/components/Header";
+import ButtonGroup from "@/components/v1/ButtonGroup";
 
 export default function Home() {
   const [showDialog, setShowDialog] = useState(false);
@@ -32,22 +34,29 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex justify-center items-center bg-[#EBEBEB] text-md font-semibold">
+      {/* <div className="flex justify-center items-center bg-[#EBEBEB] text-md font-semibold">
         <div className=""></div>
+      </div> */}
+      <div className="h-[80px] bg-[#330594] grid content-center">
+        <Header />
       </div>
-      {!isAppLoading ? (
-        <main className="overflowY-scroll relative flex justify-center mt-6">
+      <main className="overflowY-scroll relative flex flex-col justify-evenly items-center min-h-[80dvh] max-h-[80dvh] ">
+        {!isAppLoading ? (
           <>
             {openAIResponse ? (
-              <GenerateStreakerBoardButton openAIResponse={openAIResponse} openAIResponseDescription={openAIResponseDescription} />
+              <GenerateStreakerBoardButton
+                openAIResponse={openAIResponse}
+                openAIResponseDescription={openAIResponseDescription}
+              />
             ) : (
               <AiInputForm />
             )}
           </>
-        </main>
-      ) : (
-        <Loading />
-      )}
+        ) : (
+          <Loading />
+        )}
+        <ButtonGroup />
+      </main>
     </>
   );
 }

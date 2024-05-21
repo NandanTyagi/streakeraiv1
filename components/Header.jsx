@@ -13,7 +13,7 @@ const Header = () => {
   const Router = useRouter();
 
   return (
-    <header className="bg-[#530DA2] flex items-center justify-between place-items-center p-0 px-3 relative">
+    <header className="bg-[#330594] flex items-center justify-between place-items-center px-3 relative">
       <a href={"/"}>
         <div className="flex justify-center items-center gap-1">
           <div className="relative rounded-full overflow-hidden shadow-xl">

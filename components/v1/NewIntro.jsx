@@ -1,4 +1,5 @@
 import StandardButton from "@/components/v1/StandardButton";
+import ButtonGroup from "@/components/v1/ButtonGroup";
 import Hero from "@/components/v1/Hero";
 
 const NewIntro = () => {
@@ -19,15 +20,7 @@ const NewIntro = () => {
             <StandardButton text="Try free!" type="pill" />
           </div>
           <div>
-            <div className="flex justify-between items-center">
-              <StandardButton text="Track" type="round" />
-              <div>
-                <StandardButton text="AiDentify" type="round" />
-              </div>
-              <div>
-                <StandardButton text="Join" type="round" />
-              </div>
-            </div>
+          <ButtonGroup />
           </div>
         </div>
       </section>

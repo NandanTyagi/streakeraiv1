@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { AppContext } from "@/context/appContext";
 import { useEffect, useState, useContext, use } from "react";
 import { set } from "mongoose";
+import StandardButton from "./v1/StandardButton";
 
 const GenerateStreakerBoardButton = ({ openAIResponse, openAIResponseDescription }) => {
   const { goalToAchieve, board, setBoard} = useContext(AppContext);
@@ -28,7 +29,7 @@ const GenerateStreakerBoardButton = ({ openAIResponse, openAIResponseDescription
     );
   };
   return (
-    <div className="w-[100%] max-w-[95%] sm:max-w-[600px] rounded-lg  mb-1 sm:mb-6 flex-col px-2 py-6 bg-slate-100 h-[fit-content] min-h-[fit-content]">
+    <div className="w-[100%] max-w-[95%] sm:max-w-[600px] rounded-lg  mb-2 sm:mb-6 flex-col px-2 py-6 bg-slate-100 h-[fit-content] min-h-[fit-content]">
       <div className="text-center text-[#530DA2] font-semibold text-lg mb-1 sm:mb-6">
         {`Five suggested habits you should track every day to:`}
         <br/>
@@ -58,13 +59,15 @@ const GenerateStreakerBoardButton = ({ openAIResponse, openAIResponseDescription
 
       </ul>
 
-      <Button
+      <StandardButton text="Start tracking now!" type="pill" />
+
+      {/* <Button
         type="button"
         className="bg-[#530DA2] text-white font-semibold cursor-pointer w-[stretch]"
         onClick={handleClick}
       >
         Generate streaker board now!
-      </Button>
+      </Button> */}
       <Button
         type="button"
         className="bg-[transparent] text-[#530DA2] hover:underline font-semibold cursor-pointer w-[stretch] m-[auto]"
