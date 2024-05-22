@@ -1,4 +1,3 @@
-
 "use client";
 import Intro from "@/components/Intro";
 import {
@@ -23,11 +22,8 @@ export default function Home() {
   const signUpRef = useRef(null);
 
   const [showDialog, setShowDialog] = useState(false);
-  const {
-    board,
-    openAIResponseHeadersNames,
-    openAIResponseHeadersValues,
-  } = useContext(AppContext);
+  const { board, openAIResponseHeadersNames, openAIResponseHeadersValues } =
+    useContext(AppContext);
 
   useEffect(() => {
     console.log("openairesponseheaders", openAIResponseHeadersNames);
@@ -53,19 +49,28 @@ export default function Home() {
             <section className="h-[100%]  bg-white">
               <Intro />
             </section>
+
+            <section className="h-[fit-content]  bg-white px-6 pt-10 flex justify-center" ref={signUpRef}>
+              <video
+                src="/streakerai-vid-v1.mp4"
+                controls
+                playsInline
+                className="sm:w-[70%]"
+              />
+            </section>
             <section
               className="h-[fit-content]  bg-white px-6 pt-10 sm:flex"
-              ref={signUpRef}
+              // ref={signUpRef}
             >
               <h2 className="text-2xl font-bold mb-6 sm:w-[50%] sm:p-10 sm:text-4xl">
-              Track the things you want to track
+                Track the things you want to track
               </h2>
 
               <div className="text-lg sm:w-[50%] sm:p-10">
                 <p>
-                  The power of repetition is immense. Small, daily
-                  actions culminate into significant transformations, leading
-                  you closer to your aspirations. StreakerAi provides a framework to
+                  The power of repetition is immense. Small, daily actions
+                  culminate into significant transformations, leading you closer
+                  to your aspirations. StreakerAi provides a framework to
                   support you on the journey of improvement and goal
                   achievement.
                 </p>
@@ -142,12 +147,12 @@ export default function Home() {
               </h2>
               <p className="text-lg sm:w-[50%] sm:p-10">
                 StreakerAi is the manifestation of this journey, conceived to
-                empower you to enact your own transformation. It&apos;s a testament
-                to the power of daily habits, a tool designed to bring focus,
-                clarity, and progress to your fingertips. StreakerAi is your
-                companion in the quest for personal growth, a daily reminder
-                that change, one day at a time, is not just possible—it&apos;s
-                inevitable.
+                empower you to enact your own transformation. It&apos;s a
+                testament to the power of daily habits, a tool designed to bring
+                focus, clarity, and progress to your fingertips. StreakerAi is
+                your companion in the quest for personal growth, a daily
+                reminder that change, one day at a time, is not just
+                possible—it&apos;s inevitable.
               </p>
             </section>
             <section className="h-[fit-content]  bg-white px-6 pt-10 sm:pt-24 sm:flex sm:flex-col">
