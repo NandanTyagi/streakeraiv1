@@ -1,0 +1,12 @@
+.description p,
+.description div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.description b,
+.description strong,
+.description bold {
+  color: #530da2;
+}

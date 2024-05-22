@@ -5,6 +5,7 @@ import { AppContext } from "@/context/appContext";
 import { useState, useContext } from "react";
 import StandardButton from "./v1/StandardButton";
 import DOMPurify from "dompurify";
+import styles from "@/styles/GenerateStreakerBoardButton.module.css";
 
 const GenerateStreakerBoardButton = ({
   openAIResponse,
@@ -57,7 +58,7 @@ const GenerateStreakerBoardButton = ({
       </div>
 
       <div
-        className="text-left bg-slate-100 p-2 text-[#272727] font-medium text-md mb-1 sm:mb-1"
+        className={`${styles.description} text-left bg-slate-100 p-2 text-[#272727] font-medium text-md mb-1 sm:mb-1`}
         dangerouslySetInnerHTML={{
           __html: DOMPurify.sanitize(cleanText(openAIResponseDescription)),
         }}
