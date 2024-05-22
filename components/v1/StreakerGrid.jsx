@@ -45,47 +45,49 @@ const StreakerGrid = () => {
     console.log("Board####################### in GRID:", board);
   }, [board]);
 
-  if (isAppLoading || isLoading) {
-    return <Loading />;
-  }
-
   return (
     <>
-      <section className={styles.streakerGrid}>
-        <StreakerGridHeaders />
-      </section>
-      <section className={styles.streakerGrid}>
-        {Array.from({ length: days }).map((_, dayIndex) => {
-          const today = dayjs().format("D");
+      {isAppLoading || isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <section className={styles.streakerGrid}>
+            <StreakerGridHeaders />
+          </section>
+          <section className={styles.streakerGrid}>
+            {Array.from({ length: days }).map((_, dayIndex) => {
+              const today = dayjs().format("D");
 
-          // Prepare cell data for each column in the row
-          const cellProps = habits.map((_, colIndex) => {
-            const cell = board?.cells?.find(
-              (c) => c.id === `${dayIndex + 1}-${colIndex + 1}`
-            );
-            return {
-              rowNr: dayIndex + 1,
-              colNr: colIndex + 1,
-              isDone: cell ? cell.isDone : false,
-              isClear: cell ? cell.isClear: true,
-              message: cell?.comment,
-              isToday: dayIndex + 1 === today,
-              cell: cell,
-            };
-          });
+              // Prepare cell data for each column in the row
+              const cellProps = habits.map((_, colIndex) => {
+                const cell = board?.cells?.find(
+                  (c) => c.id === `${dayIndex + 1}-${colIndex + 1}`
+                );
+                return {
+                  rowNr: dayIndex + 1,
+                  colNr: colIndex + 1,
+                  isDone: cell ? cell.isDone : false,
+                  isClear: cell ? cell.isClear : true,
+                  message: cell?.comment,
+                  isToday: dayIndex + 1 === today,
+                  cell: cell,
+                };
+              });
 
-          return (
-            <StreakerGridRow
-              key={dayIndex}
-              nr={dayIndex + 1}
-              cells={cellProps}
-              day={tagArr[dayIndex]}
-              user={user}
-              isLoading={isLoading}
-            />
-          );
-        })}
-      </section>
+              return (
+                <StreakerGridRow
+                  key={dayIndex}
+                  nr={dayIndex + 1}
+                  cells={cellProps}
+                  day={tagArr[dayIndex]}
+                  user={user}
+                  isLoading={isLoading}
+                />
+              );
+            })}
+          </section>
+        </>
+      )}
     </>
   );
 };

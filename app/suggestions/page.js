@@ -37,23 +37,21 @@ export default function Home() {
       <div className="h-[80px] bg-[#330594] grid content-center">
         <Header />
       </div>
-      <main className="overflowY-scroll relative flex flex-col justify-evenly items-center min-h-[80dvh] max-h-[80dvh] ">
-        {!isAppLoading ? (
-          <>
-            {openAIResponse ? (
-              <GenerateStreakerBoardButton
-                openAIResponse={openAIResponse}
-                openAIResponseDescription={openAIResponseDescription}
-              />
-            ) : (
-              <AiInputForm />
-            )}
-          </>
-        ) : (
-          <Loading />
-        )}
-        <ButtonGroup />
-      </main>
+      {isAppLoading ? (
+        <Loading />
+      ) : (
+        <main className="overflowY-scroll relative flex flex-col justify-evenly items-center min-h-[80dvh] max-h-[80dvh] ">
+          {openAIResponse ? (
+            <GenerateStreakerBoardButton
+              openAIResponse={openAIResponse}
+              openAIResponseDescription={openAIResponseDescription}
+            />
+          ) : (
+            <AiInputForm />
+          )}
+          <ButtonGroup />
+        </main>
+      )}
     </>
   );
 }
