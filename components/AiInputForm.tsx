@@ -11,6 +11,7 @@ import { AppContext } from "@/context/appContext";
 import { useEffect, useState, useContext, use } from "react";
 import { set } from "mongoose"
 import createCompleation from "@/utils/openai/createCompleation"
+import createCompleationV1 from "@/utils/openai/createCompleationV1"
 import handelBoards from "@/utils/handelBoards";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import {
@@ -76,42 +77,38 @@ function AiInputForm() {
     setisAppLoading(true)
     //@ts-ignore
     setOpenAIResponse(prev => prev = '');
-    const compleatiion = await createCompleation(values);
+    const compleatiion = await createCompleationV1(values);
+    console.log('compleatiion', compleatiion.getRunResult[1].content);
+
     //@ts-ignore
     setGoalToAchieve(values.goal);
     //@ts-ignore
-    const splitCompleation = compleatiion.split(',');
+    const splitCompleation = compleatiion.getRunResult[1].content.split('||');
+    console.log('splitCompleation', splitCompleation);
     //@ts-ignore
-    const splitCompleationHeadersAndValues = compleatiion.split('||')[0];
+    const splitCompleationHeadersAndValues = splitCompleation[0].split(',');
     console.log('splitCompleationHeadersAndValues', splitCompleationHeadersAndValues);
     //@ts-ignore
-    const splitCompleationDescription = compleatiion.split('||')[1];
+    const splitCompleationDescription = splitCompleation[1];
     console.log('splitCompleationDescription', splitCompleationDescription);
-    let compleationvalues = splitCompleation.slice(0, 10);
-    console.log('compleation values', compleationvalues);
-    let compleationDescription = splitCompleation.slice(10, splitCompleation.length - 1);
-    console.log('compleationDescription', compleationDescription);
+    
     //@ts-ignore
     // setOpenAIResponse(prev => prev = Array.from(splitCompleation));
-    setOpenAIResponse(prev => prev = compleationvalues);
-    let descriptions= splitCompleationDescription.split('.');
-    console.log('Description', descriptions);
-    //@ts-ignore
-    setOpenAIResponseDescription(prev => prev = descriptions);
+    setOpenAIResponse(prev => prev = splitCompleationHeadersAndValues);
 
-    console.log('response.compleation************************************', compleatiion);
-    console.log('response.Joindcompleation************************************', splitCompleation);
-    console.log('response.openairesopnse************************************', openAIResponse);
+    //@ts-ignore
+    setOpenAIResponseDescription(prev => prev = splitCompleationDescription);
+
 
     //@ts-ignore
     setOpenAIResponseHeadersNames(prev => {
-      let names = splitCompleation.slice(0, 5);
+      let names = splitCompleationHeadersAndValues.slice(0, 5);
       prev = names;
     });
 
     //@ts-ignore
     setOpenAIResponseHeadersValues(prev => {
-      let values = splitCompleation.slice(5, 10);
+      let values = splitCompleationHeadersAndValues.slice(5, 10);
       prev = values;
     });
 
