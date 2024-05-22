@@ -80,6 +80,7 @@ const GenerateStreakerBoardButton = ({
 export default GenerateStreakerBoardButton;
 
 function cleanText(text) {
+  if (!text) return "";
   // Remove all instances of ```html and ```
   return text.replace(/```html|```/g, "").trim();
 }
