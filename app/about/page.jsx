@@ -51,16 +51,10 @@ export default function Home() {
             </section>
 
             <section className="h-[fit-content]  bg-white px-6 pt-10 flex justify-center" ref={signUpRef}>
-              <video
-                src="/streakerai-vid-v1.mp4"
-                controls
-                playsInline
-                className="sm:w-[70%]"
-              />
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/EG3L4RkUTyY?si=gqtDqxJIWDpmmAnV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="true"></iframe>
             </section>
             <section
               className="h-[fit-content]  bg-white px-6 pt-10 sm:flex"
-              // ref={signUpRef}
             >
               <h2 className="text-2xl font-bold mb-6 sm:w-[50%] sm:p-10 sm:text-4xl">
                 Track the things you want to track
