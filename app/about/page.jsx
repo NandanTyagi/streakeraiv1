@@ -51,7 +51,7 @@ export default function Home() {
             </section>
 
             <section className="h-[fit-content]  bg-white px-6 pt-10 flex justify-center" ref={signUpRef}>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/EG3L4RkUTyY?si=gqtDqxJIWDpmmAnV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="true"></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/lHrt0zvmJVQ?si=9zCR5NTljpcwlcy9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="true"></iframe>
             </section>
             <section
               className="h-[fit-content]  bg-white px-6 pt-10 sm:flex"
