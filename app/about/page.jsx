@@ -16,6 +16,7 @@ import {
   LoginLink,
   LogoutLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
+import ButtonGroup from "@/components/v1/ButtonGroup";
 
 export default function Home() {
   const router = useRouter();
@@ -50,8 +51,11 @@ export default function Home() {
               <Intro />
             </section>
 
-            <section className="h-[fit-content]  bg-white px-6 pt-10 flex justify-center" ref={signUpRef}>
+            <section className="h-[fit-content]  bg-white px-6 pt-10 flex justify-center">
             <iframe width="560" height="315" src="https://www.youtube.com/embed/lHrt0zvmJVQ?si=9zCR5NTljpcwlcy9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="true"></iframe>
+            </section>
+            <section className="h-[fit-content]  bg-white px-6 pt-10 flex place-content-center" ref={signUpRef}>
+            <ButtonGroup join={false} />
             </section>
             <section
               className="h-[fit-content]  bg-white px-6 pt-10 sm:flex"
