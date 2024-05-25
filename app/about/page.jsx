@@ -33,8 +33,10 @@ export default function Home() {
 
   useLayoutEffect(() => {
     setTimeout(() => {
-      signUpRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-    }, 9000);
+      if (signUpRef.current) {
+        signUpRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+    }, 3000);
   }, []);
 
   return (
