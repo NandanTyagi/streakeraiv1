@@ -9,7 +9,7 @@ export const metadata = {
     canonical: "/",
   },
   title: "StreakerAi",
-  description: "What do you want to achieve?",
+  description: "Track the things you want to track!",
   openGraph: {
     images: "/opengraph-image.png",
   },
