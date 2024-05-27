@@ -127,7 +127,7 @@ const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
     if (pushTo) {
       router.push(pushTo);
     }
-    if (id === "Try free!") {
+    if (id === "Try for free!") {
       router.push("/generategoals");
     }
     if (id === "Identify") {

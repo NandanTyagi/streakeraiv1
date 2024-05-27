@@ -23,7 +23,7 @@ const NewIntro = () => {
           </div>
           <div className="mb-6 flex flex-col justify-center items-center">
             <StandardButton text="Try for free!" type="pill" />
-            or
+            OR
             <hr className="p-1 w-[50%]"/>
             <LoginLink className="font-semibold text-[#330594]">Login</LoginLink>
           </div>
