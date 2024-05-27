@@ -1,6 +1,11 @@
 import StandardButton from "@/components/v1/StandardButton";
 import ButtonGroup from "@/components/v1/ButtonGroup";
 import Hero from "@/components/v1/Hero";
+import {
+  RegisterLink,
+  LoginLink,
+  LogoutLink,
+} from "@kinde-oss/kinde-auth-nextjs/components";
 
 const NewIntro = () => {
   return (
@@ -16,11 +21,14 @@ const NewIntro = () => {
               Identify. Track. Achieve.
             </h2>
           </div>
-          <div className="mb-6">
+          <div className="mb-6 flex flex-col justify-center items-center">
             <StandardButton text="Try for free!" type="pill" />
+            or
+            <hr className="p-1 w-[50%]"/>
+            <LoginLink className="font-semibold text-[#330594]">Login</LoginLink>
           </div>
           <div>
-          <ButtonGroup />
+            <ButtonGroup />
           </div>
         </div>
       </section>
