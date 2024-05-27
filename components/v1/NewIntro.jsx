@@ -17,7 +17,7 @@ const NewIntro = () => {
             </h2>
           </div>
           <div className="mb-6">
-            <StandardButton text="Try free!" type="pill" />
+            <StandardButton text="Try for free!" type="pill" />
           </div>
           <div>
           <ButtonGroup />

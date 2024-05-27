@@ -26,7 +26,7 @@ const Header = () => {
             />
           </div>
           <div className="text-[1.4rem] sm:text-[1.6rem] flex font-bold text-white">
-            StreakerAi
+            Streaker.ai
             <div className="flex gap-2">
               <span className="text-[0.65rem]"></span>
               <span className="text-[0.7rem]">Beta</span>
