@@ -13,21 +13,21 @@ const NewIntro = () => {
       <section className="h-[50%] sm:h-[100%]  bg-white">
         <Hero />
       </section>
-      <section className="h-[50%]  sm:h-screen bg-white px-8 w-[100%] sm:max-w-[400px]">
+      <section className="h-[50%] z-[10] sm:h-screen bg-transparent px-8 w-[100%] sm:max-w-[400px] mt-[-20px]">
         <div className="h-[90%] flex flex-col justify-around">
           <div className="flex justify-center items-center text-xl">
-            <h2 className="font-semibold tracking-[2px]">
+            <h2 className="font-semibold tracking-[2px] text-white mb-[8px] sm:mb-[30px]">
               {" "}
               Identify. Track. Achieve.
             </h2>
           </div>
-          <div className="mb-6 flex flex-col justify-center items-center">
+          <div className="mb-6 flex flex-col justify-center items-center text-white">
             <StandardButton text="Try for free!" type="pill" />
             OR
             <hr className="p-1 w-[50%]"/>
-            <LoginLink className="font-semibold text-[#330594]">Login</LoginLink>
+            <LoginLink title="Login" className="font-semibold text-white">Login</LoginLink>
           </div>
-          <div>
+          <div className="sm:pb-[40px]">
             <ButtonGroup />
           </div>
         </div>

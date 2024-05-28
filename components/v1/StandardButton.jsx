@@ -166,7 +166,7 @@ const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
       <button
         onClick={() => handleClick(buttonRef.current.id)}
         title={text}
-        className={`group relative m-1 inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full border-t-4 border-b-4 border-l-4 border-r-4 border-[#330594] bg-gradient-to-tr py-6 px-[8px] text-white transition duration-100 ease-in-out active:translate-y-0.5 active:border-[#A035C2] active:shadow-none from-[#ffffff] to-[#ffffff] text-center`}
+        className={`group relative m-1 inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full border-t-4 border-b-4 border-l-4 border-r-4 border-[#330594] bg-gradient-to-tr py-6 px-[8px] text-white transition duration-100 ease-in-out active:translate-y-0.5 active:border-[#A035C2] active:shadow-none from-[#ffffff] to-[#ffffff] text-center  max-h-[130px] sm:max-h-[200px]`}
         ref={buttonRef}
         id={text}
       >
