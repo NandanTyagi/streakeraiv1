@@ -54,7 +54,7 @@ export default function Home() {
             </section>
 
             <section className="h-[fit-content]  bg-white px-6 pt-10 flex justify-center">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/iF1Q64WJpzo?si=JJ6oGloZxmpbQqrv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="true"></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/NLxlXaaMsS0?si=q7oc5fZRUqc8AT1k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="true"></iframe>
             </section>
             <section className="h-[fit-content]  bg-white px-6 pt-10 flex place-content-center" ref={signUpRef}>
             <ButtonGroup join={false} />
