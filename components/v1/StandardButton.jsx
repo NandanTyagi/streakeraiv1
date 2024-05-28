@@ -1,11 +1,13 @@
 "use client";
 
 import { useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
   const buttonRef = useRef(text);
   const router = useRouter();
+  const pathname = usePathname();
+  const isSpalshScreen = pathname === "/";
 
   const AiDentifySvg = (
     <svg
@@ -166,7 +168,7 @@ const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
       <button
         onClick={() => handleClick(buttonRef.current.id)}
         title={text}
-        className={`group relative m-1 inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full border-t-4 border-b-4 border-l-4 border-r-4 border-[transparent] bg-gradient-to-tr py-6 px-[8px] text-white transition duration-100 ease-in-out active:translate-y-0.5 active:border-[#A035C2] active:shadow-none from-[transparent] to-[transparent] text-center  max-h-[130px] sm:max-h-[200px]`}
+        className={`group relative m-1 inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full border-t-4 border-b-4 border-l-4 border-r-4 ${isSpalshScreen ? "border-[transparent]": "border-[#330594]"}  bg-gradient-to-tr py-6 px-[8px] text-white transition duration-100 ease-in-out active:translate-y-0.5 active:border-[#A035C2] active:shadow-none from-[transparent] to-[transparent] text-center  max-h-[130px] sm:max-h-[200px]`}
         ref={buttonRef}
         id={text}
       >
@@ -176,7 +178,7 @@ const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
           {text === "Track" && trackSvg}
           {text === "Join" && joinSvg}
           {text === "About" && aboutSvg}
-          <div className="text-white font-semibold text-md tracking-[1px]">
+          <div className={`${isSpalshScreen ? "text-white": "text-black"} font-semibold text-md tracking-[1px]`}>
             {text}
           </div>
         </div>
