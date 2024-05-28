@@ -23,13 +23,13 @@ const StreakerEmptyGrid = () => {
   const days = getDaysInMonth(new Date());
   const tagArr = getDayTagArray(new Date(), days);
 
-  useEffect(() => {
-    const fetchUsersFromDb = async () => {
-      const userFromDb = await fetchUser();
-      console.log("user from Db in EMPTY streaker grid", userFromDb);
-    };
-    fetchUsersFromDb();
-  }, []);
+  // useEffect(() => {
+  //   const fetchUsersFromDb = async () => {
+  //     const userFromDb = await fetchUser();
+  //     console.log("user from Db in EMPTY streaker grid", userFromDb);
+  //   };
+  //   fetchUsersFromDb();
+  // }, []);
 
   // const panels = await fetchPanels();
   // const userFromDb = await fetchUser(user?.email);
