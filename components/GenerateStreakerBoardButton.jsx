@@ -66,13 +66,13 @@ const GenerateStreakerBoardButton = ({
 
       <StandardButton text="Start tracking now!" type="pill" pushTo={url} />
 
-      <Button
+      <button
         type="button"
         className="bg-[transparent] text-[#530DA2] hover:underline font-semibold cursor-pointer w-[stretch] m-[auto]"
         onClick={() => router.push("/generategoals")}
       >
         Set new goal
-      </Button>
+      </button>
     </div>
   );
 };
