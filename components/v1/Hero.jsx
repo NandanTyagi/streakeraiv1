@@ -7,7 +7,7 @@ const Hero = () => {
 
       <Image src="/streaker-mobile-bg-2.png" alt="logo" priority fill />
 
-      <h1 className="absolute z-[10] bottom-[40px] sm:bottom-[28px] text-[2.6rem] pb-2 sm:text-6xl font-semibold text-center text-white w-[100%] font-lato tracking-[4px]">
+      <h1 className="absolute z-[10] bottom-[80px] sm:bottom-[80px] text-[2.6rem] pb-2 sm:text-6xl font-semibold text-center text-white w-[100%] font-lato tracking-[4px]">
         Streaker.ai
       </h1>
     </div>
