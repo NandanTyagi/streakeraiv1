@@ -1,3 +1,7 @@
+.description {
+  margin-bottom: 24px;
+}
+
 .description p,
 .description div {
   margin-bottom: 12px !important;
