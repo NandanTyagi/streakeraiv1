@@ -90,7 +90,17 @@ button {
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 8px 8px;
+  padding: 16px 8px;
+}
+
+footer {
+  min-height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  margin-top: -16px;
 }
 
 /* @media (prefers-color-scheme: dark) {
