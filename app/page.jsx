@@ -10,7 +10,7 @@ export default function Home() {
         <>
           <div className="h-[100%] bg-white">
             <section className="h-[100%]  bg-white">
-              <NewIntro />
+              <NewIntro /> 
             </section>
           </div>
         </>
