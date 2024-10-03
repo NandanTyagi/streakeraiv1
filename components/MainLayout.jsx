@@ -12,7 +12,7 @@ export default function MainLayout({ children }) {
     pathname === "/"
   ) {
     return (
-      <div className="min-h-[100dvh] h-[100%]">
+      <div className="min-h-[100svh] h-[100%]">
         {children}
         <Footer />
       </div>
