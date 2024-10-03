@@ -40,7 +40,7 @@ export default function Home() {
       {isAppLoading ? (
         <Loading />
       ) : (
-        <main className="overflowY-scroll relative flex flex-col justify-evenly items-center min-h-[80dvh] max-h-[80dvh] ">
+        <main className="overflowY-scroll relative flex flex-col justify-evenly items-center min-h-[calc(100vh-140px)] max-h-[calc(100vh-140px)] ">
           {openAIResponse ? (
             <GenerateStreakerBoardButton
               openAIResponse={openAIResponse}

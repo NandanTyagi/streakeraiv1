@@ -8,7 +8,7 @@ export default function Home() {
       <div className="h-[80px] bg-[#330594] grid content-center">
         <Header />
       </div>
-      <main className="overflowY-scroll relative flex flex-col justify-evenly items-center min-h-[80dvh] ">
+      <main className="overflowY-scroll relative flex flex-col justify-evenly items-center min-h-[calc(100vh-140px)] ">
         
           <AiInputForm />
 

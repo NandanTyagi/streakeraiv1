@@ -20,21 +20,30 @@ body {
   background-color: white;
   min-height: 100dvh;
   max-height: 100dvh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center;
+  align-items: center; */
   font-family: "Corben", serif;
   font-family: "Orbitron", sans-serif;
   font-family: "Roboto", sans-serif;
   font-family: "Roboto Condensed", sans-serif;
   font-family: "Lato", sans-serif;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.main-layout-container {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
 }
 
 main {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
+  margin-bottom: 16px;
 }
 
 .main-layout {

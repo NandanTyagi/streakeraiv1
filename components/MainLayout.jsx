@@ -6,22 +6,26 @@ import { usePathname } from "next/navigation";
 export default function MainLayout({ children }) {
   const pathname = usePathname();
 
-  return (
-    <>
-      {pathname === "/" || pathname === "/generategoals" || pathname === "/suggestions" ? (
-        <>
-          <div className="w-[100%] min-h-[100dvh] h-[fit-content] flex flex-col justify-between">
-            {children}
-            <Footer />
-          </div>
-        </>
-      ) : (
+  if (
+    pathname === "/generategoals" ||
+    pathname === "/suggestions" ||
+    pathname === "/"
+  ) {
+    return (
+      <div className="min-h-[100dvh] h-[100%]">
+        {children}
+        <Footer />
+      </div>
+    );
+  } else {
+    return (
+      <div className="main-layout-container">
         <div className="main-layout">
           <Header />
           {children}
           <Footer />
         </div>
-      )}
-    </>
-  );
+      </div>
+    );
+  }
 }

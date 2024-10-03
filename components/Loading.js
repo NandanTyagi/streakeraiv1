@@ -2,8 +2,8 @@ import Image from "next/image";
 
 const Loading = () => {
   return (
-    <div className="h-[50vh] flex justify-center items-center">
-      <div className="h-[50vh] flex justify-center items-center"> <Image
+    <div className="h-[100vh] flex justify-center items-center">
+      <div className="h-[100vh] flex justify-center items-center"> <Image
               src={"/spinner-purple.gif"}
               alt="checkmark"
               priority
