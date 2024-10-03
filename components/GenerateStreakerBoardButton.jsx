@@ -24,15 +24,28 @@ const GenerateStreakerBoardButton = ({
       <div className="text-center text-[#530DA2] font-semibold text-lg mb-1 sm:mb-6">
         {`Five habits you should track every day to achieve:`}
         <br />
-        <div className="p-1 mt-2 italic">
-        {`"${goalToAchieve}"`}
-        </div>
+        <div className="p-1 mt-2 italic">{`"${goalToAchieve}"`}</div>
       </div>
-      <div className="  mb-1 sm:mb-1 flex justify-evenly gap-1 text-[0.8rem] sm:text-lg italic">
+      <div className="  mb-1 sm:mb-1 flex justify-center gap-1 text-[0.8rem] sm:text-lg italic">
+        {openAIResponse &&
+          openAIResponse.slice(0, 5).map((response, index) => (
+            <div
+              className="flex flex-col justify-center items-center text-center p-2 min-w-[18%] "
+              key={response.id || index} // Use a unique identifier if available
+            >
+              <div className="font-semibold">{response}</div>
+              <div className="font-normal">{openAIResponse[index + 5]}</div>
+            </div>
+          ))}
+
+
+      </div>
+      {/* <div className="mb-1 sm:mb-6 flex justify-evenly gap-1 text-[0.8rem] sm:text-lg italic">
         {openAIResponse &&
           openAIResponse.map(
             (response, index) =>
-              index < 5 && (
+              index > 4 &&
+              index < 10 && (
                 <div
                   className="flex justify-center items-center text-center"
                   key={index}
@@ -41,21 +54,7 @@ const GenerateStreakerBoardButton = ({
                 </div>
               )
           )}
-      </div>
-      <div className="mb-1 sm:mb-6 flex justify-evenly gap-1 text-[0.8rem] sm:text-lg italic">
-        {openAIResponse &&
-          openAIResponse.map(
-            (response, index) =>
-              (index > 4 && index < 10)  && (
-                <div
-                  className="flex justify-center items-center text-center"
-                  key={index}
-                >
-                  {response}
-                </div>
-              )
-          )}
-      </div>
+      </div> */}
 
       <div
         className={`${styles.description} text-left bg-slate-100 p-2 text-[#272727] font-medium text-md mb-1 sm:mb-1`}
