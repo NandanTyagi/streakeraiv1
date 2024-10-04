@@ -5,7 +5,7 @@ import ButtonGroup from "@/components/v1/ButtonGroup";
 export default function Home() {
   return (
     <>
-      <main className="relative flex flex-col justify-evenly items-center gap-4 min-h-[80vh]">
+      <main className="relative flex flex-col justify-center items-center gap-4 min-h-[80vh]">
         
           <AiInputForm />
 

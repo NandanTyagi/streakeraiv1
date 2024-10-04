@@ -2,7 +2,7 @@ import StandardButton from "./StandardButton";
 
 const ButtonGroup = ({ track = true, identify = true, join = true }) => {
   return (
-    <div className="flex justify-between items-center gap-x-4">
+    <div className="flex justify-between items-center gap-x-4 mt-4">
       {track && (
         <div>
           <StandardButton text="Track" type="round" />
