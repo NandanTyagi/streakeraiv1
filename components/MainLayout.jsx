@@ -7,12 +7,10 @@ export default function MainLayout({ children }) {
   const pathname = usePathname();
 
   if (
-    pathname === "/generategoals" ||
-    pathname === "/suggestions" ||
     pathname === "/"
   ) {
     return (
-      <div className="min-h-[100svh] h-[100%] flex flex-col justify-between">
+      <div className="min-h-[100%] h-[100%] flex flex-col justify-between">
         {children}
         <Footer />
       </div>

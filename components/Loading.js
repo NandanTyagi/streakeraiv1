@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const Loading = () => {
   return (
-    <div className="h-[100vh] flex justify-center items-center">
+    <div className="flex flex-col justify-center items-center h-[50vh]">
       <div className="h-[100vh] flex justify-start items-start pt-20">
         {" "}
         <Image

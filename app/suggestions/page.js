@@ -34,13 +34,11 @@ export default function Home() {
 
   return (
     <>
-      <div className="h-[80px] bg-[#330594] grid content-center">
-        <Header />
-      </div>
+      
       {isAppLoading ? (
         <Loading />
       ) : (
-        <main className="scroller m-[auto]  ">
+        <main className="scroller m-[auto]  min-h-[80vh] flex flex-col justify-center items-center">
           {openAIResponse ? (
             <GenerateStreakerBoardButton
               openAIResponse={openAIResponse}

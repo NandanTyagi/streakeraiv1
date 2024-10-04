@@ -5,10 +5,7 @@ import ButtonGroup from "@/components/v1/ButtonGroup";
 export default function Home() {
   return (
     <>
-      <div className="h-[80px] bg-[#330594] grid content-center">
-        <Header />
-      </div>
-      <main className="overflowY-scroll relative flex flex-col justify-evenly items-center min-h-[calc(100vh-140px)] ">
+      <main className="relative flex flex-col justify-evenly items-center gap-4 min-h-[80vh]">
         
           <AiInputForm />
 
