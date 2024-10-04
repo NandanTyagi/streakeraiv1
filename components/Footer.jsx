@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const Footer = () => {
   return (
-    <footer className="flex flex-col justify-center w-screen items-center z-[0] absolute bottom-0">
+    <footer className="flex flex-col justify-center w-screen items-center sm:items-end pr-8 z-[0] absolute bottom-0">
       <a href="https://www.devnty.com">
         {" "}
         <Image
