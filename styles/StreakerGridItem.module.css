@@ -7,6 +7,17 @@
     position: relative;
     cursor: pointer;
     overflow: hidden;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.streakerGridItem:hover {
+    opacity: 1;
+    border: 2px solid black;
+}
+
+.streakerGridItem:active {
+    transform: scale(0.95);
 }
 
 .streakerGridItemNoBg {
