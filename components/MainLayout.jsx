@@ -12,7 +12,7 @@ export default function MainLayout({ children }) {
     pathname === "/"
   ) {
     return (
-      <div className="min-h-[100svh] h-[100%]">
+      <div className="min-h-[100svh] h-[100%] flex flex-col justify-between">
         {children}
         <Footer />
       </div>

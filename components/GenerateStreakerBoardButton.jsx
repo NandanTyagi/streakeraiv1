@@ -20,7 +20,7 @@ const GenerateStreakerBoardButton = ({
   const router = useRouter();
 
   return (
-    <div className="scroller">
+    <div className="p-6 overflow-x-hidden max-h-[80vh]">
       <div className="text-center text-[#530DA2] font-semibold text-lg mb-1 sm:mb-6">
         {`Five habits you should track every day to achieve:`}
         <br />
