@@ -54,12 +54,12 @@ const StreakerGridItem = ({
 
   useEffect(() => {
     if(!currentCellIndexLocal) return
-    console.log("label local ******************************", board);
-    console.log("current cell ******************************", currentCellIndexLocal % 4);
+    // console.log("label local ******************************", board);
+    // console.log("current cell ******************************", currentCellIndexLocal % 4);
     const setCurrentCellLabelToCorespondingHabitName = () => {
       const habits = board?.habitsNames;
       const currentCellLabel = habits[(currentCellIndexLocal % 4) + 1];
-      console.log("current cell label", currentCellLabel);
+      // console.log("current cell label", currentCellLabel);
       setLabelLocal(currentCellLabel);
     }
     setCurrentCellLabelToCorespondingHabitName();
