@@ -20,6 +20,7 @@ const StreakerGridItem = ({
   user,
   isLoading,
   cell,
+  label
 }) => {
   const {
     board,
@@ -39,6 +40,7 @@ const StreakerGridItem = ({
   const [clickTimeout, setClickTimeout] = useState(null);
   const [todaysDate, settodaysDate] = useState(dayjs().format("D"));
   const [isTodayLocal, setIsTodayLocal] = useState(isToday);
+  const [labelLocal, setLabelLocal] = useState(label);
   const [currentCellIndexLocal, setCurrentCellIndexLocal] = useState(
     board?.cells?.findIndex((cell) => cell.id === `${rowNr}-${colNr}`)
   );
@@ -49,6 +51,19 @@ const StreakerGridItem = ({
   const buttonIsClearRef = useRef(null);
   const buttonIsDoneRef = useRef(null);
   const todayRef = useRef(null);
+
+  useEffect(() => {
+    if(!currentCellIndexLocal) return
+    console.log("label local ******************************", board);
+    console.log("current cell ******************************", currentCellIndexLocal % 4);
+    const setCurrentCellLabelToCorespondingHabitName = () => {
+      const habits = board?.habitsNames;
+      const currentCellLabel = habits[(currentCellIndexLocal % 4) + 1];
+      console.log("current cell label", currentCellLabel);
+      setLabelLocal(currentCellLabel);
+    }
+    setCurrentCellLabelToCorespondingHabitName();
+  }, [labelLocal, currentCellIndexLocal]);
 
   useEffect(() => {
     // console.log("isTodayLocal", isTodayLocal);
@@ -193,6 +208,7 @@ const StreakerGridItem = ({
             ...board.cells[currentCellIndexLocal],
             isDone: !isDoneLocal,
             isClear: false,
+            label: labelLocal,
           };
           handelCells(updatedCell);
         } else {
@@ -205,6 +221,7 @@ const StreakerGridItem = ({
             colNr: colNr,
             isDone: !isDoneLocal,
             isClear: false,
+            label: labelLocal,
           };
 
           handelCells(newCell);
@@ -232,6 +249,7 @@ const StreakerGridItem = ({
         ...board.cells[currentCellIndexLocal],
         isDone: false,
         isClear: true,
+        label: labelLocal,
       };
       setIsDoneLocal((prev) => false);
       handelCells(updatedCell);
@@ -243,6 +261,7 @@ const StreakerGridItem = ({
         colNr: colNr,
         isDone: false,
         isClear: true,
+        label: labelLocal,
       };
       setIsDoneLocal((prev) => false);
       handelCells(newCell);

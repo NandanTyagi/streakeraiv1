@@ -11,6 +11,7 @@ const generateEmptyBoardCells = (days, habitsNames, boardId) => {
         comment: "",
         isDone: false,
         isClear: true,
+        label: habit,
         createdAt:
           new Date().getFullYear() +
           "-" +

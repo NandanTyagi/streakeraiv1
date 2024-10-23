@@ -29,7 +29,7 @@ export default async function savePanelToDb(panel, userEmail) {
   console.log("in savePanelToDb user email", userEmail);
 
   if (checkPanelExists(panel._id)) {
-    return { saved: await updatePanelInDb(panel), message: "Panel updated" };
+    return { saved: await updatePanelInDb(panel, history), message: "Panel updated" };
   }
 }
 

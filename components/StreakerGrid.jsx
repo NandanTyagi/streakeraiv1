@@ -24,6 +24,7 @@ const StreakerGrid = () => {
         {isAppLoading ? <Loading /> :
           Array.from({ length: days }).map((item, i) =>
             habits.map((habit, j) => {
+              console.log("habit***********************", habit);
               const cell = board?.cells?.find(
                 (c) => c.rowId === i + 1 && c.columnId === j + 1
               );
@@ -36,6 +37,7 @@ const StreakerGrid = () => {
                   isDone={cell?.isDone}
                   isClear={cell?.isClear}
                   message={cell?.message}
+                  label={habit}
                 />
               );
             })

@@ -19,6 +19,9 @@ const CellSchema = new Schema(
     comment: {
       type: String,
     },
+    label: {
+      type: String,
+    },
     isDone: {
       type: Boolean,
       default: false,
