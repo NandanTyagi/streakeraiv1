@@ -13,7 +13,7 @@ export default function MainLayout({ children }) {
         <Footer />
       </div>
     );
-  }else if(pathname === "/generategoals") {
+  } else if (pathname === "/generategoals") {
     return (
       <div className="main-layout-container">
         <div className="main-layout">
@@ -22,7 +22,16 @@ export default function MainLayout({ children }) {
         </div>
       </div>
     );
-  }else {
+  } else if (pathname === "/about") {
+    return (
+      <div className="main-layout-container">
+        <div className="main-layout">
+          <Header />
+          {children}
+        </div>
+      </div>
+    );
+  } else {
     return (
       <div className="main-layout-container">
         <div className="main-layout">
