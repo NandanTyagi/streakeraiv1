@@ -1,6 +1,17 @@
+"use client";
+import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 import StandardButton from "./StandardButton";
 
 const ButtonGroup = ({ track = true, identify = true, join = true }) => {
+  const pathname = usePathname();
+  const [localIdentify, setLocalIdentify] = useState(identify);
+  useEffect(() => {
+    if (pathname === "/generategoals") {
+      setLocalIdentify(false);
+    }
+  }, [track, identify, join, pathname]);
+
   return (
     <div className="flex justify-between items-center gap-x-4 mt-4">
       {track && (
@@ -8,7 +19,7 @@ const ButtonGroup = ({ track = true, identify = true, join = true }) => {
           <StandardButton text="Track" type="round" />
         </div>
       )}
-      {identify && (
+      {localIdentify && (
         <div>
           <StandardButton text="Identify" type="round" />
         </div>
