@@ -67,7 +67,7 @@ const GenerateStreakerBoardButton = ({
 
       <button
         type="button"
-        className="bg-[transparent] text-[#530DA2] hover:underline font-semibold cursor-pointer w-[stretch] m-[auto]"
+        className="bg-[transparent] text-[#530DA2] hover:underline font-semibold cursor-pointer w-[stretch] m-[auto] mb-[8px]"
         onClick={() => router.push("/generategoals")}
       >
         Set new goal
