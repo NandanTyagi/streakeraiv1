@@ -166,7 +166,7 @@ const StreakerGridItem = ({
         };
         handelCells(newCell);
       }
-    }, 1000);
+    }, 2000);
     setTimer(timeoutId);
   };
 
