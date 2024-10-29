@@ -43,13 +43,13 @@ main:not(.zero-m) {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 .main-layout {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: [primary-header] 80px [secondary-header] 40px [main] auto [footer] 40px;
+  grid-template-rows: [primary-header] 80px [secondary-header] 40px [main] auto [footer] 60px;
   height: 100dvh;
   max-height: 100dvh;
   width: 100%;
@@ -97,7 +97,8 @@ footer {
   display: flex;
   justify-content: start;
   align-items: center;
-  margin-top: -8px;
+  /* margin-top: -8px; */
+  background-color: white;
 }
 
 .spin {

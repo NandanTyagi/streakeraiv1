@@ -178,7 +178,7 @@ const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
           {text === "Track" && trackSvg}
           {text === "Join" && joinSvg}
           {text === "About" && aboutSvg}
-          <div className={`${isSpalshScreen ? "text-white": "text-black"} font-semibold text-md tracking-[1px]`}>
+          <div className={`${isSpalshScreen ? "text-white": "text-black"} font-semibold text-sm sm:text-md tracking-[1px]`}>
             {text}
           </div>
         </div>
