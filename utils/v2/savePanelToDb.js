@@ -3,14 +3,6 @@ import dayjs from "dayjs";
 import createPanelInDb from "@/utils/v2/createPanelInDb";
 
 export default async function savePanelToDb(panel, userEmail) {
-  const month = dayjs().format("MMMM");
-  const year = dayjs().format("YYYY");
-  let history = Array.from({ length: 12 });
-  history[dayjs().month()] = {
-    year: year,
-    month: month,
-    cells: panel.cells,
-  };
 
   if (!userEmail) {
     console.log("in savePanelToDb no user email");
@@ -29,12 +21,12 @@ export default async function savePanelToDb(panel, userEmail) {
   console.log("in savePanelToDb user email", userEmail);
 
   if (checkPanelExists(panel._id)) {
-    return { saved: await updatePanelInDb(panel, history), message: "Panel updated" };
+    return { saved: await updatePanelInDb(panel), message: "Panel updated" };
   }
 }
 
-async function updatePanelInDb(panel, history) {
-  console.log("in updatePanelInDb panel", panel, history);
+async function updatePanelInDb(panel) {
+  console.log("in updatePanelInDb panel", panel);
   try {
     const res = await fetch(`/api/v2/panels/update`, {
       method: "post",
@@ -43,7 +35,7 @@ async function updatePanelInDb(panel, history) {
         habitsNames: panel.habitsNames,
         habitsValues: panel.habitsValues,
         days: panel.days,
-        history: history,
+        history: setHistory(panel),
         cells: panel.cells,
         user: panel.boardUser,
         _id: panel._id,
@@ -82,4 +74,34 @@ async function checkPanelExists(panelId) {
     console.error("Panel operation failed", error);
     return false;
   }
+}
+
+function setHistory(panel) {
+// Check if history exisists on panel
+  if (!panel.history) {
+    return setNewHistory(panel);
+  }
+
+
+  // Check if history for this month exists
+  if (!panel.history[dayjs().month()]) {
+    return setNewHistory(panel);
+  }
+
+  // Update history for this month
+  panel.history[dayjs().month()] = {
+    year: dayjs().format("YYYY"),
+    month: dayjs().format("MMMM"),
+    cells: panel.cells,
+  };
+  return panel.history;
+}
+
+function setNewHistory(history, panel) {
+  history[dayjs().month()] = {
+    year: dayjs().format("YYYY"),
+    month: dayjs().format("MMMM"),
+    cells: panel.cells,
+  };
+  return history;
 }
