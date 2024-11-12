@@ -77,34 +77,36 @@ const Nav = ({ isNav = true }) => {
   const handleClearPanel = async (e) => {
     console.log("clear panel");
     e.preventDefault();
-  
+
     if (!user) {
       alert("Please log in to clear and save your panel.");
       return;
     }
-  
-    const clear = window.confirm("Are you sure you want to clear the panel? This action cannot be undone.");
+
+    const clear = window.confirm(
+      "Are you sure you want to clear the panel? This action cannot be undone."
+    );
     if (clear) {
       // Create the updated board with cells cleared
       const updatedBoard = {
         ...board,
         cells: [],
       };
-  
+
       // Update the state
       setBoard(updatedBoard);
-  
+
       try {
         // Save the updated board to the database
         const panelSaved = await savePanelToDb(updatedBoard, user?.email);
-  
+
         if (panelSaved && !panelSaved.saved) {
           alert(`${panelSaved.message}`);
           return;
         }
-  
+
         setIsSaved(true);
-  
+
         // Optionally, refresh the page or update the UI accordingly
         setTimeout(() => {
           window.location.reload();
@@ -115,8 +117,6 @@ const Nav = ({ isNav = true }) => {
       }
     }
   };
-  
-  
 
   useEffect(() => {
     setDialogValue(board?.goalToAchieve || "");
@@ -193,7 +193,8 @@ const Nav = ({ isNav = true }) => {
           <RegisterLink>Sign up free to save your board</RegisterLink>
         ) : (
           <Dialog
-            value={dialogValue || "I want to live a healthy life"}
+            value={
+              dialogValue}
             onChange={handelClick}
           />
         )}
