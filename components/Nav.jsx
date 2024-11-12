@@ -163,10 +163,10 @@ const Nav = ({ isNav = true }) => {
     return (
       <div className="flex justify-center relative items-center bg-[#EBEBEB] text-md font-semibold cursor-pointer relative">
         {user && (
-          <div className="absolute left-6 sm:left-2">
+          <div className="absolute left-2 sm:left-2">
             <div className="hidden sm:block">
               <ThreeDButton
-                isSaved={isSaved}
+                isSaved={true}
                 text="Clear"
                 onClick={(e) => handleClearPanel(e)}
                 title="Reset panel"
