@@ -35,7 +35,9 @@ const IosInstallPrompt = () => {
   }
 
   return (
-    <div className="ios-install-prompt">
+    <div className="flex flex-col justify-center items-center">
+        <h1 className="text-xl">Installation</h1>
+        <h2 className="text-IPhone">Ios</h2>
       <p>To install this app on your home screen:</p>
       <ol>
         <li>

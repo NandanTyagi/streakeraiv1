@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const AddToHomeScreen = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -13,10 +13,10 @@ const AddToHomeScreen = () => {
       setIsVisible(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handler);
+    window.addEventListener("beforeinstallprompt", handler);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handler);
+      window.removeEventListener("beforeinstallprompt", handler);
     };
   }, []);
 
@@ -24,10 +24,10 @@ const AddToHomeScreen = () => {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      console.log('User accepted the install prompt');
+    if (outcome === "accepted") {
+      console.log("User accepted the install prompt");
     } else {
-      console.log('User dismissed the install prompt');
+      console.log("User dismissed the install prompt");
     }
     setIsVisible(false);
     setDeferredPrompt(null);
@@ -35,10 +35,12 @@ const AddToHomeScreen = () => {
 
   return (
     <>
-      {isVisible && (
-        <button onClick={handleInstallClick}>
-          Install App
-        </button>
+      {!isVisible && (
+        <div className="flex flex-col h-[20vh] justify-center items-center">
+          <h1 className="text-xl">Installation</h1>
+          <h2 className="text-IPhone">Android</h2>
+          <button onClick={handleInstallClick}>Install App</button>
+        </div>
       )}
     </>
   );

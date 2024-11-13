@@ -28,10 +28,7 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
               <RegisterLink>Sign up</RegisterLink>
             </li>
             <li>
-              <AddToHomeScreen>Android</AddToHomeScreen>
-            </li>
-            <li>
-              <Link href="/install" onClick={handleMenuClick}>IOS</Link>
+              <Link href="/install" onClick={handleMenuClick}>Install</Link>
             </li>
           </ul>
         ) : (
