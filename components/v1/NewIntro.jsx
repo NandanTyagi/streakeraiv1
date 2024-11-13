@@ -6,8 +6,10 @@ import {
   LoginLink,
   LogoutLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 const NewIntro = () => {
+  const { user } = useKindeBrowserClient();
   return (
     <div className="">
       <section className="">
@@ -17,12 +19,20 @@ const NewIntro = () => {
         <h2 className=""> Identify. Track. Achieve.</h2>
 
         <div className="relative z-50 flex flex-col items-center justify-center max-w-[50%] text-white">
-          <StandardButton text="Try for free!" type="pill" />
-          OR
-          <hr className="p-1 w-[50%]" />
-          <LoginLink title="Login" className="font-semibold text-white">
-            Login
-          </LoginLink>
+          <StandardButton
+            text={`${user ? "Enter" : "Try for free!"}`}
+            type="pill"
+            pushTo={user ? "/panel" : "/generategoals"}
+          />
+          {!user && (
+            <>
+              OR
+              <hr className="p-1 w-[50%]" />
+              <LoginLink title="Login" className="font-semibold text-white">
+                Login
+              </LoginLink>
+            </>
+          )}
           <ButtonGroup />
         </div>
       </section>
