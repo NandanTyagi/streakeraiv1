@@ -63,7 +63,7 @@ const StreakerGridHeaders = ({ isEmpty = false }) => {
     return (
       <>
         <div className="flex flex-col justify-center items-center text-[0.65rem] sm:text-[0.8rem] sm:font-semibold">
-          {dayjs().format("MMM")}
+          <strong className="text-[0.7rem]">{dayjs().format("MMM")}</strong>
         </div>
         {(headerNamesLocal ? headerNamesLocal : board?.headerNames || []).map(
           (name, i) => (

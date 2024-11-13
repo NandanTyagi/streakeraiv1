@@ -19,6 +19,7 @@ export default function MainLayout({ children }) {
         <div className="main-layout">
           <Header />
           {children}
+          <Footer />
         </div>
       </div>
     );
@@ -28,6 +29,7 @@ export default function MainLayout({ children }) {
         <div className="main-layout">
           <Header />
           {children}
+          <Footer />
         </div>
       </div>
     );

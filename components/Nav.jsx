@@ -161,10 +161,10 @@ const Nav = ({ isNav = true }) => {
     );
   } else {
     return (
-      <div className="flex justify-center relative items-center bg-[#EBEBEB] text-md font-semibold cursor-pointer relative">
+      <div className="flex justify-center items-center bg-[#EBEBEB] text-md font-semibold cursor-pointer relative">
         {user && (
-          <div className="absolute left-2 sm:left-2">
-            <div className="hidden sm:block">
+          <div className="absolute left-2 md:left-2">
+            <div className="hidden md:block">
               <ThreeDButton
                 isSaved={true}
                 text="Clear"
@@ -181,7 +181,7 @@ const Nav = ({ isNav = true }) => {
               </ThreeDButton>
             </div>
             <button
-              className={`flex flex-col justify-center items-center sm:hidden w-[40px]`}
+              className={`flex flex-col justify-center items-center md:hidden w-[40px]`}
               onClick={(e) => handleClearPanel(e)}
             >
               <span className="text-[0.7rem] sm:text-[0.7rem]">X</span>
@@ -200,7 +200,7 @@ const Nav = ({ isNav = true }) => {
         )}
         <div className="absolute right-6">
           <div
-            className={`hidden sm:block ${
+            className={`hidden md:block ${
               !isSaved ? "border-red-500 border-2 rounded-lg" : null
             }`}
           >
@@ -220,7 +220,7 @@ const Nav = ({ isNav = true }) => {
             </ThreeDButton>
           </div>
           <button
-            className={`flex flex-col sm:hidden w-[14px] pt-1`}
+            className={`flex flex-col md:hidden w-[14px] pt-1`}
             onClick={handelCtxMenu}
           >
             {isSaved ? (
@@ -237,7 +237,7 @@ const Nav = ({ isNav = true }) => {
             )}
 
             <span
-              className={`text-[0.7rem] sm:text-[0.7rem] ml-[-6px] mt-[-2px] ${
+              className={`text-[0.7rem] md:text-[0.7rem] ml-[-6px] mt-[-2px] ${
                 !isSaved ? " text-red-500 font-bold" : "font-light"
               }`}
             >

@@ -158,7 +158,7 @@ function AiInputForm() {
             </FormItem>
           )}
         />
-        <StandardButton type="pill" text="Generate streak items" />
+        <StandardButton action="submit" type="pill" text="Generate streak items" />
         {/* <Button type="submit" className="bg-[#330594] text-white cursor-pointer w-[stretch]">Generate streak items</Button> */}
       </form>
     </Form>

@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import { useLayoutEffect, useRef } from "react";
 import { Button } from "@/components/ui/button/Button";
 import { useRouter } from "next/navigation";
+import StandardButton from "./v1/StandardButton";
 const Intro = () => {
   const comp = useRef(null);
   const router = useRouter();
@@ -80,14 +81,20 @@ const Intro = () => {
           >
             Streaker.ai
           </h1>
-          <Button
+          <div className="w-[100%] flex justify-center items-center" id="button">
+          <StandardButton onClick={() => router.push("/generategoals")} widthSM="400" width="300" text="Identify your goals now!" type="pill" />
+
+          </div>
+          {/* <Button
             id="button"
+            variant={"special"}
+            size={"special"}
             type="button"
             onClick={() => router.push("/generategoals")}
             className="bg-[#530DA2] font-semibold text-[1.1rem] sm:max-w-[300px] max-w-[200px] text-white cursor-pointer w-[stretch]"
           >
             Identify your goals now!
-          </Button>
+          </Button> */}
       </div>
     </div>
   );

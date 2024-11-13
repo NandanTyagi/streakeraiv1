@@ -19,7 +19,7 @@ const DialogButton = ({ habit = null, value, onChange }) => (
         )}
         {!habit && (
           <span className="font-extrabold text-[1rem] md:hidden">
-            {value.length > 20
+            {value.length > 25
               ? value.substring(0, 25) + "..."
               : value || "I want to live a healthy life"}
           </span>
@@ -37,11 +37,12 @@ const DialogButton = ({ habit = null, value, onChange }) => (
       <Dialog.Overlay className="DialogOverlay" />
       <Dialog.Content className="DialogContent">
         <Dialog.Title className="DialogTitle">
-          Edit {habit ? "activity" : "goal"}
+          <strong>Edit {habit ? "activity" : "goal"}</strong>
+          {habit && `: ${habit} - ${value}`}
+          {!habit && value && `: ${value}`}
         </Dialog.Title>
         <Dialog.Description className="DialogDescription">
-          Make changes to your tracked {habit ? "activity" : "goal"} here. Click
-          save when you&apos;re done.
+          Make changes to your tracked {habit ? "activity" : "goal"} here.
         </Dialog.Description>
         {habit && (
           <fieldset className="Fieldset">

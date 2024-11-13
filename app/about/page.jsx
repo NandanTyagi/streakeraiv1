@@ -11,16 +11,20 @@ import { AppContext } from "@/context/appContext";
 import Nav from "@/components/Nav";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button/Button";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import {
   RegisterLink,
   LoginLink,
   LogoutLink,
+  
 } from "@kinde-oss/kinde-auth-nextjs/components";
 import ButtonGroup from "@/components/v1/ButtonGroup";
+import StandardButton from "@/components/v1/StandardButton";
 
 export default function Home() {
   const router = useRouter();
   const signUpRef = useRef(null);
+  const { isAuthenticated, user } = useKindeBrowserClient();
 
   const [showDialog, setShowDialog] = useState(false);
   const { board, openAIResponseHeadersNames, openAIResponseHeadersValues } =
@@ -53,12 +57,12 @@ export default function Home() {
               <Intro />
             </section>
 
-            <section className="h-[fit-content]  bg-white px-6 pt-10 flex justify-center">
+            <section ref={signUpRef} className="h-[fit-content]  bg-white px-6 pt-10 flex justify-center">
             <iframe width="560" height="315" src="https://www.youtube.com/embed/NLxlXaaMsS0?si=q7oc5fZRUqc8AT1k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="true"></iframe>
             </section>
-            <section className="h-[fit-content]  bg-white px-6 pt-10 flex place-content-center" ref={signUpRef}>
+            {/* <section className="h-[fit-content]  bg-white px-6 pt-10 flex place-content-center" >
             <ButtonGroup join={false} />
-            </section>
+            </section> */}
             <section
               className="h-[fit-content]  bg-white px-6 pt-10 sm:flex"
             >
@@ -74,7 +78,7 @@ export default function Home() {
                   support you on the journey of improvement and goal
                   achievement.
                 </p>
-                <div className="flex justify-around gap-10 pt-10">
+                {!user && <div className="flex justify-around gap-10 pt-10">
                   <Button
                     id="button"
                     type="button"
@@ -89,7 +93,10 @@ export default function Home() {
                   >
                     <RegisterLink>Sign up</RegisterLink>
                   </Button>
-                </div>
+                </div>}
+                {user && <div className="flex justify-around gap-10 pt-10">
+                  <StandardButton widthSM="300" width="200" text="Track now!" type="pill" />
+                </div>}
               </div>
             </section>
             <section className="h-[fit-content]  bg-white px-6 pt-10 sm:pt-24 sm:flex sm:flex-col">

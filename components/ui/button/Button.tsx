@@ -9,6 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        special:"group relative inline-flex cursor-pointer w-[100%]  items-center justify-center overflow-hidden rounded-full border-b-2 border-l-2 border-r-2 border-[#330594] bg-gradient-to-tr py-4 text-white shadow-lg transition duration-100 ease-in-out active:translate-y-0.5 active:border-[#A035C2] active:shadow-none from-[#330594] to-[#330594] text-center w-[300px] rounded-full",
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
@@ -20,10 +21,11 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
+        special: "w-[300px] rounded-full",
         default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        // sm: "h-9 rounded-md px-3",
+        // lg: "h-11 rounded-md px-8",
+        // icon: "h-10 w-10",
       },
     },
     defaultVariants: {

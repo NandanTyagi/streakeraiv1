@@ -3,7 +3,12 @@
 import { useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
-const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
+const StandardButton = ({
+  action = "button",
+  text,
+  type = "pill",
+  pushTo = "",
+}) => {
   const buttonRef = useRef(text);
   const router = useRouter();
   const pathname = usePathname();
@@ -135,14 +140,14 @@ const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
     if (id === "Identify") {
       router.push("/generategoals");
     }
-    if (id === "Track") {
+    if (id === "Track" || id === "Track now!") {
       router.push("/panel");
     }
     if (id === "Join") {
       router.push("/about");
     }
-    if (id === "About") {
-      router.push("/about");
+    if (id === "Identify your goals now!") {
+      router.push("/generategoals");
     }
   };
 
@@ -151,11 +156,14 @@ const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
       <button
         onClick={() => handleClick(buttonRef.current.id)}
         title={text}
-        className={`group relative inline-flex cursor-pointer w-[100%]  items-center justify-center overflow-hidden rounded-full border-b-2 border-l-2 border-r-2 border-[#330594] bg-gradient-to-tr py-4 text-white shadow-lg transition duration-100 ease-in-out active:translate-y-0.5 active:border-[#A035C2] active:shadow-none from-[#330594] to-[#330594] text-center`}
-        ref={buttonRef}
+        type={action}
         id={text}
+        className={`group relative inline-flex cursor-pointer w-[100%]  items-center justify-center overflow-hidden rounded-full border-b-2 border-l-2 border-r-2 border-[#330594] bg-gradient-to-tr py-4 text-white shadow-lg transition duration-100 ease-in-out active:translate-y-0.5 active:border-[#A035C2] active:shadow-none from-[#330594] to-[#330594] text-center max-w-[$`}
+        ref={buttonRef}
       >
-        <span className="absolute h-0 w-0 rounded-full bg-white opacity-10 transition-all duration-300 ease-out group-hover:h-32 group-hover:w-[100%]"></span>
+        <span
+          className={`absolute h-0 w-0 rounded-full bg-white opacity-10 transition-all duration-300 ease-out group-hover:h-32 group-hover:w-[100%]`}
+        ></span>
         <span className="relative text-xl font-semibold flex w-[100%] sm:w-[100%] text-center justify-center items-center">
           {text}
         </span>
@@ -168,7 +176,9 @@ const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
       <button
         onClick={() => handleClick(buttonRef.current.id)}
         title={text}
-        className={`group relative m-1 inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full border-t-4 border-b-4 border-l-4 border-r-4 ${isSpalshScreen ? "border-[transparent]": "border-[#330594]"}  bg-gradient-to-tr py-6 px-[8px] text-white transition duration-100 ease-in-out active:translate-y-0.5 active:border-[#A035C2] active:shadow-none from-[transparent] to-[transparent] text-center  max-h-[130px] sm:max-h-[200px]`}
+        className={`group relative m-1 inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full border-t-4 border-b-4 border-l-4 border-r-4 ${
+          isSpalshScreen ? "border-[transparent]" : "border-[#330594]"
+        }  bg-gradient-to-tr py-6 px-[8px] text-white transition duration-100 ease-in-out active:translate-y-0.5 active:border-[#A035C2] active:shadow-none from-[transparent] to-[transparent] text-center  max-h-[130px] sm:max-h-[200px]`}
         ref={buttonRef}
         id={text}
       >
@@ -178,7 +188,11 @@ const StandardButton = ({ text, type = "pill", pushTo = "" }) => {
           {text === "Track" && trackSvg}
           {text === "Join" && joinSvg}
           {text === "About" && aboutSvg}
-          <div className={`${isSpalshScreen ? "text-white": "text-black"} font-semibold text-sm sm:text-md tracking-[1px]`}>
+          <div
+            className={`${
+              isSpalshScreen ? "text-white" : "text-black"
+            } font-semibold text-sm sm:text-md tracking-[1px]`}
+          >
             {text}
           </div>
         </div>

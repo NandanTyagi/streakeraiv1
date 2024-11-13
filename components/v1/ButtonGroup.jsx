@@ -26,7 +26,7 @@ const ButtonGroup = ({ track = true, identify = true, join = true }) => {
       )}
       {join && (
         <div>
-          <StandardButton text="About" type="round" />
+          <StandardButton text="About" type="round" pushTo="/about" />
         </div>
       )}
     </div>

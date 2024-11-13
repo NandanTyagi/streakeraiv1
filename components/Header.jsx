@@ -1,24 +1,31 @@
 "use client";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import {
-  RegisterLink,
-  LoginLink,
-  LogoutLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
+import HamburgerButton from "@/components/HamburgerButton";
+import Menu from "@/components/Menu";
+import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 
 const Header = () => {
-  const { isAuthenticated, isLoading, user } = useKindeBrowserClient();
-  const Router = useRouter();
+  const { isAuthenticated, user } = useKindeBrowserClient();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const handleMenuClose = () => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      setIsAnimating(false);
+      setIsMenuOpen(false);
+    }, 500); // Match the animation duration
+  };
 
   return (
-    <header className="bg-[#330594] flex items-center justify-between place-items-center px-3 relative">
-      <a href={"/"}>
-        <div className="flex justify-center items-center gap-1">
+    <header className="bg-[#330594] flex items-center justify-between px-3 relative">
+      <a href="/">
+        <div className="flex items-center gap-1">
           <div className="relative rounded-full overflow-hidden shadow-xl">
             <Image
-              src={"/streaker-logo.png"}
+              src="/streaker-logo.png"
               alt="logo"
               priority
               width={60}
@@ -28,85 +35,60 @@ const Header = () => {
           <div className="text-[1.4rem] sm:text-[1.6rem] flex font-bold text-white">
             Streaker.ai
             <div className="flex gap-2">
-              <span className="text-[0.65rem]"></span>
               <span className="text-[0.7rem]">Beta</span>
             </div>
           </div>
         </div>
       </a>
-      <div className="absolute top-0 right-0 flex z-50 justify-between gap-5 pr-3 text-white text-[0.8rem] h-[100%] pt-[4px]">
-        {isAuthenticated && (
-          <div className="flex justify-center items-center flex-row-reverse gap-2 sm:mr-6">
-            <span className="sm:block hidden mb-[-2px]">
-              {isAuthenticated && user?.family_name}{" "}
-            </span>
-            <span className="sm:block hidden mb-[-2px]">
-              {isAuthenticated && user?.given_name}{" "}
-            </span>
-            <span>
-              {isAuthenticated && user.picture ? (
-                <img
-                  className="rounded-[100px] w-[30px] h-[30px] overflow-hidden"
-                  src={user.picture}
-                ></img>
-              ) : (
-                <div className="rounded-[100px] w-[30px] h-[30px] overflow-hidden bg-black text-white text-[0.6rem] font-semibold flex justify-center items-center">
-                  {isAuthenticated &&
-                    user?.given_name[0] + user?.family_name[0]}
-                </div>
-              )}
-            </span>
-          </div>
-        )}
-        {!isAuthenticated && (
-          <div className="mt-[4px] flex flex-col items-center">
-            <LoginLink>
-              Log in
-            </LoginLink>
-            <LoginLink>
-              <button
-                className="text-xl relative w-[2.2rem] h-[100%] cursor-pointer"
-                onClick={() => Router.push("/generategoals")}
-              >
-                <Image
-                  src={"/burger-white.svg"}
-                  alt="menu-button"
-                  priority
-                  fill
-                />
-              </button>
-            </LoginLink>
-            {/* <RegisterLink>Sign up</RegisterLink> */}
-          </div>
-        )}
-        {isAuthenticated && (
-          <div className="mt-[4px] flex flex-col items-center">
-            <LogoutLink>
-              Log out
-            </LogoutLink>
-            <LogoutLink>
-              <button
-                className="text-xl relative w-[2.2rem] h-[100%] cursor-pointer"
-                onClick={() => Router.push("/generategoals")}
-              >
-                <Image
-                  src={"/burger-white.svg"}
-                  alt="menu-button"
-                  priority
-                  fill
-                />
-              </button>
-            </LogoutLink>
-          </div>
-        )}
+      <div className="absolute top-0 right-0 flex z-2 gap-5 pr-3 text-white text-[0.8rem] h-full pt-1">
+        <div className="flex items-center">
+          {isAuthenticated ? (
+            <>
+              <div className="flex items-center gap-2 sm:mr-6">
+                <span className="hidden sm:block mb-[-2px]">
+                  {user?.given_name} {user?.family_name}
+                </span>
+                {user?.picture ? (
+                  <Image
+                    className="rounded-full w-8 h-8 mr-[32px]"
+                    src={user.picture}
+                    alt="profile-pic"
+                    priority
+                    width={30}
+                    height={30}
+                  />
+                ) : (
+                  <div className="rounded-full w-8 h-8 bg-black text-white text-xs font-semibold flex justify-center items-center">
+                    {user?.given_name?.[0]}
+                    {user?.family_name?.[0]}
+                  </div>
+                )}
+              </div>
+              {/* <LogoutLink>Log out</LogoutLink> */}
+            </>
+          ) : // <LoginLink>Log in</LoginLink>
+          null}
+          <HamburgerButton
+            isMenuOpen={isMenuOpen}
+            setIsMenuOpen={setIsMenuOpen}
+          />
+        </div>
       </div>
-      {/* 
-        <button
-          className="text-xl relative w-[2.2rem] h-[100%] cursor-pointer"
-          onClick={() => Router.push("/generategoals")}
+      {isMenuOpen && (
+        <div
+          className={`absolute inset-0 z-50 flex justify-center items-center bg-white h-[calc(100vh-80px)] top-[80px] ${
+            isAnimating ? "animate-fadeOut" : "animate-fadeIn"
+          }`}
+          onAnimationEnd={() => {
+            if (isAnimating) {
+              setIsMenuOpen(false);
+              setIsAnimating(false);
+            }
+          }}
         >
-          <Image src={"/burger-white.svg"} alt="menu-button" priority fill />
-        </button> */}
+          <Menu user={user} setIsMenuOpen={handleMenuClose} />
+        </div>
+      )}
     </header>
   );
 };
