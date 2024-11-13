@@ -35,13 +35,13 @@ export default function Home() {
     console.log("openairesponseheadersvalues", openAIResponseHeadersValues);
   }, [board, openAIResponseHeadersNames, openAIResponseHeadersValues]);
 
-  useLayoutEffect(() => {
-    setTimeout(() => {
-      if (signUpRef.current) {
-        signUpRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-      }
-    }, 3000);
-  }, []);
+  // useLayoutEffect(() => {
+  //   setTimeout(() => {
+  //     if (signUpRef.current) {
+  //       signUpRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+  //     }
+  //   }, 3000);
+  // }, []);
 
   return (
     <>

@@ -81,7 +81,7 @@ const Intro = () => {
           >
             Streaker.ai
           </h1>
-          <div className="w-[100%] flex justify-center items-center" id="button">
+          <div className="w-[100%] flex justify-center items-center max-w-[400px] px-6" id="button">
           <StandardButton onClick={() => router.push("/generategoals")} widthSM="400" width="300" text="Identify your goals now!" type="pill" />
 
           </div>
