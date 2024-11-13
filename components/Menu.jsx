@@ -37,7 +37,7 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
               <AddToHomeScreen>Android</AddToHomeScreen>
             </li>
             <li>
-              <Link href="/install" onClick={handleMenuClick}>IOS</Link>
+              <Link href="/install" onClick={handleMenuClick}>Install</Link>
             </li>
             <li>
               <LogoutLink>Logout</LogoutLink>
