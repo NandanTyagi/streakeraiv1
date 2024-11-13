@@ -35,11 +35,11 @@ const IosInstallPrompt = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center mb-10 mt-10">
         <h1 className="text-xl">Installation</h1>
-        <h2 className="text-IPhone">Ios</h2>
+        <h2 className="text-IPhone">Ios / IPhone</h2>
       <p>To install this app on your home screen:</p>
-      <ol>
+      <ol className="flex flex-col justify-center items-center">
         <li>
           Tap the{" "}
           <Image

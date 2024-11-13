@@ -39,7 +39,7 @@ const AddToHomeScreen = () => {
         <div className="flex flex-col h-[20vh] justify-center items-center">
           <h1 className="text-xl">Installation</h1>
           <h2 className="text-IPhone">Android</h2>
-          <button onClick={handleInstallClick}>Install App</button>
+          <button className="text-lg text-blue-500 border border-blue-500 p-4 rounded-full" onClick={handleInstallClick}>Install App</button>
         </div>
       )}
     </>
