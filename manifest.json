@@ -1,0 +1,27 @@
+{
+    "name": "StreakerAI",
+    "short_name": "StreakerAI",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "description": "An AI-powered app to help you track the things you want to track.",
+    "icons": [
+      {
+        "src": "/streaker-logo-min.svg",
+        "sizes": "any",
+        "type": "image/svg+xml"
+      },
+      {
+        "src": "/streaker-logo-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/streaker-logo-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  

@@ -15,6 +15,12 @@ export const metadata = {
   openGraph: {
     images: "/opengraph-image.png",
   },
+  themeColor: '#ff5722',
+  icons: {
+    icon: '/streaker-logo-192x192.png',
+    apple: '/streaker-logo-180x180.png',
+  },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({ children }) {

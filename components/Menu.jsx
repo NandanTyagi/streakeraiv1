@@ -9,6 +9,7 @@ import {
 } from "@kinde-oss/kinde-auth-nextjs/components";
 import Footer from "@/components/Footer";
 import StandardButton from "./v1/StandardButton";
+import AddToHomeScreen from "./AddToHomeScreen";
 
 const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
   const handleMenuClick = () => {
@@ -26,9 +27,21 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
             <li>
               <RegisterLink>Sign up</RegisterLink>
             </li>
+            <li>
+              <AddToHomeScreen>Android</AddToHomeScreen>
+            </li>
+            <li>
+              <Link href="/install" onClick={handleMenuClick}>IOS</Link>
+            </li>
           </ul>
         ) : (
           <ul>
+            <li>
+              <AddToHomeScreen>Android</AddToHomeScreen>
+            </li>
+            <li>
+              <Link href="/install" onClick={handleMenuClick}>IOS</Link>
+            </li>
             <li>
               <LogoutLink>Logout</LogoutLink>
             </li>
@@ -39,17 +52,17 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
         <ul className="flex flex-col gap-6 sm:gap-20 w-full p-4">
           <li>
             <Link href="/about" onClick={handleMenuClick}>
-            <StandardButton text="About" type="pill" />
+              <StandardButton text="About" type="pill" />
             </Link>
           </li>
           <li>
             <Link href="/generategoals" onClick={handleMenuClick}>
-                <StandardButton text="Identify" type="pill" />
+              <StandardButton text="Identify" type="pill" />
             </Link>
           </li>
           <li>
             <Link href="/panel" onClick={handleMenuClick}>
-                <StandardButton text="Track" type="pill" />
+              <StandardButton text="Track" type="pill" />
             </Link>
           </li>
         </ul>
@@ -60,4 +73,3 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
 };
 
 export default Menu;
-
