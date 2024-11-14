@@ -12,6 +12,7 @@ export const metadata = {
   openGraph: {
     images: "/opengraph-image.png",
   },
+  themeColor: '#330594',
 };
 
 export default function RootLayout({ children }) {
