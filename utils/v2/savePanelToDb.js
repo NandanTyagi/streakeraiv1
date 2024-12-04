@@ -26,7 +26,12 @@ export default async function savePanelToDb(panel, userEmail) {
 }
 
 async function updatePanelInDb(panel) {
-  console.log("in updatePanelInDb panel", panel);
+  if (!panel) {
+    console.log("in updatePanelInDb no panel");
+    return { saved: false, message: "Panel not found" };
+  }
+  console.log("in updatePanelInDb panel", panel)
+  debugger;
   try {
     const res = await fetch(`/api/v2/panels/update`, {
       method: "post",
@@ -77,6 +82,12 @@ async function checkPanelExists(panelId) {
 }
 
 function setHistory(panel) {
+  debugger;
+
+if (!panel) {
+    console.log("in setHistory no panel");
+    return { saved: false, message: "Panel not found" };
+  }
 // Check if history exisists on panel
   if (!panel.history) {
     return setNewHistory(panel);
@@ -101,7 +112,7 @@ function setNewHistory(history, panel) {
   history[dayjs().month()] = {
     year: dayjs().format("YYYY"),
     month: dayjs().format("MMMM"),
-    cells: panel.cells,
+    cells: panel?.cells,
   };
   return history;
 }

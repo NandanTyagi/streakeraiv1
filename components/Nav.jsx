@@ -43,7 +43,8 @@ const Nav = ({ isNav = true }) => {
       }
       const panelSaved = await savePanelToDb(board, user?.email);
       if (panelSaved && !panelSaved.saved) {
-        alert(`${panelSaved.message}`);
+        debugger;
+        alert(`Is panel saved: ${panelSaved.saved}`);
         return;
       }
       setIsSaved(true);
@@ -99,12 +100,15 @@ const Nav = ({ isNav = true }) => {
       try {
         // Save the updated board to the database
         const panelSaved = await savePanelToDb(updatedBoard, user?.email);
+        debugger
 
         if (panelSaved && !panelSaved.saved) {
+          console.error("Error saving panel:", panelSaved.saved);
           alert(`${panelSaved.message}`);
           return;
         }
-
+        
+        console.log("NOT Error saving panel:", panelSaved.message);
         setIsSaved(true);
 
         // Optionally, refresh the page or update the UI accordingly

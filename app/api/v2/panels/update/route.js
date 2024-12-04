@@ -16,7 +16,7 @@ export const POST = async (req, res) => {
   } = await req.json();
 
   await connectDB();
-
+debugger
   try {
     const existingPanel = await Panel.findByIdAndUpdate(
       _id,
