@@ -22,7 +22,7 @@ const StreakerGridRow = ({ nr, cells, day, user, isLoading, onCellSelect, board,
             isLoading={isLoading}
             onCellClick={() => onCellSelect(currentCellIndex)}
             board={board}
-            label={habits[cell.colNr - 1]}
+            label={habits?.[cell.colNr - 1]}
           />
         );
       })}
