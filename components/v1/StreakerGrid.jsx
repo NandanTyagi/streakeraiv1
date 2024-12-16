@@ -17,6 +17,7 @@ const StreakerGrid = () => {
   const { cells, board, isAppLoading } = useContext(AppContext);
   const { isLoading, user } = useKindeBrowserClient();
   const [cellsArray, setCellsArray] = useState(board?.cells || []);
+  const [currentCellIndexLocal, setCurrentCellIndexLocal] = useState(null);
   const habits = board?.habitsNames || Array.from({ length: 5 });
   const days = getDaysInMonth(new Date());
   const tagArr = getDayTagArray(new Date(), days);
@@ -82,6 +83,9 @@ const StreakerGrid = () => {
                   day={tagArr[dayIndex]}
                   user={user}
                   isLoading={isLoading}
+                  onCellSelect={(index) => setCurrentCellIndexLocal(index)}
+                  board={board}
+                  habits={habits}
                 />
               );
             })}

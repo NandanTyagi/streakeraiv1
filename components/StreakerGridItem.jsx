@@ -2,12 +2,11 @@
 
 import Image from "next/image";
 import styles from "../styles/StreakerGridItem.module.css";
-import { useState, useEffect, useContext, useRef, use } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { AppContext } from "@/context/appContext";
-import handelBoards from "@/utils/handelBoards";
 import dayjs from "dayjs";
-// import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import handelDbCells from "../utils/handelDbCells";
+
 const StreakerGridItem = ({
   type,
   isDone,
@@ -20,12 +19,12 @@ const StreakerGridItem = ({
   user,
   isLoading,
   cell,
-  label
+  label,
+  board,
+  onCellClick, // New callback prop to notify parent of current cell index
 }) => {
   const {
-    board,
     setBoard,
-    cells,
     setCells,
     isCellLoading,
     setIsCellLoading,
@@ -41,46 +40,38 @@ const StreakerGridItem = ({
   const [todaysDate, settodaysDate] = useState(dayjs().format("D"));
   const [isTodayLocal, setIsTodayLocal] = useState(isToday);
   const [labelLocal, setLabelLocal] = useState(label);
-  const [currentCellIndexLocal, setCurrentCellIndexLocal] = useState(
-    board?.cells?.findIndex((cell) => cell.id === `${rowNr}-${colNr}`)
-  );
   const [timer, setTimer] = useState(null);
-  const [currentCell, setCurrentCell] = useState(
-    cells ? [currentCellIndexLocal ? currentCellIndexLocal : 0] : null
+
+  // Find the current cell index from the board
+  const currentCellIndexLocal = board?.cells?.findIndex(
+    (cell) => cell.id === `${rowNr}-${colNr}`
   );
-  const buttonIsClearRef = useRef(null);
-  const buttonIsDoneRef = useRef(null);
+
   const todayRef = useRef(null);
 
   useEffect(() => {
-    if(!currentCellIndexLocal) return
-    // console.log("label local ******************************", board);
-    // console.log("current cell ******************************", currentCellIndexLocal % 4);
+    if (currentCellIndexLocal == null || currentCellIndexLocal < 0) return;
     const setCurrentCellLabelToCorespondingHabitName = () => {
       const habits = board?.habitsNames;
-      const currentCellLabel = habits[(currentCellIndexLocal % 4) + 1];
-      // console.log("current cell label", currentCellLabel);
+      if (!habits || habits.length === 0) return;
+      // Adjust indexing if needed; currently using (currentCellIndexLocal % 4) + 1
+      // Consider if you want to just use (currentCellIndexLocal % habits.length)
+      const currentCellLabel = habits[currentCellIndexLocal % habits.length];
       setLabelLocal(currentCellLabel);
-    }
+    };
     setCurrentCellLabelToCorespondingHabitName();
-  }, [labelLocal, currentCellIndexLocal]);
+  }, [currentCellIndexLocal, board]);
 
   useEffect(() => {
-    // console.log("isTodayLocal", isTodayLocal);
-    // console.log("isToday", isToday);
-    // console.log("isTodayLocal row nr", rowNr);
-    // console.log("isTodayLocal date", todaysDate);
     if (todaysDate == rowNr) {
       setIsTodayLocal(true);
     }
     if (todayRef.current !== null) {
       todayRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
-  }, [isTodayLocal]);
+  }, [isTodayLocal, rowNr, todaysDate]);
 
   const handelCells = (cellProps) => {
-    console.log("cell props", cellProps);
-    console.log("cell props cell", cell);
     setIsCellLoading(true);
     const cellId = `${rowNr}-${colNr}`;
     const updatedCell = {
@@ -88,23 +79,18 @@ const StreakerGridItem = ({
       boardId: board?.boardId,
     };
 
-    // Update the cells with the new state
     setCells((prevCells) => ({
       ...prevCells,
       [cellId]: updatedCell,
     }));
-    // console.log("cells", board.cells);
-    // console.log("updated cell", updatedCell);
 
     setBoard((prevBoard) => {
       if (prevBoard?.boardUser && prevBoard.boardUser !== user?.email) {
         prevBoard.boardUser = user?.email;
       }
-      // Check if the cell already exists in the array
       const cellIndex = prevBoard?.cells?.findIndex(
-        (cell) => cell.id === `${rowNr}-${colNr}`
+        (cell) => cell.id === cellId
       );
-      // If the cell exists, replace it
       if (cellIndex !== -1) {
         return {
           ...prevBoard,
@@ -113,31 +99,30 @@ const StreakerGridItem = ({
           ),
         };
       }
-
-      // If the cell doesn't exist, add it
       return {
         ...prevBoard,
         cells: [...prevBoard.cells, updatedCell],
       };
     });
+
     if (!user?.email) {
       setIsCellLoading(false);
       return;
     }
+
     handelDbCells(board, currentCellIndexLocal, updatedCell);
     setIsCellLoading(false);
   };
 
   const handleMouseDown = () => {
-    if(isSaved) {
+    if (isSaved) {
       setIsSaved(false);
     }
     const timeoutId = window.setTimeout(() => {
       let input;
-
-      if (currentCell?.updatedAt) {
+      if (board?.cells?.[currentCellIndexLocal]?.updatedAt) {
         input = window.prompt(
-          `Previous note: "${messageLocal}"\n\nLast updated: ${currentCell.updatedAt}"`
+          `Previous note: "${messageLocal}"\n\nLast updated: ${board.cells[currentCellIndexLocal].updatedAt}"`
         );
       } else {
         if (!messageLocal) {
@@ -146,13 +131,10 @@ const StreakerGridItem = ({
           input = window.prompt(`Note:\n"${messageLocal}"\n\nUpdate note:`);
         }
       }
-      console.log(input); // Handle the input as needed
       if (!input) {
         return;
       }
       setMessageLocal(input);
-      let d = dayjs();
-      let date = d.format("YYYY-MM-DD THH:mm");
       if (!isClearLocal) {
         const updatedCell = {
           ...board.cells[currentCellIndexLocal],
@@ -171,39 +153,41 @@ const StreakerGridItem = ({
   };
 
   const handleMouseUp = () => {
-    // If the mouse up event is fired before the timer runs out, clear the timeout
     clearTimeout(timer);
     setTimer(null);
   };
 
   const handleClick = (e) => {
-    if(isSaved) {
+    if (isSaved) {
       setIsSaved(false);
     }
+
+    // Handle double-click detection
     if (clickTimeout) {
       clearTimeout(clickTimeout);
       setClickTimeout(null);
       handleDoubleClick();
     } else {
-      // Otherwise, start a timeout to wait for a potential second click
+      // Start a timeout for single-click
       const newTimeout = setTimeout(() => {
         // Single-click logic
 
-        const currentCellIndex = board?.cells?.findIndex(
-          (cell) => cell.id === `${rowNr}-${colNr}`
-        );
-        setCurrentCellIndexLocal(currentCellIndex);
+        // Notify parent of current cell index
+        if (
+          onCellClick &&
+          currentCellIndexLocal != null &&
+          currentCellIndexLocal >= 0
+        ) {
+          onCellClick(currentCellIndexLocal);
+        }
 
         setIsDoneLocal(!isDoneLocal);
-        let newD = dayjs();
-        let date = newD.format();
         let cellExists = board?.cells?.[currentCellIndexLocal];
         if (
           cellExists &&
           board.cells[currentCellIndexLocal].id === `${rowNr}-${colNr}`
         ) {
           setIsClearLocal(false);
-
           const updatedCell = {
             ...board.cells[currentCellIndexLocal],
             isDone: !isDoneLocal,
@@ -223,24 +207,20 @@ const StreakerGridItem = ({
             isClear: false,
             label: labelLocal,
           };
-
           handelCells(newCell);
         }
         setClickTimeout(null);
-      }, 400); // timeout for double-click
+      }, 400);
       setClickTimeout(newTimeout);
     }
   };
 
   const handleDoubleClick = () => {
-    if(isSaved) {
+    if (isSaved) {
       setIsSaved(false);
     }
     setIsClearLocal(true);
-    let newD = dayjs();
-    let date = newD.format();
     let cellExists = board?.cells?.[currentCellIndexLocal];
-
     if (
       cellExists &&
       board.cells[currentCellIndexLocal].id === `${rowNr}-${colNr}`
@@ -251,7 +231,7 @@ const StreakerGridItem = ({
         isClear: true,
         label: labelLocal,
       };
-      setIsDoneLocal((prev) => false);
+      setIsDoneLocal(false);
       handelCells(updatedCell);
     } else {
       const newCell = {
@@ -263,31 +243,18 @@ const StreakerGridItem = ({
         isClear: true,
         label: labelLocal,
       };
-      setIsDoneLocal((prev) => false);
+      setIsDoneLocal(false);
       handelCells(newCell);
     }
-    console.log(
-      `DoubleClicked current cell info`,
-      board?.cells?.[currentCellIndexLocal]
-    );
   };
 
   useEffect(() => {
-    // Clean up the timer if the component is unmounted
     return () => {
       if (timer) {
         clearTimeout(timer);
       }
     };
   }, [timer]);
-
-  useEffect(() => {
-    // console.clear();
-    // console.log("isDoneLocal", isDoneLocal);
-    // console.log("isDone", isDone);
-    // console.log("isClearLocal", isClearLocal);
-    // console.log("isClear", isClear);
-  }, [isClear, isDone, isDoneLocal, isClearLocal]);
 
   return (
     <>
@@ -314,10 +281,7 @@ const StreakerGridItem = ({
           id={`${rowNr}-${colNr}`}
           data-is-clear={isClear ? "true" : "false"}
           data-is-done={isDone ? "true" : "false"}
-          ref={buttonIsClearRef}
-        >
-          {/* {messageLocal && messageLocal} */}
-        </button>
+        ></button>
       ) : (
         <button
           className={`${styles.streakerGridItem} ${
@@ -334,7 +298,6 @@ const StreakerGridItem = ({
           id={`${rowNr}-${colNr}`}
           data-is-clear={isClear ? "true" : "false"}
           data-is-done={isDone ? "true" : "false"}
-          ref={buttonIsDoneRef}
         >
           {message || messageLocal ? (
             <Image
@@ -357,7 +320,7 @@ const StreakerGridItem = ({
                 priority
                 width={14}
                 height={14}
-                unselectable="on" // To make the image not selectable
+                unselectable="on"
                 style={{
                   userSelect: "none",
                   pointerEvents: "none",
@@ -370,7 +333,7 @@ const StreakerGridItem = ({
                 priority
                 width={20}
                 height={20}
-                unselectable="on" // To make the image not selectable
+                unselectable="on"
                 style={{
                   userSelect: "none",
                   pointerEvents: "none",
@@ -379,11 +342,11 @@ const StreakerGridItem = ({
             ) : (
               <Image
                 src={"/icon-check.svg"}
-                alt="crossmark"
+                alt="checkmark"
                 priority
                 width={20}
                 height={20}
-                unselectable="on" // To make the image not selectable
+                unselectable="on"
                 style={{
                   userSelect: "none",
                   pointerEvents: "none",
@@ -397,7 +360,7 @@ const StreakerGridItem = ({
               priority
               width={14}
               height={14}
-              unselectable="on" // To make the image not selectable
+              unselectable="on"
               style={{
                 userSelect: "none",
                 pointerEvents: "none",
@@ -410,7 +373,7 @@ const StreakerGridItem = ({
               priority
               width={20}
               height={20}
-              unselectable="on" // To make the image not selectable
+              unselectable="on"
               style={{
                 userSelect: "none",
                 pointerEvents: "none",

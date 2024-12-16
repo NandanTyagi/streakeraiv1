@@ -110,6 +110,10 @@ function setHistory(panel) {
     (h) => h.year === currentYear && h.month === currentMonthName
   );
 
+  console.log("in setHistory existingHistoryIndex",
+     existingHistoryIndex
+    );
+
   if (existingHistoryIndex === -1) {
     panel.history.push({
       year: currentYear,
@@ -137,54 +141,3 @@ function setNewHistory(panel) {
     },
   ];
 }
-
-
-
-
-
-
-// function setHistory(panel) {
-//   debugger;
-
-// if (!panel) {
-//     console.log("in setHistory no panel");
-//     return { saved: false, message: "Panel not found" };
-//   }
-// // Check if history exisists on panel
-//   if (!panel.history) {
-//     return setNewHistory(panel);
-//   }
-
-//   const months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-//   const currentMonth = months[dayjs().month()];
-//   console.log("currentMonth", currentMonth);
-
-//   console.log("MONTH IN setHistory panel", dayjs().month());
-
-//   // Check if history for this month exists
-//   if (!panel.history[dayjs().month()]) {
-//     return setNewHistory(panel);
-//   }
-
-//   // Update history for this month
-
-//   panel.history[dayjs().month()] = {
-//     year: dayjs().format("YYYY"),
-//     month: dayjs().format("MMMM"),
-//     cells: panel.cells,
-//   };
-//   return panel.history;
-// }
-
-// function setNewHistory(panel, history) {
-//   if (!panel) {
-//     console.log("in setNewHistory no panel");
-//     return { saved: false, message: "Panel not found" };
-//   }
-//   history[dayjs().month()] = {
-//     year: dayjs().format("YYYY"),
-//     month: dayjs().format("MMMM"),
-//     cells: panel?.cells,
-//   };
-//   return history;
-// }
