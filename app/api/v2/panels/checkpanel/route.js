@@ -8,8 +8,8 @@ export const POST = async (req, res) => {
   try {
     await connectDB();
     const existingPanel = await Panel.find({ _id: `${panelId}` });
-    console.log("existingPanel in check panel route", existingPanel);
-    console.log("panel id in check panel route", panelId);
+    // console.log("existingPanel in check panel route", existingPanel);
+    // console.log("panel id in check panel route", panelId);
     return new NextResponse(JSON.stringify(existingPanel), {
       status: 200,
       headers: {

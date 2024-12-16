@@ -32,7 +32,7 @@ debugger
       },
       { new: true, upsert: true }
     );
-    console.log("Updated cells", existingPanel);
+    // console.log("Existing panel in update panel", existingPanel);
     return new NextResponse(JSON.stringify(existingPanel), {
       status: 201,
       headers: {

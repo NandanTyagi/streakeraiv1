@@ -3,7 +3,9 @@ import generateEmptyBoardCells from "@/utils/generateEmptyBoardCells";
 
 const generateEmptyBoard = async (email) => {
   const currentBoard = null;
-  console.log("currentBoard in genereateEmptyBoard", currentBoard);
+  console.log("currentBoard in genereateEmptyBoard",
+    //  currentBoard
+    );
   const boardId = generateUUID();
   const goalToAchieve = "I want to live a healthy life";
   const habitsNames = ["Sleep", "Meditation", "Food", "Training", "Study"];
@@ -19,7 +21,9 @@ const generateEmptyBoard = async (email) => {
     boardUser,
     cells: generateEmptyBoardCells(days, habitsNames, boardId),
   };
-  console.log("the new board in genereateEmptyBoard", board);
+  console.log("the new board in genereateEmptyBoard",
+    //  board
+    );
   return board;
 };
 

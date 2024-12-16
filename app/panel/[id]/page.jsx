@@ -14,7 +14,7 @@ const PanelPage = () => {
             try {
                 const panel = await fetchPanelById(id);
                 setPanel(panel);
-                console.log("panel", panel);
+                // console.log("panel", panel);
             } catch (error) {
                 console.error("Panel operation failed", error);
             }finally {

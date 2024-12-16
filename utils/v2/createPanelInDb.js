@@ -1,5 +1,7 @@
 async function createPanelInDb(panel, userEmail) {
-  console.log("in createPanelInDb panel", panel, userEmail);
+  console.log("in createPanelInDb panel",
+    //  panel, userEmail
+    );
   try {
     const res = await fetch(`/api/v2/panels/create`, {
       method: "post",
@@ -13,7 +15,9 @@ async function createPanelInDb(panel, userEmail) {
         panelUser: userEmail,
       }),
     });
-    console.log("in create panel in Db res", await res.json());
+    console.log("in create panel in Db res",
+      //  await res.json()
+      );
     if (res.status === 201) {
       return true;
     }

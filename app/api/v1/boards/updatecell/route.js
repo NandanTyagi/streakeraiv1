@@ -10,8 +10,8 @@ export const POST = async (req, res) => {
 
   try {
     // console.log("update cells route", cells);
-    console.log("update cells route call", updatedCell);
-    console.log("update cells route call current cell index", currentCellIndex);
+    // console.log("update cells route call", updatedCell);
+    // console.log("update cells route call current cell index", currentCellIndex);
     // const updateObject = { [updateField]: cells[`${rowNr}-${colNr}`] };
     const updateField = `cells.${currentCellIndex}`;
     const existingBoard = await Board.findOneAndUpdate(
@@ -19,7 +19,7 @@ export const POST = async (req, res) => {
       { $set: { [updateField]: updatedCell } },
       { new: true, upsert: true }
     ).exec();
-    console.log("Updated cell", existingBoard.cells[currentCellIndex]);
+    // console.log("Updated cell", existingBoard.cells[currentCellIndex]);
     return new NextResponse("cells updated", {
       "updated board": existingBoard,
       status: 201,

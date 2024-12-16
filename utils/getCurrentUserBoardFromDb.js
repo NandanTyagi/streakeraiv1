@@ -19,9 +19,9 @@ const getCurrentUserBoardFromDb = async (userEmail) => {
       // throw new Error(`HTTP error! Status: ${userBoards.error}`);
     }
     const currentUserBoard = await userBoards[0];
-    console.log("currentUserBoard from db", currentUserBoard);
-    console.log("currentUserBoard from db email", userEmail);
-    console.log("currentUserBoard from db ******************", userBoards[0]);
+    // console.log("currentUserBoard from db", currentUserBoard);
+    // console.log("currentUserBoard from db email", userEmail);
+    // console.log("currentUserBoard from db ******************", userBoards[0]);
     return currentUserBoard;
   } catch (error) {
     console.error(error.message);

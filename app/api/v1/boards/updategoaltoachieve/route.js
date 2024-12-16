@@ -12,13 +12,13 @@ export const POST = async (req, res) => {
     await connectDB();
   
     try {
-      console.log("goalToAchieve route", boardUser);
+      // console.log("goalToAchieve route", boardUser);
       const existingBoard = await Board.findOneAndUpdate(
         {_id},
         {$set: {goalToAchieve: goalToAchieve}},
         {new: true, upsert: true}
         ).exec();
-        console.log("Board goalToAchieve", existingBoard);
+        // console.log("Board goalToAchieve", existingBoard);
         return new NextResponse("goalToAchieve updated", { status: 201 });
   
     } catch (error) {

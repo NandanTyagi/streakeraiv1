@@ -3,7 +3,7 @@ import fetch from "isomorphic-unfetch";
 
 export default async function handelBoards(board, userEmail) {
   // debugger;
-  console.log('in handel boards', board);
+  // console.log('in handel boards', board);
   if (!board) {
     return;
   }

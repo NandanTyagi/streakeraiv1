@@ -10,7 +10,7 @@ const getBoardsFromDb = async () => {
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
     const boards = await res.json();
-    console.log('cells from db', boards)
+    // console.log('cells from db', boards)
     return boards;
 }
 

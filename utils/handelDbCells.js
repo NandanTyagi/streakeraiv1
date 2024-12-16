@@ -3,7 +3,7 @@ import fetch from "isomorphic-unfetch";
 
 export default async function handelDbCells(board, currentCellIndex, updatedCell) {
 //   debugger;
-  console.log("in handel boards", board);
+  // console.log("in handel boards", board);
   if (!board) {
     return;
   }
@@ -21,8 +21,8 @@ export default async function handelDbCells(board, currentCellIndex, updatedCell
         updatedCell: updatedCell
       }),
     })
-    console.log("cells updated respons", res);
-    console.log("cells updated board.cells", board.cells);
+    // console.log("cells updated respons", res);
+    // console.log("cells updated board.cells", board.cells);
   } catch (error) {
     console.error("Failed to update cells", error);
   }

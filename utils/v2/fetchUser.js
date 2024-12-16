@@ -10,7 +10,7 @@ async function fetchUser() {
       throw new Error("Failed to fetch user");
     }
     const data = await response.json();
-    console.log("data", data);
+    // console.log("data", data);
     return data;
   } catch (error) {
     console.error("Fetch user failed", error);

@@ -15,7 +15,7 @@ const openai = new OpenAI({
 
 export async function POST(request, response) {
   const { message } = await request.json();
-  console.log("input from request", message.goal);
+  // console.log("input from request", message.goal);
 
   // Create the stream
   const compleation = await openai.chat.completions.create({

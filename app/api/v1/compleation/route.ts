@@ -17,7 +17,7 @@ const openai = new OpenAIApi(configuration);
 
 export async function POST(request: Request) {
   const { message } = await request.json();
-  console.log("input from request", message.goal);
+  // console.log("input from request", message.goal);
 
   // Create the stream
   const response = await openai.createChatCompletion({
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
 
   const streamResponse = new StreamingTextResponse(stream);
 
-  console.log("streamResponse", streamResponse);
+  // console.log("streamResponse", streamResponse);
 
   return streamResponse;
 }
