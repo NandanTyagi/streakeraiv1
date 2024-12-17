@@ -20,7 +20,9 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-[#330594] flex items-center justify-between px-3 relative">
+    // Header with a blurred background
+
+    <header className="flex items-center justify-between px-3 relative bg-[#330594]">
       <a href="/">
         <div className="flex items-center gap-1">
           <div className="relative rounded-full overflow-hidden shadow-xl">
