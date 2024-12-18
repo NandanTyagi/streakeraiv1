@@ -13,7 +13,7 @@ export default function Hero() {
       >
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[white] mb-4">Streaker.ai</h1>
         <p className="text-xl sm:text-2xl md:text-3xl text-[white] max-w-3xl mx-auto">
-          Track the things you want to track.
+          Track the things that matter to you.
         </p>
       </motion.div>
       <motion.div

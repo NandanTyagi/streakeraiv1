@@ -2,8 +2,8 @@ import { Metadata } from 'next'
 import About from '@/components/about'
 
 export const metadata: Metadata = {
-  title: 'About Us | Our Company',
-  description: 'Learn more about our company, our mission, and our team.',
+  title: 'About Us | Streaker.ai',
+  description: 'Track the things that matter to you.',
 }
 
 export default function AboutPage() {

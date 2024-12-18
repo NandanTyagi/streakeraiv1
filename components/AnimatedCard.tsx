@@ -13,9 +13,10 @@ interface AnimatedCardProps {
   icon?: React.ReactNode
   btnText?: string
   href?: string
+  newWindow?: boolean
 }
 
-export default function AnimatedCard({ title, description, icon, btnText, href }: AnimatedCardProps) {
+export default function AnimatedCard({ title, description, icon, btnText, href, newWindow}: AnimatedCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const router = useRouter()
 
@@ -52,7 +53,13 @@ export default function AnimatedCard({ title, description, icon, btnText, href }
           <CardDescription className="mt-2">{description}</CardDescription>
         </CardContent>
         <CardFooter>
-          <Button onClick={()=>router.push(href ? href : '/')} className="w-full" variant={'default'}>{btnText || 'Learn more'}</Button>
+          <Button onClick={() => {
+            if (newWindow && href) {
+              window.open(href, '_blank');
+            } else {
+              router.push(href ? href : '/');
+            }
+          }} className="w-full" variant={'default'}>{btnText || 'Learn more'}</Button>
         </CardFooter>
       </Card>
     </motion.div>

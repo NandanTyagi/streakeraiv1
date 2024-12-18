@@ -92,6 +92,7 @@ export default function Content() {
                   }
                   btnText="Expolore"
                   href="https://store.darrenhardy.com/collections/frontpage/products/the-compound-effect?_gl=1*1qahhkh*_gcl_au*MTM5MjA3Nzk1NC4xNzM0NDc2MDY4*_ga*MTY3OTYzNTg5NS4xNzM0NDc2MDY3*_ga_TLRGHBVSZ7*MTczNDQ3NjA2Ny4xLjEuMTczNDQ3NjEwMy4yNC4wLjA.*_ga_K5Q92SJZ4M*MTczNDQ3NjA2OC4xLjEuMTczNDQ3NjEwMy4wLjAuMA..&_ga=2.258302602.1842553765.1734476069-1679635895.1734476067"
+                  newWindow
                 />
                 <AnimatedCard
                   title="Atomic Habits"
@@ -106,6 +107,7 @@ export default function Content() {
                   }
                   btnText="Expolore"
                   href="https://jamesclear.com/atomic-habits"
+                  newWindow
                 />
               </div>
             </div>
