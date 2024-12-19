@@ -13,6 +13,7 @@ import AddToHomeScreen from "./AddToHomeScreen";
 import { usePathname } from "next/navigation"; 
 import { useContext } from "react";
 import { AppContext } from "../context/appContext";
+import { LogOutIcon, LogInIcon, PenBoxIcon } from "lucide-react";
 
 const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
   const { board } = useContext(AppContext);
@@ -27,12 +28,12 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
     <>
       <nav className="absolute top-[10px] right-[10px] max-w-[1480px] z-[1]">
         {!user ? (
-          <ul className="flex gap-4">
+          <ul className="flex flex-row gap-6">
             <li>
-              <LoginLink>Login</LoginLink>
+              <LoginLink className="flex gap-2"><span><LogInIcon /></span>Login </LoginLink>
             </li>
             <li>
-              <RegisterLink>Sign up</RegisterLink>
+              <RegisterLink className="flex gap-2"><span><PenBoxIcon /></span>Sign up </RegisterLink>
             </li>
             {/* <li>
               <Link href="/install" onClick={handleMenuClick}>Install</Link>
@@ -40,14 +41,14 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
           </ul>
         ) : (
           <ul>
-            <li>
+            {/* <li>
               <AddToHomeScreen>Android</AddToHomeScreen>
             </li>
             <li>
               <Link href="/install" onClick={handleMenuClick}>Install</Link>
-            </li>
+            </li> */}
             <li>
-              <LogoutLink>Logout</LogoutLink>
+              <LogoutLink className="flex gap-2"><span><LogOutIcon /></span>Logout </LogoutLink>
             </li>
           </ul>
         )}
