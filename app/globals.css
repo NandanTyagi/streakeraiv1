@@ -51,7 +51,7 @@ main:not(.zero-m) {
 .main-layout {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: [primary-header] 80px [secondary-header] 40px [main] auto [footer] 60px;
+  grid-template-rows: [primary-header] 80px [secondary-header] 40px [main] auto [footer] 36px;
   height: 100dvh;
   max-height: 100dvh;
   width: 100%;
@@ -95,7 +95,7 @@ button {
 }
 
 footer {
-  min-height: 60px;
+  min-height: 36px;
   display: flex;
   justify-content: start;
   align-items: center;

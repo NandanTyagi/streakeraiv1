@@ -7,11 +7,11 @@ const Footer = () => {
         {" "}
         <Image
           className="z-[-1]"
-          src={"/devnty-logo.png"}
+          src={"/devnty-logo-svg-mini.svg"}
           alt="menu-button"
           priority
-          height={80}
-          width={120}
+          height={36}
+          width={109}
         />
       </a>
     </footer>
