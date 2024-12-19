@@ -52,8 +52,8 @@ main:not(.zero-m) {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: [primary-header] 80px [secondary-header] 40px [main] auto [footer] 36px;
-  height: 100dvh;
-  max-height: 100dvh;
+  height: 100svh;
+  max-height: 100svh;
   width: 100%;
   max-width: 1480px;
 }
