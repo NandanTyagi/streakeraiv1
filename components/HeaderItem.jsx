@@ -4,7 +4,7 @@ import Dialog from "@/components/ui/Dialog";
 import handelBoards from "@/utils/handelBoards";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
-const HeaderItem = ({ column, description, value }) => {
+const HeaderItem = ({ column, description, value, isHistory }) => {
   const { isAuthenticated, user, isLoading } = useKindeBrowserClient();
   const [activityInputLocal, setActivityInputLocal] = useState(description);
   const [valueInputLocal, setValueInputLocal] = useState(value);
@@ -12,6 +12,9 @@ const HeaderItem = ({ column, description, value }) => {
     useContext(AppContext);
 
   const handleClick = (e, field) => {
+    if(isHistory) {
+      return;
+    }
     const newValue = e.target.value;
     if(isSaved) {
       setIsSaved(false);
@@ -54,6 +57,7 @@ const HeaderItem = ({ column, description, value }) => {
         habit={activityInputLocal || description || ' '}
         value={valueInputLocal || value || ' '}
         onChange={handleClick}
+        isHistory={isHistory}
       />
     </div>
   );

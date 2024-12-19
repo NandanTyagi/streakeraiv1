@@ -43,7 +43,7 @@ export default function AnimatedCard({ title, description, icon, btnText, href, 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="relative z-10 flex items-center justify-center h-full"
+            className="relative z-[0] flex items-center justify-center h-full"
           >
             {icon || <Zap size={48} className="text-white" />}
           </motion.div>

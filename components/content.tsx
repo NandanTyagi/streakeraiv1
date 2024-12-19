@@ -81,7 +81,7 @@ export default function Content() {
               <div className="flex flex-col sm:flex-row justify-center gap-8">
                 <AnimatedCard
                   title="The Compound Effect"
-                  description="Darren HardyHardy’s philosophy on the power of small, consistent actions over time is a core principle of Streaker.ai. By following small habits daily, users witness how consistency breeds success and leads to significant improvement."
+                  description="Darren Hardy’s philosophy on the power of small, consistent actions over time is a core principle of Streaker.ai. By following small habits daily, users witness how consistency breeds success and leads to significant improvement."
                   icon={
                     <Image
                       src="/the-compound-effect.png"

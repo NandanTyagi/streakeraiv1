@@ -21,7 +21,8 @@ const StreakerGridItem = ({
   cell,
   label,
   board,
-  onCellClick, // New callback prop to notify parent of current cell index
+  onCellClick,
+  isHistory,
 }) => {
   const {
     setBoard,
@@ -121,19 +122,35 @@ const StreakerGridItem = ({
     const timeoutId = window.setTimeout(() => {
       let input;
       if (board?.cells?.[currentCellIndexLocal]?.updatedAt) {
+        if (isHistory) {
+          window.alert(
+            `Note: "${messageLocal}"\n\nLast updated: ${board.cells[currentCellIndexLocal].updatedAt}"`
+          );
+          return;
+        }
         input = window.prompt(
           `Previous note: "${messageLocal}"\n\nLast updated: ${board.cells[currentCellIndexLocal].updatedAt}"`
         );
       } else {
         if (!messageLocal) {
+          if (isHistory) {
+            return;
+          }
           input = window.prompt(`Enter a new note:`);
         } else {
+          if (isHistory) {
+            window.alert(
+              `Note: "${messageLocal}"\n\nLast updated: ${board.cells[currentCellIndexLocal].updatedAt}"`
+            );
+            return;
+          }
           input = window.prompt(`Note:\n"${messageLocal}"\n\nUpdate note:`);
         }
       }
       if (!input) {
         return;
       }
+      if (isHistory) return;
       setMessageLocal(input);
       if (!isClearLocal) {
         const updatedCell = {
@@ -153,11 +170,13 @@ const StreakerGridItem = ({
   };
 
   const handleMouseUp = () => {
+    if (isHistory) return;
     clearTimeout(timer);
     setTimer(null);
   };
 
   const handleClick = (e) => {
+    if (isHistory) return;
     if (isSaved) {
       setIsSaved(false);
     }
@@ -216,6 +235,7 @@ const StreakerGridItem = ({
   };
 
   const handleDoubleClick = () => {
+    if (isHistory) return;
     if (isSaved) {
       setIsSaved(false);
     }

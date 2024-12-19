@@ -8,7 +8,7 @@ import { useSearchParams } from "next/navigation";
 import HeaderItem from "./HeaderItem";
 import dayjs from "dayjs";
 
-const StreakerGridHeaders = ({ isEmpty = false }) => {
+const StreakerGridHeaders = ({ isEmpty = false, isHistory }) => {
   const { board, setBoard, isAppLoading, setisAppLoading, setIsCellLoading } =
     useContext(AppContext);
   const [headerNamesLocal, setHeaderNamesLocal] = useState();
@@ -71,6 +71,7 @@ const StreakerGridHeaders = ({ isEmpty = false }) => {
               key={i}
               column={i}
               description={name}
+              isHistory={isHistory}
               value={
                 (headerValuesLocal
                   ? headerValuesLocal

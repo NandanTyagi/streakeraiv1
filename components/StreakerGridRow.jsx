@@ -1,7 +1,7 @@
 import StreakerGridItem from "./StreakerGridItem";
 import dayjs from "dayjs";
 
-const StreakerGridRow = ({ nr, cells, day, user, isLoading, onCellSelect, board, habits }) => {
+const StreakerGridRow = ({ nr, cells, day, user, isLoading, onCellSelect, board, habits, isHistory }) => {
   return (
     <>
       <StreakerGridItem type={"nr"} rowNr={nr} day={day} user={user} isLoading={isLoading} />
@@ -23,6 +23,7 @@ const StreakerGridRow = ({ nr, cells, day, user, isLoading, onCellSelect, board,
             onCellClick={() => onCellSelect(currentCellIndex)}
             board={board}
             label={habits?.[cell.colNr - 1]}
+            isHistory={isHistory}
           />
         );
       })}

@@ -3,9 +3,9 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import "./styles.css";
 
-const DialogButton = ({ habit = null, value, onChange }) => (
+const DialogButton = ({ habit = null, value, onChange, isHistory }) => (
   <Dialog.Root>
-    <Dialog.Trigger asChild>
+    <Dialog.Trigger asChild disabled={isHistory}>
       <button className="Button violet cursor-pointer">
         {habit && (
           <span className="text-[0.8rem] text-center sm:text-[0.9rem] sm:font-semibold">

@@ -6,12 +6,11 @@ import Dialog from "@/components/ui/Dialog";
 import { useState, useContext, useEffect } from "react";
 import { AppContext } from "@/context/appContext";
 import savePanelToDb from "@/utils/v2/savePanelToDb";
-import { set } from "mongoose";
 import ThreeDButton from "@/components/ui/button/3DButton";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 
-const Nav = ({ isNav = true }) => {
+const Nav = ({ isNav = true, isHistory }) => {
   const { user } = useKindeBrowserClient();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -167,8 +166,8 @@ const Nav = ({ isNav = true }) => {
     return (
       <div className="flex justify-center items-center bg-[#EBEBEB] text-md font-semibold cursor-pointer relative">
         {user && (
-          <div className="absolute left-2 md:left-2">
-            <div className="hidden md:block">
+          <div className={`absolute left-2 md:left-2 ${isHistory ? "hidden" : null}`}>
+            <div className={`hidden md:block`}>
               <ThreeDButton
                 isSaved={true}
                 text="Clear"
@@ -185,7 +184,7 @@ const Nav = ({ isNav = true }) => {
               </ThreeDButton>
             </div>
             <button
-              className={`flex flex-col justify-center items-center md:hidden w-[40px]`}
+              className={`flex flex-col justify-center items-center md:hidden w-[40px] ${isHistory ? "hidden" : null}`}
               onClick={(e) => handleClearPanel(e)}
             >
               <span className="text-[0.7rem] sm:text-[0.7rem]">X</span>
@@ -200,9 +199,10 @@ const Nav = ({ isNav = true }) => {
             value={
               dialogValue}
             onChange={handelClick}
+            isHistory={isHistory}
           />
         )}
-        <div className="absolute right-6">
+        <div className={`absolute right-6 ${isHistory ? "hidden" : null}`}>
           <div
             className={`hidden md:block ${
               !isSaved ? "border-red-500 border-2 rounded-lg" : null
@@ -224,7 +224,7 @@ const Nav = ({ isNav = true }) => {
             </ThreeDButton>
           </div>
           <button
-            className={`flex flex-col md:hidden w-[14px] pt-1`}
+            className={`flex flex-col md:hidden w-[14px] pt-1 ${isHistory ? "hidden" : null}`}
             onClick={handelCtxMenu}
           >
             {isSaved ? (
