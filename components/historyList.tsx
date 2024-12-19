@@ -83,7 +83,7 @@ export default function HistoryList({ items }: HistoryListProps) {
   const [filteredItems, setFilteredItems] = useState(
     items?.filter(
       (item) =>
-        item.month !== dayjs().format('MMMM') && item.year !== dayjs().format('YYYY')
+       item.year && item.month !== dayjs().format('MMMM') && item.year !== dayjs().format('YYYY')
     )
   );
 
