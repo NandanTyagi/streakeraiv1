@@ -4,6 +4,13 @@ import StreakerEmptyGrid from "@/components/v1/StreakerEmptyGrid";
 import StreakerGrid from "@/components/v1/StreakerGrid";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: 'no',
+};
+
 const PanelPage = async () => {
   const session = getKindeServerSession();
   const user = await session.getUser();
