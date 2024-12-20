@@ -19,7 +19,7 @@ export default function MainLayout({ children }) {
         <div className="main-layout">
           <Header />
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </div>
     );
@@ -29,7 +29,7 @@ export default function MainLayout({ children }) {
         <div className="main-layout">
           <Header />
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </div>
     );

@@ -56,6 +56,7 @@ main:not(.zero-m) {
   max-height: 100svh;
   width: 100%;
   max-width: 1480px;
+  position: relative;
 }
 
 .loading {
@@ -101,6 +102,8 @@ footer {
   align-items: center;
   /* margin-top: -8px; */
   background-color: white;
+  /* background: transparent;
+  opacity: 0; */
 }
 
 .spin {
