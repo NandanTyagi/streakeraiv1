@@ -40,7 +40,7 @@ export default function MainLayout({ children }) {
           <Header />
           {children}
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     );
   }
