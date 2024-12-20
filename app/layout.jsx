@@ -90,6 +90,7 @@ export default function RootLayout({ children }) {
         <meta name="msapplication-TileColor" content={metadata.themeColor} />
         <meta name="msapplication-config" content="/browserconfig.xml" />
         <meta name="theme-color" content={metadata.themeColor} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
       </Head>
 
       <body>
