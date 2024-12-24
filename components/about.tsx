@@ -14,6 +14,7 @@ import {
   BrainCircuit,
 } from "lucide-react";
 import Image from "next/image";
+import { DashboardIcon } from "@radix-ui/react-icons";
 
 export default function About() {
   return (
@@ -62,6 +63,7 @@ export default function About() {
           </p>
           <div className="flex justify-center">
             <AnimatedCard
+            icon={<DashboardIcon width={48} height={48} className="text-white rotate-90" />}
               title="Explore the Dashboard"
               description="Visualize your progress and stay on top of your goals."
               btnText="Go to Dashboard"

@@ -79,6 +79,7 @@ export default function AnimatedCard({
             text={`${btnText || "Learn more"}`}
             type="pill"
             pushTo={href || "/"}
+            newWindow={newWindow}
           />
         </CardFooter>
       </Card>

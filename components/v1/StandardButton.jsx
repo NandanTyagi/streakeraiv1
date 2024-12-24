@@ -8,6 +8,7 @@ const StandardButton = ({
   text,
   type = "pill",
   pushTo = "",
+  newWindow = false,
 }) => {
   const buttonRef = useRef(text);
   const router = useRouter();
@@ -132,7 +133,7 @@ const StandardButton = ({
   const handleClick = (id) => {
     console.log(id);
     if (pushTo) {
-      router.push(pushTo);
+      newWindow ? window.open(pushTo, '_blank') : router.push(pushTo);
     }
     if (id === "Try for free!") {
       router.push("/generategoals");
