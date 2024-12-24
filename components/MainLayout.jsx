@@ -15,7 +15,7 @@ export default function MainLayout({ children }) {
     );
   } else if (pathname === "/generategoals") {
     return (
-      <div className="main-layout-container">
+      <div className="main-layout-container bg-gradient-to-r from-blue-100 to-purple-100">
         <div className="main-layout">
           <Header />
           {children}
@@ -23,9 +23,10 @@ export default function MainLayout({ children }) {
         </div>
       </div>
     );
-  } else if (pathname === "/about") {
+  } 
+  else if (pathname === "/about") {
     return (
-      <div className="main-layout-container">
+      <div className="main-layout-container bg-gradient-to-r from-blue-100 to-purple-100">
         <div className="main-layout">
           <Header />
           {children}
@@ -33,7 +34,19 @@ export default function MainLayout({ children }) {
         </div>
       </div>
     );
-  } else {
+  } 
+  else if (pathname === "/history") {
+    return (
+      <div className="main-layout-container bg-gradient-to-r from-blue-100 to-purple-100">
+        <div className="main-layout">
+          <Header />
+          {children}
+          {/* <Footer /> */}
+        </div>
+      </div>
+    );
+  } 
+  else {
     return (
       <div className="main-layout-container">
         <div className="main-layout">

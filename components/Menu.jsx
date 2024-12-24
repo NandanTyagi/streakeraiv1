@@ -54,7 +54,7 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
         )}
       </nav>
       <nav className="relative max-w-[600px] w-full h-full flex justify-center items-center">
-        <ul className="flex flex-col gap-6 sm:gap-20 w-full p-4">
+        <ul className="flex flex-col gap-6 w-full p-4">
           <li>
             <Link href="/about" onClick={handleMenuClick} className={pathname === "/about" ? "opacity-50" : ""}>
               <StandardButton text="About" type="pill" />
@@ -68,6 +68,11 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
           <li>
             <Link href="/panel" onClick={handleMenuClick} className={pathname === "/panel" ? "opacity-50" : ""}>
               <StandardButton text="Track" type="pill" />
+            </Link>
+          </li>
+          <li>
+            <Link href="/dashboard/" onClick={handleMenuClick} className={`${pathname === "/dashboard" ? "opacity-50" : ""} ${user ? "" : "hidden"}`}>
+              <StandardButton text="Dashboard" type="pill" />
             </Link>
           </li>
           <li>

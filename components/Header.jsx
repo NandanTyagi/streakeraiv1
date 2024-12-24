@@ -78,7 +78,7 @@ const Header = () => {
       </div>
       {isMenuOpen && (
         <div
-          className={`absolute inset-0 z-50 flex justify-center items-center bg-white h-[calc(100vh-80px)] top-[80px] ${
+          className={`absolute inset-0 z-50 flex justify-center items-center bg-gradient-to-r from-blue-100 to-purple-100 h-[calc(100vh-80px)] top-[80px] ${
             isAnimating ? "animate-fadeOut" : "animate-fadeIn"
           }`}
           onAnimationEnd={() => {

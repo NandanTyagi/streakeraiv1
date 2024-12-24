@@ -144,7 +144,7 @@ const Nav = ({ isNav = true, isHistory }) => {
   if (isNav) {
     return (
       <nav>
-        <ul className="flex gap-6 sm:gap-20">
+        <ul className="flex gap-6 sm:gap-20 bg-gradient-to-r from-blue-100 to-purple-100">
           {/* <li>
             <Link href={"/about"}>About</Link>
           </li> */}
