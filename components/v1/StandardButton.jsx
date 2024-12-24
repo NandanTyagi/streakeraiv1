@@ -158,13 +158,13 @@ const StandardButton = ({
         title={text}
         type={action}
         id={text}
-        className={`group relative inline-flex cursor-pointer w-[100%]  items-center justify-center overflow-hidden rounded-full border-b-2 border-l-2 border-r-2 border-[#330594] bg-gradient-to-tr py-4 text-white shadow-lg transition duration-100 ease-in-out active:translate-y-0.5 active:border-[#A035C2] active:shadow-none from-[#330594] to-[#330594] text-center ${pathname === text.toLowerCase().trim() ? "hidden" : ""}`}
+        className={`group relative inline-flex cursor-pointer w-[100%]  items-center justify-center overflow-hidden rounded-full border-b-2 border-l-2 border-r-2 border-[#330594] bg-gradient-to-tr py-2 px-4 text-white shadow-lg transition duration-100 ease-in-out active:translate-y-0.5 active:border-[#A035C2] active:shadow-none from-[#330594] to-[#330594] text-center ${pathname === text.toLowerCase().trim() ? "hidden" : ""}`}
         ref={buttonRef}
       >
         <span
           className={`absolute h-0 w-0 rounded-full bg-white opacity-10 transition-all duration-300 ease-out group-hover:h-32 group-hover:w-[100%]`}
         ></span>
-        <span className="relative text-xl font-semibold flex w-[100%] sm:w-[100%] text-center justify-center items-center">
+        <span className="relative text-md font-semibold flex w-[100%] sm:w-[100%] text-center justify-center items-center">
           {text}
         </span>
       </button>
