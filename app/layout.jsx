@@ -2,6 +2,7 @@ import "./globals.css";
 import { AppContextProvider } from "@/context/appContext";
 import MainLayout from "../components/MainLayout";
 import Head from "next/head";
+import { CSPostHogProvider } from "./providers.js";
 
 export const metadata = {
   metadataBase: new URL("https://www.streaker.ai"),
@@ -17,10 +18,10 @@ export const metadata = {
 };
 
 export const viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  userScalable: 'no',
+  userScalable: "no",
 };
 
 export default function RootLayout({ children }) {
@@ -97,13 +98,18 @@ export default function RootLayout({ children }) {
         <meta name="msapplication-TileColor" content={metadata.themeColor} />
         <meta name="msapplication-config" content="/browserconfig.xml" />
         <meta name="theme-color" content={metadata.themeColor} />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no"
+        />
       </Head>
 
       <body>
-        <AppContextProvider>
-          <MainLayout>{children}</MainLayout>
-        </AppContextProvider>
+        <CSPostHogProvider>
+          <AppContextProvider>
+            <MainLayout>{children}</MainLayout>
+          </AppContextProvider>
+        </CSPostHogProvider>
       </body>
     </html>
   );
