@@ -56,7 +56,7 @@ export default function About() {
           <p className="text-lg text-gray-700 mb-10">
             Dive into the Dashboard to monitor your habits and goals. Get a
             comprehensive view of your progress with detailed statistics,
-            interactive charts, and streak tracking. Whether it's daily habits
+            interactive charts, and streak tracking. Whether it&apos;s daily habits
             or long-term objectives, the Dashboard keeps you informed and
             motivated.
           </p>
