@@ -158,7 +158,7 @@ const StandardButton = ({
         title={text}
         type={action}
         id={text}
-        className={`group relative inline-flex cursor-pointer w-[100%]  items-center justify-center overflow-hidden rounded-full border-b-2 border-l-2 border-r-2 border-[#330594] bg-gradient-to-tr py-2 px-4 text-white shadow-lg transition duration-100 ease-in-out active:translate-y-0.5 active:border-[#A035C2] active:shadow-none from-[#330594] to-[#330594] text-center ${pathname === text.toLowerCase().trim() ? "hidden" : ""}`}
+        className={`group relative inline-flex cursor-pointer w-[100%]  items-center justify-center overflow-hidden rounded-full border-b-2 border-l-2 border-r-2 border-black bg-gradient-to-br from-primary to-[#330594] py-2 px-4 text-white shadow-lg transition duration-100 ease-in-out active:translate-y-0.5 active:border-[#A035C2] active:shadow-none text-center ${pathname === text.toLowerCase().trim() ? "hidden" : ""}`}
         ref={buttonRef}
       >
         <span
@@ -182,7 +182,7 @@ const StandardButton = ({
         ref={buttonRef}
         id={text}
       >
-        <span className="absolute h-0 w-0 rounded-full bg-[#330594] opacity-10 transition-all duration-300 ease-out group-hover:h-40 group-hover:w-40"></span>
+        <span className="absolute h-0 w-0 rounded-full border-black bg-gradient-to-br from-primary to-[#330594] opacity-10 transition-all duration-300 ease-out group-hover:h-40 group-hover:w-40"></span>
         <div className="flex flex-col justify-between items-center gap-2">
           {text === "Identify" && AiDentifySvg}
           {text === "Track" && trackSvg}
