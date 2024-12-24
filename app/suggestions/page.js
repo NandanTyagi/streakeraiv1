@@ -47,7 +47,7 @@ export default function Home() {
           ) : (
             <>
               <AiInputForm />
-              <ButtonGroup />
+              {/* <ButtonGroup /> */}
             </>
           )}
         </main>

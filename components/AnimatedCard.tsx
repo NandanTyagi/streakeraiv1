@@ -1,33 +1,48 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Zap } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Zap } from "lucide-react";
+import { useRouter } from "next/navigation";
+import StandardButton from "./v1/StandardButton";
 
 interface AnimatedCardProps {
-  title: string
-  description: string
-  icon?: React.ReactNode
-  btnText?: string
-  href?: string
-  newWindow?: boolean
+  title: string;
+  description: string;
+  icon?: React.ReactNode;
+  btnText?: string;
+  href?: string;
+  newWindow?: boolean;
 }
 
-export default function AnimatedCard({ title, description, icon, btnText, href, newWindow}: AnimatedCardProps) {
-  const [isHovered, setIsHovered] = useState(false)
-  const router = useRouter()
+export default function AnimatedCard({
+  title,
+  description,
+  icon,
+  btnText,
+  href,
+  newWindow,
+}: AnimatedCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      viewport={{ once: true, margin: '-100px' }}
+      viewport={{ once: true, margin: "-100px" }}
     >
-      <Card 
+      <Card
         className="w-full max-w-sm mx-auto overflow-hidden"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -53,16 +68,20 @@ export default function AnimatedCard({ title, description, icon, btnText, href, 
           <CardDescription className="mt-2">{description}</CardDescription>
         </CardContent>
         <CardFooter>
-          <Button onClick={() => {
+          {/* <Button onClick={() => {
             if (newWindow && href) {
               window.open(href, '_blank');
             } else {
               router.push(href ? href : '/');
             }
-          }} className="w-full" variant={'default'}>{btnText || 'Learn more'}</Button>
+          }} className="w-full" variant={'default'}>{btnText || 'Learn more'}</Button> */}
+          <StandardButton
+            text={`${btnText || "Learn more"}`}
+            type="pill"
+            pushTo={href || "/"}
+          />
         </CardFooter>
       </Card>
     </motion.div>
-  )
+  );
 }
-
