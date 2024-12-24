@@ -187,7 +187,7 @@ const Dashboard = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-100 p-8"
+      className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-100 p-8 pb-20"
     >
       {/* Title */}
       <motion.h1
