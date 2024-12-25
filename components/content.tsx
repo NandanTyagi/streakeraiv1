@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import AnimatedCard from "./AnimatedCard";
 import Image from "next/image";
+import { Zap, BookHeartIcon } from "lucide-react";
 
 const contentItems = [
   {
@@ -97,7 +98,7 @@ export default function Content() {
           className="mt-20"
         >
           <h2 className="text-4xl font-bold mb-10 text-center text-gray-800">
-            The Story Behind Streaker.ai
+            The Inspiration Behind Streaker.ai
           </h2>
           <p className="text-lg text-gray-600 mb-8 leading-relaxed">
             {`Streaker is built on the transformative power of daily habits. By focusing on small, consistent actions, the platform helps you unlock your full potential and achieve remarkable milestones.`}
@@ -108,12 +109,13 @@ export default function Content() {
               title="The Compound Effect"
               description="Harness the principles of small, consistent actions with insights from Darren Hardy’s acclaimed work 'The Compound Effect'."
               icon={
-                <Image
-                  src="/the-compound-effect.png"
-                  className="rounded-lg"
-                  fill
-                  alt="The Compound Effect"
-                />
+                <BookHeartIcon size={48} className="text-white" />
+                // <Image
+                //   src="/the-compound-effect.png"
+                //   className="rounded-lg"
+                //   fill
+                //   alt="The Compound Effect"
+                // />
               }
               btnText="Learn More"
               href="https://store.darrenhardy.com/collections/frontpage/products/the-compound-effect"
@@ -123,12 +125,13 @@ export default function Content() {
               title="Atomic Habits"
               description="James Clear’s insights on habit formation are central to Streaker.ai, emphasizing the power of incremental change."
               icon={
-                <Image
-                  src="/atomic-habits.png"
-                  className="rounded-lg"
-                  fill
-                  alt="Atomic Habits"
-                />
+                <BookHeartIcon size={48} className="text-white" />
+                // <Image
+                //   src="/atomic-habits.png"
+                //   className="rounded-lg"
+                //   fill
+                //   alt="Atomic Habits"
+                // />
               }
               btnText="Learn More"
               href="https://jamesclear.com/atomic-habits"
@@ -138,12 +141,14 @@ export default function Content() {
               title="Stick With It"
               description="Sean Young’s research on habit formation provides a scientific foundation for Streaker.ai, emphasizing the importance of consistency."
               icon={
-                <Image
-                  src="/stick-with-it.png"
-                  className="rounded-lg"
-                  fill
-                  alt="Stick With It"
-                />
+                <BookHeartIcon size={48} className="text-white" />
+                
+                // <Image
+                //   src="/stick-with-it.png"
+                //   className="rounded-lg"
+                //   fill
+                //   alt="Stick With It"
+                // />
               }
               btnText="Learn More"
               href="https://seanyoungphd.com/"
