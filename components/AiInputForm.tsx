@@ -153,7 +153,7 @@ function AiInputForm() {
               </FormControl>
               <FormMessage />
               <FormDescription className="text-[1.4rem] font-semibold tracking-wide">
-              We&apos;ll help you achieve this by recommending 5 daily habits tailored to your goal.
+              We&apos;ll help you achieve this by recommending 5 daily habits tailored to your dream.
               </FormDescription>
             </FormItem>
           )}
