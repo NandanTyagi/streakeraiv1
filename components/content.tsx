@@ -115,7 +115,7 @@ export default function Content() {
                   alt="The Compound Effect"
                 />
               }
-              btnText="Explore More"
+              btnText="Learn More"
               href="https://store.darrenhardy.com/collections/frontpage/products/the-compound-effect"
               newWindow
             />
