@@ -26,7 +26,7 @@ export default function MainLayout({ children }) {
   } 
   else if (pathname === "/about") {
     return (
-      <div className="main-layout-container bg-gradient-to-r from-blue-100 to-purple-100">
+      <div className="main-layout-container bg-black">
         <div className="main-layout">
           <Header />
           {children}
@@ -43,6 +43,17 @@ export default function MainLayout({ children }) {
           {children}
           {/* <Footer /> */}
         </div>
+      </div>
+    );
+  } 
+  else if (pathname === "/panel") {
+    return (
+      <div className="main-layout-container">
+        <div className="main-layout">
+          <Header />
+          {children}
+        </div>
+        <footer className="flex flex-col justify-center w-full items-center sm:items-end sm:pr-6 z-[0] absolute bottom-0 max-w-[1480px] bg-[#EBEBEB]"></footer>
       </div>
     );
   } 

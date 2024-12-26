@@ -191,12 +191,12 @@ const Dashboard = () => {
     >
       {/* Title */}
       <motion.h1
-        className="text-4xl font-extrabold text-center mb-10"
+        className="text-3xl font-extrabold text-center mb-10"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        Streaker Dashboard
+        Dashboard
       </motion.h1>
       <motion.h2
         className="text-2xl font-bold text-center mb-10"

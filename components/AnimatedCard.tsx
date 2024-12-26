@@ -10,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Zap } from "lucide-react";
 import { useRouter } from "next/navigation";
 import StandardButton from "./v1/StandardButton";
@@ -22,6 +21,7 @@ interface AnimatedCardProps {
   btnText?: string;
   href?: string;
   newWindow?: boolean;
+  tag?: string;
 }
 
 export default function AnimatedCard({
@@ -31,6 +31,7 @@ export default function AnimatedCard({
   btnText,
   href,
   newWindow,
+  tag,
 }: AnimatedCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
@@ -65,16 +66,10 @@ export default function AnimatedCard({
         </CardHeader>
         <CardContent className="mt-4">
           <CardTitle className="text-2xl font-bold">{title}</CardTitle>
+          {tag && ( <span className="text-sm text-gray-300">{tag}</span> )}
           <CardDescription className="mt-2">{description}</CardDescription>
         </CardContent>
         <CardFooter>
-          {/* <Button onClick={() => {
-            if (newWindow && href) {
-              window.open(href, '_blank');
-            } else {
-              router.push(href ? href : '/');
-            }
-          }} className="w-full" variant={'default'}>{btnText || 'Learn more'}</Button> */}
           <StandardButton
             text={`${btnText || "Learn more"}`}
             type="pill"

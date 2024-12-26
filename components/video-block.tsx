@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 
 export default function VideoBlock() {
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 min-h-[40vh] flex items-center justify-center">
+    <section className="py-16 px-4 sm:px-6 lg:px-8 min-h-[40vh] flex items-center justify-center bg-gradient-to-r from-blue-100 to-purple-100">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
