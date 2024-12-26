@@ -102,7 +102,7 @@ const Dashboard = () => {
 
     // Convert objects to array of stats for each column
     return Object.entries(columnTotals).map(([col, stats]) => {
-      const totalAttempts = stats.isDone + stats.missed + stats.isClear;
+      const totalAttempts = stats.isDone + stats.missed;
       const hitRate =
         totalAttempts > 0
           ? ((stats.isDone / totalAttempts) * 100).toFixed(2)
