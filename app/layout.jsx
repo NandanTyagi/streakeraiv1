@@ -6,7 +6,7 @@ import { CSPostHogProvider } from "@/app/providers";
 export const metadata = {
   metadataBase: new URL("https://www.streaker.ai"),
   title: "Streaker.ai",
-  description: "Track the things you want to track!",
+  description: "Track the things that matter to you!",
   openGraph: {
     images: "/opengraph-image.png",
     url: "https://www.streaker.ai/",
@@ -20,7 +20,7 @@ export const metadata = {
     width: "device-width",
     initialScale: 1,
     maximumScale: 1,
-    userScalable: false,
+    userScalable: false, // Updated for accessibility, remove if zoom is required
   },
   icons: {
     icon: [
@@ -40,7 +40,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        {/* Ensure meta and link tags are injected */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content={metadata.themeColor} />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+      </head>
       <body>
+        {/* Wrap app context and main layout */}
         <CSPostHogProvider>
           <AppContextProvider>
             <MainLayout>{children}</MainLayout>
@@ -50,6 +59,64 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
+
+
+
+
+
+// import "./globals.css";
+// import { AppContextProvider } from "@/context/appContext";
+// import MainLayout from "@/components/MainLayout";
+// import { CSPostHogProvider } from "@/app/providers";
+
+// export const metadata = {
+//   metadataBase: new URL("https://www.streaker.ai"),
+//   title: "Streaker.ai",
+//   description: "Track the things you want to track!",
+//   openGraph: {
+//     images: "/opengraph-image.png",
+//     url: "https://www.streaker.ai/",
+//     type: "website",
+//   },
+//   themeColor: "#330594",
+//   alternates: {
+//     canonical: "/",
+//   },
+//   viewport: {
+//     width: "device-width",
+//     initialScale: 1,
+//     maximumScale: 1,
+//     userScalable: false,
+//   },
+//   icons: {
+//     icon: [
+//       { url: "/favicon-32x32.png", sizes: "32x32" },
+//       { url: "/favicon-16x16.png", sizes: "16x16" },
+//     ],
+//     apple: "/apple-touch-icon.png",
+//   },
+//   manifest: "/manifest.json",
+//   appleWebApp: {
+//     capable: true,
+//     statusBarStyle: "default",
+//     title: "Streaker.ai",
+//   },
+// };
+
+// export default function RootLayout({ children }) {
+//   return (
+//     <html lang="en">
+//       <body>
+//         <CSPostHogProvider>
+//           <AppContextProvider>
+//             <MainLayout>{children}</MainLayout>
+//           </AppContextProvider>
+//         </CSPostHogProvider>
+//       </body>
+//     </html>
+//   );
+// }
 
 
 
