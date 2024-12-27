@@ -175,7 +175,18 @@ const StreakerGridItem = ({
     setTimer(null);
   };
 
+  const checkIfCurrentRowIsAfterToday = () => {
+    const currentDay = dayjs().date();
+    if (currentDay < rowNr) {
+      alert("This cell is in the future. You can't mark it as done yet.");
+      return true;
+    }
+    return false; 
+  };
+
   const handleClick = (e) => {
+    if(checkIfCurrentRowIsAfterToday()) return;
+  
     if (isHistory) return;
     if (isSaved) {
       setIsSaved(false);

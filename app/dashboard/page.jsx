@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useContext, useMemo, Suspense } from "react";
+import React, { useContext, useMemo, Suspense, useEffect } from "react";
 import { motion } from "framer-motion";
-import { AppContext } from "@/context/appContext"; 
+import { AppContext } from "@/context/appContext";
 import dayjs from "dayjs";
 import Loading from "@/components/Loading";
 
@@ -45,128 +45,149 @@ const DashboardLoading = () => (
 const Dashboard = () => {
   const { board } = useContext(AppContext);
 
-  // ====== Calculate Stats with useMemo ======
   const columnStats = useMemo(() => {
-    // Guard clause
     if (!board?.cells || !board?.habitsNames) return [];
 
-    // 1) Get today's day-of-month, e.g. 26 if today is the 26th
     const currentDay = dayjs().date();
 
-    // 2) Filter out any cells that are for future days
-    const filteredCells = board.cells.filter((cell) => {
-      // Adjust this check if your cell object stores the day differently
-      // For example, if `cell.dayIndex` starts at 1 for the first day of the month, do:
-      // return cell.dayIndex <= currentDay;
-      // If you store the date in some other property, change accordingly.
-      return cell.rowNr <= currentDay;
-    });
+    // Filter out future days
+    const filteredCells = board.cells.filter(
+      (cell) => cell.rowNr <= currentDay
+    );
 
+    // Remove Type Annotations here:
     const columnTotals = {};
     const columnStreaks = {};
 
-    // 3) Use the filtered cells to build our stats
     filteredCells.forEach((cell) => {
-      const column = cell.colNr;
-
-      // Initialize if missing
-      if (!columnTotals[column]) {
-        columnTotals[column] = { isDone: 0, isClear: 0, missed: 0 };
-        columnStreaks[column] = { longestStreak: 0, currentStreak: 0 };
+      const col = cell.colNr;
+      if (!columnTotals[col]) {
+        columnTotals[col] = { isDone: 0, isClear: 0, missed: 0 };
+        columnStreaks[col] = { longestStreak: 0, currentStreak: 0 };
       }
 
-      // Count done vs. missed vs. clear
       if (cell.isDone) {
-        columnTotals[column].isDone += 1;
-
-        // Increase current streak
-        columnStreaks[column].currentStreak += 1;
+        columnTotals[col].isDone++;
+        columnStreaks[col].currentStreak++;
         if (
-          columnStreaks[column].currentStreak >
-          columnStreaks[column].longestStreak
+          columnStreaks[col].currentStreak > columnStreaks[col].longestStreak
         ) {
-          columnStreaks[column].longestStreak =
-            columnStreaks[column].currentStreak;
+          columnStreaks[col].longestStreak = columnStreaks[col].currentStreak;
         }
       } else {
-        // If not done, then either missed or unreviewed (clear)
         if (!cell.isClear) {
-          columnTotals[column].missed += 1;
+          columnTotals[col].missed++;
+        } else {
+          columnTotals[col].isClear++;
         }
-        columnTotals[column].isClear += 1;
-
-        // Reset current streak
-        columnStreaks[column].currentStreak = 0;
+        columnStreaks[col].currentStreak = 0;
       }
     });
 
-    // Convert objects to array of stats for each column
     return Object.entries(columnTotals).map(([col, stats]) => {
       const totalAttempts = stats.isDone + stats.missed;
       const hitRate =
         totalAttempts > 0
-          ? ((stats.isDone / totalAttempts) * 100).toFixed(2)
-          : 0;
+          ? ((stats.isDone / totalAttempts) * 100).toFixed(0)
+          : "0";
 
       return {
-        colNr: col,
-        headerName: board.habitsNames[col - 1] || `Column ${col}`,
+        colNr: Number(col),
+        headerName: board.habitsNames[Number(col) - 1] || `Column ${col}`,
         ...stats,
-        longestStreak: columnStreaks[col].longestStreak,
+        longestStreak: columnStreaks[Number(col)].longestStreak,
         hitRate: `${hitRate}%`,
       };
     });
   }, [board]);
 
-  // ====== Prepare Data for Bar Chart ======
-  const barChartData = {
-    labels: columnStats.map((col) => col.headerName),
-    datasets: [
-      {
-        label: "Done",
-        data: columnStats.map((col) => col.isDone),
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-      },
-      {
-        label: "Missed",
-        data: columnStats.map((col) => col.missed),
-        backgroundColor: "rgba(255, 99, 132, 0.6)",
-      },
-      {
-        label: "Unreviewed",
-        data: columnStats.map((col) => col.isClear),
-        backgroundColor: "rgba(153, 102, 255, 0.6)",
-      },
-      {
-        label: "Hit Rate",
-        data: columnStats.map((col) => parseFloat(col.hitRate)),
-        backgroundColor: "rgba(255, 206, 86, 0.6)",
-        type: "line",
-        borderColor: "rgba(255, 206, 86, 1)",
-        yAxisID: "y2",
-      },
-    ],
-  };
+  // ====== Prepare Data for each column's Bar Chart ======
+  const barchartDataAndOptionsArray = useMemo(() => {
+    return columnStats.map((col) => {
+      const barChartData = {
+        labels: ["Done", "Missed", "Unreviewed"],
+        datasets: [
+          {
+            label: col.headerName,
+            data: [col.isDone, col.missed, col.isClear],
+            backgroundColor: [
+              "rgba(75, 192, 192, 0.6)", // Done
+              "rgba(255, 99, 132, 0.6)", // Missed
+              "rgba(153, 102, 255, 0.6)", // Unreviewed
+            ],
+          },
+        ],
+      };
 
-  const barChartOptions = {
-    responsive: true,
-    scales: {
-      y: {
-        beginAtZero: true,
-      },
-      y2: {
-        beginAtZero: true,
-        position: "right",
-        grid: {
-          drawOnChartArea: false,
+      const barChartOptions = {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        scales: {
+          y: { beginAtZero: true },
+        },
+      };
+
+      return { barChartData, barChartOptions };
+    });
+  }, [columnStats]);
+
+  // ====== Prepare Data for the combined Bar Chart (Activity Overview) ======
+  const barChartData = useMemo(() => {
+    return {
+      labels: columnStats.map((col) => col.headerName),
+      datasets: [
+        {
+          label: "Done",
+          data: columnStats.map((col) => col.isDone),
+          backgroundColor: "rgba(75, 192, 192, 0.6)",
+        },
+        {
+          label: "Missed",
+          data: columnStats.map((col) => col.missed),
+          backgroundColor: "rgba(255, 99, 132, 0.6)",
+        },
+        {
+          label: "Unreviewed",
+          data: columnStats.map((col) => col.isClear),
+          backgroundColor: "rgba(153, 102, 255, 0.6)",
+        },
+        {
+          label: "Hit Rate",
+          data: columnStats.map((col) => parseFloat(col.hitRate)),
+          backgroundColor: "rgba(255, 206, 86, 0.6)",
+          type: "line",
+          borderColor: "rgba(255, 206, 86, 1)",
+          yAxisID: "y2",
+        },
+      ],
+    };
+  }, [columnStats]);
+
+  const barChartOptions = useMemo(() => {
+    return {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+        y2: {
+          beginAtZero: true,
+          position: "right",
+          grid: {
+            drawOnChartArea: false,
+          },
         },
       },
-    },
-  };
+    };
+  }, []);
 
-  // ====== Prepare Data for Line Chart ======
+  // ====== Prepare Data for the combined Line Chart (Streak Trends) ======
   const lineChartData = useMemo(() => {
-    // For simplicity, label the X axis as 1..n days in the current month
+    // Label the X axis as 1..n days in the current month
     const totalDays = dayjs().daysInMonth();
     const labels = Array.from({ length: totalDays }, (_, i) => i + 1);
 
@@ -174,14 +195,15 @@ const Dashboard = () => {
     const datasets = columnStats.map((col, index) => {
       // Filter cells for the current column, then only up to currentDay
       const currentDay = dayjs().date();
-      const cellsForColumn = board.cells
-        .filter((cell) => cell.colNr === parseInt(col.colNr, 10))
-        .filter((cell) => cell.rowNr <= currentDay);
+      const cellsForColumn =
+        board?.cells
+          ?.filter((cell) => cell.colNr === col.colNr)
+          .filter((cell) => cell.rowNr <= currentDay) || [];
 
-      // If your board.cells array is not sorted by day, you may need a sort:
-      // cellsForColumn.sort((a, b) => a.dayIndex - b.dayIndex);
-
-      // Convert isDone into a 1 or 0 for each day
+      // Convert isDone into 1 or 0 for each day
+      // If you need to handle alignment with day indexes carefully,
+      // you might need a more sophisticated approach. For simplicity, we assume
+      // the cells for each day are in chronological order and match [0..(currentDay-1)].
       const dataArray = cellsForColumn.map((cell) => (cell.isDone ? 1 : 0));
 
       return {
@@ -195,6 +217,12 @@ const Dashboard = () => {
 
     return { labels, datasets };
   }, [columnStats, board]);
+
+  // ====== Debugging logs (optional) ======
+  useEffect(() => {
+    console.log("Column Stats Updated:", columnStats);
+    console.log("Line Chart Data:", lineChartData);
+  }, [columnStats, lineChartData]);
 
   return (
     <motion.div
@@ -222,35 +250,73 @@ const Dashboard = () => {
       </motion.h2>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-        {columnStats.map((col) => (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+        {columnStats.map((col, i) => (
           <motion.div
             key={col.colNr}
-            className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transform transition-transform duration-300 hover:scale-105"
+            className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transform transition-transform duration-300 hover:scale-105 flex flex-col justify-center items-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: col.colNr * 0.1 }}
           >
-            <h3 className="font-bold text-lg">{col.headerName}</h3>
-            <p className="text-sm">
-              <strong>Done:</strong> {col.isDone}
-            </p>
-            <p className="text-sm">
-              <strong>Missed:</strong> {col.missed}
-            </p>
-            <p className="text-sm">
-              <strong>Longest Streak:</strong> {col.longestStreak}
-            </p>
-            <p className="text-sm">
-              <strong>Hit Rate:</strong> {col.hitRate}
-            </p>
+            <h3 className="font-bold text-lg text-center mb-4">{col.headerName}</h3>
+            <div className="flex flex-col lg:flex-row gap-4">
+              <div className="flex flex-col justify-between items-start gap-2">
+                <p className="text-sm border bg-secondary-50 p-2 rounded-lg w-full">
+                  <strong>Done:</strong> {col.isDone}
+                </p>
+                <p className="text-sm border bg-secondary-50 p-2 rounded-lg w-full">
+                  <strong>Missed:</strong> {col.missed}
+                </p>
+                <p className="text-sm border bg-secondary-50 p-2 rounded-lg w-full">
+                  <strong>Max Streak:</strong> {col.longestStreak}
+                </p>
+                <p className="text-sm border bg-secondary-50 p-2 rounded-lg w-full extrabold">
+                  <strong>Hit Rate:</strong> {col.hitRate}
+                </p>
+                <p className="text-sm border bg-secondary-50 p-2 rounded-lg w-full">
+                  <strong>Unreviewed:</strong> {col.isClear}
+                </p>
+              </div>
+              <div>
+                {/* Per-Column Bar Chart */}
+                {barchartDataAndOptionsArray[i] && (
+                  <Bar
+                    data={barchartDataAndOptionsArray[i].barChartData}
+                    options={barchartDataAndOptionsArray[i].barChartOptions}
+                  />
+                )}
+
+                {/* Per-Column Line Chart */}
+                {lineChartData.datasets && lineChartData.datasets[i] && (
+                  <Line
+                    data={{
+                      // Same labels for each column (days in month)
+                      labels: lineChartData.labels,
+                      // Wrap a single dataset in an array
+                      datasets: [lineChartData.datasets[i]],
+                    }}
+                    options={{
+                      responsive: true,
+                      animation: { duration: 2000 },
+                      plugins: {
+                        legend: { display: false },
+                      },
+                      scales: {
+                        y: { beginAtZero: true },
+                      },
+                    }}
+                  />
+                )}
+              </div>
+            </div>
           </motion.div>
         ))}
       </div>
 
       {/* Charts Section */}
       <div className="flex flex-col lg:flex-row items-center gap-8">
-        {/* Bar Chart */}
+        {/* Combined Bar Chart */}
         <motion.div
           className="w-full lg:w-1/2"
           initial={{ x: -20, opacity: 0 }}
@@ -263,7 +329,7 @@ const Dashboard = () => {
           <Bar data={barChartData} options={barChartOptions} />
         </motion.div>
 
-        {/* Line Chart */}
+        {/* Combined Line Chart */}
         <motion.div
           className="w-full lg:w-1/2"
           initial={{ x: 20, opacity: 0 }}
