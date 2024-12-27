@@ -19,7 +19,7 @@ export const metadata = {
   viewport: {
     width: "device-width",
     initialScale: 1,
-    maximumScale: 1,
+    // maximumScale: 1,
     userScalable: false, // Updated for accessibility, remove if zoom is required
   },
   icons: {
