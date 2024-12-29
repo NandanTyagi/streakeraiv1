@@ -5,11 +5,7 @@ import { motion } from "framer-motion";
 import { AppContext } from "@/context/appContext";
 import dayjs from "dayjs";
 import Loading from "@/components/Loading";
-
-// ====== 1) Import from react-chartjs-2 ======
 import { Bar, Line } from "react-chartjs-2";
-
-// ====== 2) Import from chart.js ======
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -21,8 +17,13 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 
-// ====== 3) Register the chart.js elements we need ======
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -34,7 +35,6 @@ ChartJS.register(
   Legend
 );
 
-// ====== Loading Animation Component ======
 const DashboardLoading = () => (
   <div className="flex justify-center items-center h-screen">
     <Loading />
@@ -49,29 +49,32 @@ const Dashboard = () => {
     if (!board?.cells || !board?.habitsNames) return [];
 
     const currentDay = dayjs().date();
-
-    // Filter out future days
     const filteredCells = board.cells.filter(
       (cell) => cell.rowNr <= currentDay
     );
 
-    // Remove Type Annotations here:
     const columnTotals = {};
     const columnStreaks = {};
 
     filteredCells.forEach((cell) => {
       const col = cell.colNr;
       if (!columnTotals[col]) {
-        columnTotals[col] = { isDone: 0, isClear: 0, missed: 0 };
+        columnTotals[col] = { isDone: 0, isClear: 0, missed: 0, comments: [] };
         columnStreaks[col] = { longestStreak: 0, currentStreak: 0 };
       }
 
+      // Example deriving a date from rowNr. Adjust if your board has a specific month/year.
+      const cellDate = dayjs()
+        .year(dayjs().year())
+        .month(dayjs().month())
+        .date(cell.rowNr)
+        .format("MMM D, YYYY");
+
+      // Increment done/missed/clear counts
       if (cell.isDone) {
         columnTotals[col].isDone++;
         columnStreaks[col].currentStreak++;
-        if (
-          columnStreaks[col].currentStreak > columnStreaks[col].longestStreak
-        ) {
+        if (columnStreaks[col].currentStreak > columnStreaks[col].longestStreak) {
           columnStreaks[col].longestStreak = columnStreaks[col].currentStreak;
         }
       } else {
@@ -81,6 +84,14 @@ const Dashboard = () => {
           columnTotals[col].isClear++;
         }
         columnStreaks[col].currentStreak = 0;
+      }
+
+      // If there's a comment, push an object containing text and date
+      if (cell.comment) {
+        columnTotals[col].comments.push({
+          text: cell.comment,
+          date: cellDate,
+        });
       }
     });
 
@@ -111,8 +122,8 @@ const Dashboard = () => {
             label: col.headerName,
             data: [col.isDone, col.missed, col.isClear],
             backgroundColor: [
-              "rgba(75, 192, 192, 0.6)", // Done
-              "rgba(255, 99, 132, 0.6)", // Missed
+              "rgba(75, 192, 192, 0.6)",  // Done
+              "rgba(255, 99, 132, 0.6)",  // Missed
               "rgba(153, 102, 255, 0.6)", // Unreviewed
             ],
           },
@@ -193,7 +204,6 @@ const Dashboard = () => {
 
     // Build a dataset for each column/habit
     const datasets = columnStats.map((col, index) => {
-      // Filter cells for the current column, then only up to currentDay
       const currentDay = dayjs().date();
       const cellsForColumn =
         board?.cells
@@ -201,9 +211,6 @@ const Dashboard = () => {
           .filter((cell) => cell.rowNr <= currentDay) || [];
 
       // Convert isDone into 1 or 0 for each day
-      // If you need to handle alignment with day indexes carefully,
-      // you might need a more sophisticated approach. For simplicity, we assume
-      // the cells for each day are in chronological order and match [0..(currentDay-1)].
       const dataArray = cellsForColumn.map((cell) => (cell.isDone ? 1 : 0));
 
       return {
@@ -218,7 +225,6 @@ const Dashboard = () => {
     return { labels, datasets };
   }, [columnStats, board]);
 
-  // ====== Debugging logs (optional) ======
   useEffect(() => {
     console.log("Column Stats Updated:", columnStats);
     console.log("Line Chart Data:", lineChartData);
@@ -231,7 +237,7 @@ const Dashboard = () => {
       transition={{ duration: 0.8 }}
       className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-100 p-8 pb-20"
     >
-      {/* Title */}
+      {/* Page Title */}
       <motion.h1
         className="text-3xl font-extrabold text-center mb-10"
         initial={{ y: -20, opacity: 0 }}
@@ -240,6 +246,8 @@ const Dashboard = () => {
       >
         Dashboard
       </motion.h1>
+
+      {/* Goal Heading */}
       <motion.h2
         className="text-2xl font-bold text-center mb-10"
         initial={{ y: -20, opacity: 0 }}
@@ -254,12 +262,15 @@ const Dashboard = () => {
         {columnStats.map((col, i) => (
           <motion.div
             key={col.colNr}
-            className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transform transition-transform duration-300 hover:scale-105 flex flex-col justify-center items-center"
+            className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transform transition-transform duration-300 flex flex-col justify-center items-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: col.colNr * 0.1 }}
           >
-            <h3 className="font-bold text-lg text-center mb-4">{col.headerName}</h3>
+            <h3 className="font-bold text-lg text-center mb-4">
+              {col.headerName}
+            </h3>
+
             <div className="flex flex-col lg:flex-row gap-4">
               <div className="flex flex-col justify-between items-start gap-2">
                 <p className="text-sm border bg-secondary-50 p-2 rounded-lg w-full">
@@ -278,6 +289,7 @@ const Dashboard = () => {
                   <strong>Unreviewed:</strong> {col.isClear}
                 </p>
               </div>
+
               <div>
                 {/* Per-Column Bar Chart */}
                 {barchartDataAndOptionsArray[i] && (
@@ -288,12 +300,10 @@ const Dashboard = () => {
                 )}
 
                 {/* Per-Column Line Chart */}
-                {lineChartData.datasets && lineChartData.datasets[i] && (
+                {lineChartData?.datasets && lineChartData?.datasets[i] && (
                   <Line
                     data={{
-                      // Same labels for each column (days in month)
                       labels: lineChartData.labels,
-                      // Wrap a single dataset in an array
                       datasets: [lineChartData.datasets[i]],
                     }}
                     options={{
@@ -310,13 +320,40 @@ const Dashboard = () => {
                 )}
               </div>
             </div>
+
+            {/* Accordion */}
+            <Accordion type="single" collapsible className="w-full mt-4">
+              <AccordionItem value="comments" >
+                <AccordionTrigger className="bg-primary text-white py-2 px-4 rounded-lg focus:outline-none">
+                  Notes
+                </AccordionTrigger>
+                <AccordionContent className="mt-4 bg-gray-100 rounded-lg p-4">
+                  {col.comments.length > 0 ? (
+                    col.comments.map((commentObj, index) => (
+                      <p
+                        key={index}
+                        className="text-sm text-gray-700 border-b py-2"
+                      >
+                        <span className="font-semibold mr-2">
+                          {commentObj.date}:
+                        </span>
+                        {commentObj.text}
+                      </p>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      No notes available.
+                    </p>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </motion.div>
         ))}
       </div>
 
-      {/* Charts Section */}
+      {/* Bottom Charts */}
       <div className="flex flex-col lg:flex-row items-center gap-8">
-        {/* Combined Bar Chart */}
         <motion.div
           className="w-full lg:w-1/2"
           initial={{ x: -20, opacity: 0 }}
@@ -329,7 +366,6 @@ const Dashboard = () => {
           <Bar data={barChartData} options={barChartOptions} />
         </motion.div>
 
-        {/* Combined Line Chart */}
         <motion.div
           className="w-full lg:w-1/2"
           initial={{ x: 20, opacity: 0 }}
@@ -355,7 +391,6 @@ const Dashboard = () => {
   );
 };
 
-// ====== Suspense Wrapper (Async Loading) ======
 export default function DashboardWrapper() {
   return (
     <Suspense fallback={<DashboardLoading />}>
