@@ -74,7 +74,9 @@ const Dashboard = () => {
       if (cell.isDone) {
         columnTotals[col].isDone++;
         columnStreaks[col].currentStreak++;
-        if (columnStreaks[col].currentStreak > columnStreaks[col].longestStreak) {
+        if (
+          columnStreaks[col].currentStreak > columnStreaks[col].longestStreak
+        ) {
           columnStreaks[col].longestStreak = columnStreaks[col].currentStreak;
         }
       } else {
@@ -122,8 +124,8 @@ const Dashboard = () => {
             label: col.headerName,
             data: [col.isDone, col.missed, col.isClear],
             backgroundColor: [
-              "rgba(75, 192, 192, 0.6)",  // Done
-              "rgba(255, 99, 132, 0.6)",  // Missed
+              "rgba(75, 192, 192, 0.6)", // Done
+              "rgba(255, 99, 132, 0.6)", // Missed
               "rgba(153, 102, 255, 0.6)", // Unreviewed
             ],
           },
@@ -271,26 +273,36 @@ const Dashboard = () => {
               {col.headerName}
             </h3>
 
-            <div className="flex flex-col lg:flex-row gap-4">
-              <div className="flex flex-col justify-between items-start gap-2">
-                <p className="text-sm border bg-secondary-50 p-2 rounded-lg w-full">
-                  <strong>Done:</strong> {col.isDone}
-                </p>
-                <p className="text-sm border bg-secondary-50 p-2 rounded-lg w-full">
-                  <strong>Missed:</strong> {col.missed}
-                </p>
-                <p className="text-sm border bg-secondary-50 p-2 rounded-lg w-full">
-                  <strong>Max Streak:</strong> {col.longestStreak}
-                </p>
-                <p className="text-sm border bg-secondary-50 p-2 rounded-lg w-full extrabold">
-                  <strong>Hit Rate:</strong> {col.hitRate}
-                </p>
-                <p className="text-sm border bg-secondary-50 p-2 rounded-lg w-full">
-                  <strong>Unreviewed:</strong> {col.isClear}
-                </p>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col lg:flex-row gap-4 relative">
+                {/* <div className="flex flex-col justify-between items-start gap-2"> */}
+                <div className="grid grid-cols-2 gap-1 w-full h-full">
+                  <div className="text-sm border bg-green-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-bold">
+                    <p className="text-xl">{col.isDone}</p>
+                    <p>Done</p>
+                  </div>
+                  <div className="text-sm border bg-red-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-bold">
+                    <p className="text-xl">{col.missed}</p>
+                    <p>Missed</p>
+                  </div>
+                  <div className="text-sm border bg-green-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-bold">
+                    <p className="text-xl">{col.isDone}</p>
+                    <p>Top Streak</p>
+                  </div>
+
+                  <div className="text-sm border bg-gray-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-bold">
+                    <p className="text-xl">{col.isClear}</p>
+                    <p>Unreviewd</p>
+                  </div>
+                  {/* <div className="text-sm border bg-yellow-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center"> */}
+                  <div className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] text-[0.8rem] border bg-yellow-50 p-2 rounded-full w-20 h-20 flex flex-col justify-center items-center font-bold ">
+                    <p>{col.hitRate}</p>
+                    <p>Hit Rate</p>
+                  </div>
+                </div>
               </div>
 
-              <div>
+              <div className="flex flex-col gap-4 w-full">
                 {/* Per-Column Bar Chart */}
                 {barchartDataAndOptionsArray[i] && (
                   <Bar
@@ -323,7 +335,7 @@ const Dashboard = () => {
 
             {/* Accordion */}
             <Accordion type="single" collapsible className="w-full mt-4">
-              <AccordionItem value="comments" >
+              <AccordionItem value="comments">
                 <AccordionTrigger className="bg-primary text-white py-2 px-4 rounded-lg focus:outline-none">
                   Notes
                 </AccordionTrigger>
@@ -341,9 +353,7 @@ const Dashboard = () => {
                       </p>
                     ))
                   ) : (
-                    <p className="text-sm text-gray-500">
-                      No notes available.
-                    </p>
+                    <p className="text-sm text-gray-500">No notes available.</p>
                   )}
                 </AccordionContent>
               </AccordionItem>
