@@ -482,7 +482,7 @@ const StreakerGridItem = ({
               placeholder="Enter your note..."
             />
           </div>
-          <DialogFooter>
+          <DialogFooter className="gap-2">
             <Button variant="secondary" onClick={handleCancelNote}>
               Cancel
             </Button>
