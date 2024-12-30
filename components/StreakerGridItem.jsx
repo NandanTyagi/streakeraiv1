@@ -7,6 +7,20 @@ import { AppContext } from "@/context/appContext";
 import dayjs from "dayjs";
 import handelDbCells from "../utils/handelDbCells";
 
+// 1. Import shadcn UI toast & dialog components
+import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/shad-dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+
 const StreakerGridItem = ({
   type,
   isDone,
@@ -34,6 +48,9 @@ const StreakerGridItem = ({
     setIsSaved,
   } = useContext(AppContext);
 
+  // 2. Destructure the toast function
+  const { toast } = useToast();
+
   const [isDoneLocal, setIsDoneLocal] = useState(isDone);
   const [isClearLocal, setIsClearLocal] = useState(isClear);
   const [messageLocal, setMessageLocal] = useState(message);
@@ -42,6 +59,10 @@ const StreakerGridItem = ({
   const [isTodayLocal, setIsTodayLocal] = useState(isToday);
   const [labelLocal, setLabelLocal] = useState(label);
   const [timer, setTimer] = useState(null);
+
+  // 3. State for the Dialog ("prompt" replacement)
+  const [showNoteDialog, setShowNoteDialog] = useState(false);
+  const [noteValue, setNoteValue] = useState("");
 
   // Find the current cell index from the board
   const currentCellIndexLocal = board?.cells?.findIndex(
@@ -55,8 +76,6 @@ const StreakerGridItem = ({
     const setCurrentCellLabelToCorespondingHabitName = () => {
       const habits = board?.habitsNames;
       if (!habits || habits.length === 0) return;
-      // Adjust indexing if needed; currently using (currentCellIndexLocal % 4) + 1
-      // Consider if you want to just use (currentCellIndexLocal % habits.length)
       const currentCellLabel = habits[currentCellIndexLocal % habits.length];
       setLabelLocal(currentCellLabel);
     };
@@ -115,55 +134,54 @@ const StreakerGridItem = ({
     setIsCellLoading(false);
   };
 
+  // 4. Show read-only note or open a Dialog after 2s mouse-hold
   const handleMouseDown = () => {
     if (isSaved) {
       setIsSaved(false);
     }
+
     const timeoutId = window.setTimeout(() => {
-      let input;
-      if (board?.cells?.[currentCellIndexLocal]?.updatedAt) {
+      // Check if there's an existing note update time
+      const hasUpdatedAt = board?.cells?.[currentCellIndexLocal]?.updatedAt;
+
+      if (hasUpdatedAt) {
+        // If isHistory => read-only toast
         if (isHistory) {
-          window.alert(
-            `Note: "${messageLocal}"\n\nLast updated: ${board.cells[currentCellIndexLocal].updatedAt}"`
-          );
+          toast({
+            title: "Note",
+            description: `"${messageLocal}"\n\nLast updated: ${
+              board.cells[currentCellIndexLocal].updatedAt
+            }`,
+          });
           return;
         }
-        input = window.prompt(
-          `Previous note: "${messageLocal}"\n\nLast updated: ${board.cells[currentCellIndexLocal].updatedAt}"`
-        );
+        // Else open the dialog to update existing note
+        setNoteValue(messageLocal || "");
+        setShowNoteDialog(true);
       } else {
+        // If no existing note or updatedAt
         if (!messageLocal) {
-          if (isHistory) {
-            return;
-          }
-          input = window.prompt(`Enter a new note:`);
+          // If isHistory => do nothing
+          if (isHistory) return;
+          // Else open a new note dialog
+          setNoteValue("");
+          setShowNoteDialog(true);
         } else {
+          // If user already has a note
           if (isHistory) {
-            window.alert(
-              `Note: "${messageLocal}"\n\nLast updated: ${board.cells[currentCellIndexLocal].updatedAt}"`
-            );
+            // read-only toast
+            toast({
+              title: "Note",
+              description: `"${messageLocal}"\n\nLast updated: ${
+                board.cells[currentCellIndexLocal].updatedAt
+              }`,
+            });
             return;
           }
-          input = window.prompt(`Note:\n"${messageLocal}"\n\nUpdate note:`);
+          // else open the update dialog
+          setNoteValue(messageLocal);
+          setShowNoteDialog(true);
         }
-      }
-      if (!input) {
-        return;
-      }
-      if (isHistory) return;
-      setMessageLocal(input);
-      if (!isClearLocal) {
-        const updatedCell = {
-          ...board.cells[currentCellIndexLocal],
-          comment: input,
-        };
-        handelCells(updatedCell);
-      } else {
-        const newCell = {
-          ...board.cells[currentCellIndexLocal],
-          comment: input,
-        };
-        handelCells(newCell);
       }
     }, 2000);
     setTimer(timeoutId);
@@ -178,15 +196,19 @@ const StreakerGridItem = ({
   const checkIfCurrentRowIsAfterToday = () => {
     const currentDay = dayjs().date();
     if (currentDay < rowNr) {
-      alert("This cell is in the future. You can't mark it as done yet.");
+      // Use toast instead of alert for "future day" check
+      toast({
+        title: "Heads up!",
+        description: "This cell is in the future. You can't mark it as done yet.",
+      });
       return true;
     }
-    return false; 
+    return false;
   };
 
   const handleClick = (e) => {
-    if(checkIfCurrentRowIsAfterToday()) return;
-  
+    if (checkIfCurrentRowIsAfterToday()) return;
+
     if (isHistory) return;
     if (isSaved) {
       setIsSaved(false);
@@ -212,7 +234,7 @@ const StreakerGridItem = ({
         }
 
         setIsDoneLocal(!isDoneLocal);
-        let cellExists = board?.cells?.[currentCellIndexLocal];
+        const cellExists = board?.cells?.[currentCellIndexLocal];
         if (
           cellExists &&
           board.cells[currentCellIndexLocal].id === `${rowNr}-${colNr}`
@@ -251,7 +273,7 @@ const StreakerGridItem = ({
       setIsSaved(false);
     }
     setIsClearLocal(true);
-    let cellExists = board?.cells?.[currentCellIndexLocal];
+    const cellExists = board?.cells?.[currentCellIndexLocal];
     if (
       cellExists &&
       board.cells[currentCellIndexLocal].id === `${rowNr}-${colNr}`
@@ -277,6 +299,34 @@ const StreakerGridItem = ({
       setIsDoneLocal(false);
       handelCells(newCell);
     }
+  };
+
+  // 5. Handle saving the note after user closes Dialog
+  const handleSaveNote = () => {
+    setMessageLocal(noteValue);
+
+    // If cell is not clear => update comment
+    if (!isClearLocal) {
+      const updatedCell = {
+        ...board.cells[currentCellIndexLocal],
+        comment: noteValue,
+      };
+      handelCells(updatedCell);
+    } else {
+      // If cell is clear => create a new cell with comment
+      const newCell = {
+        ...board.cells[currentCellIndexLocal],
+        comment: noteValue,
+      };
+      handelCells(newCell);
+    }
+
+    setShowNoteDialog(false);
+  };
+
+  const handleCancelNote = () => {
+    // Just close the dialog without saving
+    setShowNoteDialog(false);
   };
 
   useEffect(() => {
@@ -413,6 +463,33 @@ const StreakerGridItem = ({
           )}
         </button>
       )}
+
+      {/* 6. Dialog for "prompt" replacement */}
+      <Dialog open={showNoteDialog} onOpenChange={setShowNoteDialog}>
+        <DialogContent className="bg-white">
+          <DialogHeader>
+            <DialogTitle>{messageLocal ? "Update Note" : "New Note"}</DialogTitle>
+            <DialogDescription>
+              {messageLocal
+                ? "Update your existing note below."
+                : "Enter a new note below."}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4">
+            <Textarea
+              value={noteValue}
+              onChange={(e) => setNoteValue(e.target.value)}
+              placeholder="Enter your note..."
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="secondary" onClick={handleCancelNote}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveNote}>Done</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

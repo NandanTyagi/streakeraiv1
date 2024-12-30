@@ -2,6 +2,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { usePathname } from "next/navigation";
+import { Toaster } from "./ui/toaster";
 
 export default function MainLayout({ children }) {
   const pathname = usePathname();
@@ -23,8 +24,7 @@ export default function MainLayout({ children }) {
         </div>
       </div>
     );
-  } 
-  else if (pathname === "/about") {
+  } else if (pathname === "/about") {
     return (
       <div className="main-layout-container bg-black">
         <div className="main-layout">
@@ -34,8 +34,7 @@ export default function MainLayout({ children }) {
         </div>
       </div>
     );
-  } 
-  else if (pathname === "/history") {
+  } else if (pathname === "/history") {
     return (
       <div className="main-layout-container bg-gradient-to-r from-blue-100 to-purple-100">
         <div className="main-layout">
@@ -45,10 +44,10 @@ export default function MainLayout({ children }) {
         </div>
       </div>
     );
-  } 
-  else if (pathname === "/panel") {
+  } else if (pathname === "/panel") {
     return (
       <div className="main-layout-container">
+        <Toaster />
         <div className="main-layout">
           <Header />
           {children}
@@ -56,8 +55,7 @@ export default function MainLayout({ children }) {
         <footer className="flex flex-col justify-center w-full items-center sm:items-end sm:pr-6 z-[0] absolute bottom-0 max-w-[1480px] bg-[#EBEBEB]"></footer>
       </div>
     );
-  } 
-  else {
+  } else {
     return (
       <div className="main-layout-container">
         <div className="main-layout">
