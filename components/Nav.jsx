@@ -304,7 +304,7 @@ const Nav = ({ isNav = true, isHistory }) => {
                 <DialogTitle>{confirmTitle}</DialogTitle>
                 <DialogDescription>{confirmDescription}</DialogDescription>
               </DialogHeader>
-              <DialogFooter>
+              <DialogFooter className="gap-2">
                 <button
                   className="border px-4 py-2 rounded-md"
                   onClick={() => setConfirmOpen(false)}
