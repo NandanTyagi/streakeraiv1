@@ -45,59 +45,92 @@ const DashboardLoading = () => (
 const Dashboard = () => {
   const { board } = useContext(AppContext);
 
+  // ========== UPDATED columnStats logic ==========
   const columnStats = useMemo(() => {
+    // Early return if board or habit names aren't loaded
     if (!board?.cells || !board?.habitsNames) return [];
 
-    const currentDay = dayjs().date();
-    const filteredCells = board.cells.filter(
-      (cell) => cell.rowNr <= currentDay
-    );
+    // Number of days in current month up to today's date
+    const currentDay = dayjs().date(); // e.g., 30 if today is the 30th
+    // Number of habits (columns)
+    const numberOfHabits = board.habitsNames.length;
 
+    // Prepare structures to hold totals/streaks for each column
     const columnTotals = {};
+
     const columnStreaks = {};
 
-    filteredCells.forEach((cell) => {
-      const col = cell.colNr;
-      if (!columnTotals[col]) {
-        columnTotals[col] = { isDone: 0, isClear: 0, missed: 0, comments: [] };
-        columnStreaks[col] = { longestStreak: 0, currentStreak: 0 };
-      }
+    // Initialize totals and streaks for each column
+    for (let colNr = 1; colNr <= numberOfHabits; colNr++) {
+      columnTotals[colNr] = {
+        isDone: 0,
+        isClear: 0,
+        missed: 0,
+        unreviewed: 0,
+        comments: [],
+      };
+      columnStreaks[colNr] = {
+        longestStreak: 0,
+        currentStreak: 0,
+      };
+    }
 
-      // Example deriving a date from rowNr. Adjust if your board has a specific month/year.
-      const cellDate = dayjs()
-        .year(dayjs().year())
-        .month(dayjs().month())
-        .date(cell.rowNr)
-        .format("MMM D, YYYY");
+    // Iterate over each day from 1..currentDay for each habit
+    for (let day = 1; day <= currentDay; day++) {
+      for (let colNr = 1; colNr <= numberOfHabits; colNr++) {
+        // Attempt to find a matching cell
+        const cell = board.cells.find((c) => c.rowNr === day && c.colNr === colNr);
 
-      // Increment done/missed/clear counts
-      if (cell.isDone) {
-        columnTotals[col].isDone++;
-        columnStreaks[col].currentStreak++;
-        if (
-          columnStreaks[col].currentStreak > columnStreaks[col].longestStreak
-        ) {
-          columnStreaks[col].longestStreak = columnStreaks[col].currentStreak;
-        }
-      } else {
-        if (!cell.isClear) {
-          columnTotals[col].missed++;
+        if (!cell) {
+          // No cell => user hasn't interacted => unreviewed
+          columnTotals[colNr].unreviewed++;
         } else {
-          columnTotals[col].isClear++;
+          // Build a date string for any comment
+          const cellDate = dayjs()
+            .year(dayjs().year())
+            .month(dayjs().month())
+            .date(day)
+            .format("MMM D, YYYY");
+
+          if (cell.isDone) {
+            columnTotals[colNr].isDone++;
+            columnStreaks[colNr].currentStreak++;
+            // Update longest streak if needed
+            if (
+              columnStreaks[colNr].currentStreak >
+              columnStreaks[colNr].longestStreak
+            ) {
+              columnStreaks[colNr].longestStreak =
+                columnStreaks[colNr].currentStreak;
+            }
+          } else {
+            // If cell is explicitly cleared, increment isClear
+            if (cell.isClear) {
+              columnTotals[colNr].isClear++;
+            } else {
+              // Otherwise, mark it as missed
+              columnTotals[colNr].missed++;
+            }
+            // Missed or isClear => reset current streak
+            columnStreaks[colNr].currentStreak = 0;
+          }
+
+          // Push comments if any
+          if (cell.comment) {
+            columnTotals[colNr].comments.push({
+              text: cell.comment,
+              date: cellDate,
+            });
+          }
         }
-        columnStreaks[col].currentStreak = 0;
       }
+    }
 
-      // If there's a comment, push an object containing text and date
-      if (cell.comment) {
-        columnTotals[col].comments.push({
-          text: cell.comment,
-          date: cellDate,
-        });
-      }
-    });
-
+    // Convert columnTotals into an array for rendering
     return Object.entries(columnTotals).map(([col, stats]) => {
+      const colNr = Number(col);
+
+      // "Hit Rate": ratio of isDone to (isDone + missed)
       const totalAttempts = stats.isDone + stats.missed;
       const hitRate =
         totalAttempts > 0
@@ -105,10 +138,10 @@ const Dashboard = () => {
           : "0";
 
       return {
-        colNr: Number(col),
-        headerName: board.habitsNames[Number(col) - 1] || `Column ${col}`,
+        colNr,
+        headerName: board.habitsNames[colNr - 1] || `Column ${colNr}`,
         ...stats,
-        longestStreak: columnStreaks[Number(col)].longestStreak,
+        longestStreak: columnStreaks[colNr].longestStreak,
         hitRate: `${hitRate}%`,
       };
     });
@@ -122,7 +155,7 @@ const Dashboard = () => {
         datasets: [
           {
             label: col.headerName,
-            data: [col.isDone, col.missed, col.isClear],
+            data: [col.isDone, col.missed, col.unreviewed],
             backgroundColor: [
               "rgba(75, 192, 192, 0.6)", // Done
               "rgba(255, 99, 132, 0.6)", // Missed
@@ -165,7 +198,7 @@ const Dashboard = () => {
         },
         {
           label: "Unreviewed",
-          data: columnStats.map((col) => col.isClear),
+          data: columnStats.map((col) => col.unreviewed),
           backgroundColor: "rgba(153, 102, 255, 0.6)",
         },
         {
@@ -207,13 +240,20 @@ const Dashboard = () => {
     // Build a dataset for each column/habit
     const datasets = columnStats.map((col, index) => {
       const currentDay = dayjs().date();
+      // Filter the board cells for matching colNr and day <= currentDay
       const cellsForColumn =
         board?.cells
           ?.filter((cell) => cell.colNr === col.colNr)
           .filter((cell) => cell.rowNr <= currentDay) || [];
 
-      // Convert isDone into 1 or 0 for each day
-      const dataArray = cellsForColumn.map((cell) => (cell.isDone ? 1 : 0));
+      // Convert isDone into 1 or 0 for each day that has a cell
+      // If a day has no cell, you could consider it 0 or skip it
+      // (Implement as needed for your chart’s logic)
+      const dataArray = [];
+      for (let d = 1; d <= totalDays; d++) {
+        const foundCell = cellsForColumn.find((cell) => cell.rowNr === d);
+        dataArray.push(foundCell?.isDone ? 1 : 0);
+      }
 
       return {
         label: col.headerName,
@@ -275,7 +315,6 @@ const Dashboard = () => {
 
             <div className="flex flex-col gap-4">
               <div className="flex flex-col lg:flex-row gap-4 relative">
-                {/* <div className="flex flex-col justify-between items-start gap-2"> */}
                 <div className="grid grid-cols-2 gap-1 w-full h-full">
                   <div className="text-sm border bg-green-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-bold">
                     <p className="text-xl">{col.isDone}</p>
@@ -286,16 +325,14 @@ const Dashboard = () => {
                     <p>Missed</p>
                   </div>
                   <div className="text-sm border bg-green-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-bold">
-                    <p className="text-xl">{col.isDone}</p>
+                    <p className="text-xl">{col.longestStreak}</p>
                     <p>Top Streak</p>
                   </div>
-
                   <div className="text-sm border bg-gray-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-bold">
-                    <p className="text-xl">{col.isClear}</p>
+                    <p className="text-xl">{col.unreviewed}</p>
                     <p>Unreviewed</p>
                   </div>
-                  {/* <div className="text-sm border bg-yellow-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center"> */}
-                  <div className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] text-[0.8rem] border bg-yellow-50 p-2 rounded-full w-20 h-20 flex flex-col justify-center items-center font-bold ">
+                  <div className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] text-[0.8rem] border bg-yellow-50 p-2 rounded-full w-20 h-20 flex flex-col justify-center items-center font-bold">
                     <p>{col.hitRate}</p>
                     <p>Hit Rate</p>
                   </div>
