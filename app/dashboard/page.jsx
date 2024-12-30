@@ -336,7 +336,7 @@ const Dashboard = () => {
             {/* Accordion */}
             <Accordion type="single" collapsible className="w-full mt-4">
               <AccordionItem value="comments">
-                <AccordionTrigger className="bg-primary text-white py-2 px-4 rounded-lg focus:outline-none">
+                <AccordionTrigger className="bg-gradient-to-br from-primary to-[#330594] text-white py-2 px-4 rounded-lg focus:outline-none">
                   Notes
                 </AccordionTrigger>
                 <AccordionContent className="mt-4 bg-gray-100 rounded-lg p-4">
