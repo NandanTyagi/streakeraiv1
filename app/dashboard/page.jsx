@@ -292,7 +292,7 @@ const Dashboard = () => {
 
                   <div className="text-sm border bg-gray-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-bold">
                     <p className="text-xl">{col.isClear}</p>
-                    <p>Unreviewd</p>
+                    <p>Unreviewed</p>
                   </div>
                   {/* <div className="text-sm border bg-yellow-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center"> */}
                   <div className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] text-[0.8rem] border bg-yellow-50 p-2 rounded-full w-20 h-20 flex flex-col justify-center items-center font-bold ">
