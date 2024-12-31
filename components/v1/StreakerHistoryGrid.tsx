@@ -54,7 +54,7 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({ board, cells 
   }, [board]);
 
   useEffect(() => {
-    console.log("Board####################### in GRID:", board);
+    console.log("Board####################### in History GRID:", board);
   }, [board]);
 
   return (
