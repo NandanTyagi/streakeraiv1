@@ -1,17 +1,19 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from "react";
+import dayjs from "dayjs";
+
+import { AppContext } from "@/context/appContext";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+
 import styles from "../../styles/StreakerGrid.module.css";
+
 import StreakerGridHeaders from "../../components/StreakerGridHeaders";
 import StreakerGridRow from "../StreakerGridRow";
 import Loading from "@/components/Loading";
-import { AppContext } from "@/context/appContext";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import dayjs from "dayjs";
+
 import getDaysInMonth from "@/utils/getDaysInMonth";
 import getDayTagArray from "@/utils/getDayTagArray";
-import fetchUser from "@/utils/v2/fetchUser";
-import getCurrentUserBoardFromDb from "@/utils/getCurrentUserBoardFromDb";
 
 interface Cell {
   id: string;
@@ -21,125 +23,100 @@ interface Cell {
 }
 
 interface Board {
-  cells: Cell[];
-  habitsNames: string[];
+  _id?: string;
+  goalToAchieve?: string;
+  habitsNames?: string[];
+  habitsValues?: string[];
+  days?: number;
+  history?: Array<{
+    year: string;
+    month: string;
+    cells: Cell[];
+  }>;
+  // etc...
 }
 
 interface StreakerHistoryGridProps {
   board: Board;
+  cells: Cell[]; // these are the "history" cells we want to display
 }
 
-const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({ board }) => {
+const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
+  board,
+  cells,
+}) => {
   const { isAppLoading } = useContext(AppContext);
   const { isLoading, user } = useKindeBrowserClient();
 
-  const [cellsArray, setCellsArray] = useState<Cell[]>(board?.cells || []);
-  const [currentCellIndexLocal, setCurrentCellIndexLocal] = useState<number | null>(null);
+  // Local state for cells (optional if you need to modify them)
+  const [cellsArray, setCellsArray] = useState<Cell[]>(cells || []);
+  // If the `cells` prop changes, sync up:
+  useEffect(() => {
+    setCellsArray(cells || []);
+    console.log("Cells array in History GRID:", cellsArray);
+  }, [cells]);
 
-  // We’ll keep using the habits from the prop unless you have a reason to fetch them too
+  // If you have habits at the board level
   const habits = board?.habitsNames || Array.from({ length: 5 });
-
-  const days = getDaysInMonth(new Date());
+  
+  // Just an example of how you might decide how many days to show:
+  // If your board has a "days" field, you can use it.
+  // Otherwise, you might default to the current month, etc.
+  const days = board?.days ?? getDaysInMonth(new Date());
   const tagArr = getDayTagArray(new Date());
 
-  useEffect(() => {
-    if (!board) {
-      console.warn("No board prop was passed in!");
-      return;
-    }
-
-    const fetchUsersFromDb = async () => {
-      try {
-        console.log("Attempting to fetch user from DB...");
-        const userFromDb = await fetchUser();
-        if (!userFromDb) {
-          console.error("No user returned from fetchUser() in production!");
-          return;
-        }
-        console.log("userFromDb:", userFromDb);
-
-        console.log("Now fetching current user's board from DB...");
-        const userBoard = await getCurrentUserBoardFromDb(userFromDb.email);
-
-        if (!userBoard || !userBoard.cells) {
-          console.warn(
-            "userBoard is empty or undefined. Possibly no board found for this user in production."
-          );
-        } else {
-          console.log("Successfully fetched userBoard:", userBoard);
-        }
-
-        setCellsArray(userBoard?.cells || []);
-      } catch (error) {
-        console.error("Error while fetching user or board from DB:", error);
-      }
-    };
-
-    fetchUsersFromDb();
-  }, [board]);
-
-  // Additional logs if you need them:
-  useEffect(() => {
-    console.log("Board prop changed. board:", board);
-  }, [board]);
+  if (isAppLoading || isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
-      {isAppLoading || isLoading ? (
-        <Loading />
-      ) : (
-        <>
-          <section className={styles.streakerGrid}>
-            <StreakerGridHeaders isHistory />
-          </section>
+      <section className={styles.streakerGrid}>
+        <StreakerGridHeaders isHistory />
+      </section>
 
-          <section className={styles.streakerGrid}>
-            {Array.from({ length: days }).map((_, dayIndex) => {
-              const today = Number(dayjs().format("D"));
+      <section className={styles.streakerGrid}>
+        {Array.from({ length: days }).map((_, dayIndex) => {
+          const today = dayjs().format("D");
 
-              // Render using cellsArray
-              const cellProps = habits.map((_, colIndex) => {
-                const cellId = `${dayIndex + 1}-${colIndex + 1}`;
-                const cell = cellsArray.find((c) => c.id === cellId);
+          // For each day row, we map across the habits columns
+          const cellProps = habits.map((_, colIndex) => {
+            const cellId = `${dayIndex + 1}-${colIndex + 1}`;
+            // find a matching cell in your 161 cells, for example
+            const cell = cellsArray.find((c) => c.id === cellId);
 
-                return {
-                  rowNr: dayIndex + 1,
-                  colNr: colIndex + 1,
-                  isDone: cell?.isDone ?? false,
-                  isClear: cell?.isClear ?? true,
-                  message: cell?.comment,
-                  isToday: dayIndex + 1 === today,
-                  cell,
-                };
-              });
+            return {
+              rowNr: dayIndex + 1,
+              colNr: colIndex + 1,
+              isDone: cell?.isDone ?? false,
+              isClear: cell?.isClear ?? true,
+              message: cell?.comment,
+              isToday: dayIndex + 1 === Number(today),
+              cell,
+            };
+          });
 
-              return (
-                <StreakerGridRow
-                  key={dayIndex}
-                  nr={dayIndex + 1}
-                  cells={cellProps}
-                  day={tagArr[dayIndex]}
-                  user={user}
-                  isLoading={isLoading}
-                  onCellSelect={(index: number | null) => setCurrentCellIndexLocal(index)}
-                  board={board}
-                  habits={habits}
-                  isHistory
-                />
-              );
-            })}
-          </section>
-        </>
-      )}
+          return (
+            <StreakerGridRow
+              key={dayIndex}
+              nr={dayIndex + 1}
+              cells={cellProps}
+              day={tagArr[dayIndex]}
+              user={user}
+              isLoading={isLoading}
+              board={board}
+              habits={habits}
+              isHistory
+              onCellSelect={() => {}}
+            />
+          );
+        })}
+      </section>
     </>
   );
 };
 
 export default StreakerHistoryGrid;
-
-
-
-
 
 
 
