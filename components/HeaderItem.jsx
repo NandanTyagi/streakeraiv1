@@ -48,7 +48,7 @@ const HeaderItem = ({ column, description, value, isHistory }) => {
 
   useEffect(() => {
     // Example: console.log to demonstrate useEffect with dependencies
-    console.log("Activity or value changed", { activityInputLocal, valueInputLocal, board, user });
+    // console.log("Activity or value changed", { activityInputLocal, valueInputLocal, board, user });
   }, [activityInputLocal, valueInputLocal, board, user]);
 
   return (
