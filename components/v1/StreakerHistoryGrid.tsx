@@ -72,7 +72,8 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({ board, cells 
 
               // Prepare cell data for each column in the row
               const cellProps = habits.map((_, colIndex) => {
-                const cell = board?.cells?.find(
+                // const cell = board?.cells?.find(
+                const cell = cellsArray.find(
                   (c) => c.id === `${dayIndex + 1}-${colIndex + 1}`
                 );
                 return {
