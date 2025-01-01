@@ -7,17 +7,32 @@ import Nav from "@/components/Nav";
 import Loading from "@/components/Loading";
 
 const PanelPage = () => {
-  const { id, year: currentYear } = useParams();
+  const params = useParams();
+  // Sometimes useParams() is an object with { id: string, year: string }
+  // Confirm how you've set up your routes.
+  const { id, year: currentYear } = params || {};
+  
   const [panel, setPanel] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Log the ID and year to confirm they’re correct in production
+    console.log("PanelPage -> id:", id);
+    console.log("PanelPage -> year:", currentYear);
+
     const fetchPanel = async () => {
-      if (!id) return;
+      if (!id) {
+        console.warn("No 'id' available, cannot fetchPanelById.");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const panelData = await fetchPanelById(id);
-        setPanel(panelData);
-        console.log("Fetched panel:", panelData);
+        console.log("Fetching panel by ID:", id);
+        const fetchedPanel = await fetchPanelById(id);
+        console.log("Fetched panel data:", fetchedPanel);
+
+        setPanel(fetchedPanel);
       } catch (error) {
         console.error("Panel operation failed:", error);
       } finally {
@@ -28,9 +43,8 @@ const PanelPage = () => {
     if (panel === null) {
       fetchPanel();
     }
-  }, [id, panel]);
+  }, [id, currentYear, panel]);
 
-  // While loading, show a spinner or similar
   if (loading) {
     return (
       <>
@@ -40,7 +54,7 @@ const PanelPage = () => {
     );
   }
 
-  // If we finished loading but have no panel (e.g., no matching ID), show a fallback
+  // If there's no panel after we've finished loading
   if (!panel) {
     return (
       <>
@@ -50,29 +64,19 @@ const PanelPage = () => {
     );
   }
 
-  // Otherwise, we have a valid panel
   const historyData = panel.history?.find((h) => h.year === currentYear);
 
   return (
     <>
       <Nav isNav={false} isHistory />
       <main className="overflowY-scroll relative z-1">
-        {/* 
-          Now we know `panel` is not null, so we can safely pass it.
-          Also pass the 'cells' or 'historyData' if your component uses it.
-        */}
-        <StreakerHistoryGrid
-          board={panel}
-          cells={historyData}
-        />
+        <StreakerHistoryGrid board={panel} cells={historyData} />
       </main>
     </>
   );
 };
 
 export default PanelPage;
-
-
 
 
 
