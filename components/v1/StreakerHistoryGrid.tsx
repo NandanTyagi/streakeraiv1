@@ -13,60 +13,74 @@ import getDayTagArray from "@/utils/getDayTagArray";
 import fetchUser from "@/utils/v2/fetchUser";
 import getCurrentUserBoardFromDb from "@/utils/getCurrentUserBoardFromDb";
 
+interface Cell {
+  id: string;
+  isDone: boolean;
+  isClear: boolean;
+  comment?: string;
+}
+
 interface Board {
-  cells: Array<{
-    id: string;
-    isDone: boolean;
-    isClear: boolean;
-    comment?: string;
-  }>;
+  cells: Cell[];
   habitsNames: string[];
 }
 
 interface StreakerHistoryGridProps {
   board: Board;
-  // You mentioned a `cells` prop, but we don't actually need it unless there's another use for it:
-  // cells?: Array<{ id: string; isDone: boolean; isClear: boolean; comment?: string }>;
 }
 
 const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({ board }) => {
   const { isAppLoading } = useContext(AppContext);
   const { isLoading, user } = useKindeBrowserClient();
 
-  // Local state that will hold the cells once fetched
-  const [cellsArray, setCellsArray] = useState(board?.cells || []);
+  const [cellsArray, setCellsArray] = useState<Cell[]>(board?.cells || []);
   const [currentCellIndexLocal, setCurrentCellIndexLocal] = useState<number | null>(null);
 
-  // You can keep using board.habitsNames for habits unless you need to fetch them too
+  // We’ll keep using the habits from the prop unless you have a reason to fetch them too
   const habits = board?.habitsNames || Array.from({ length: 5 });
 
-  // Generate the days & tags for the current month
   const days = getDaysInMonth(new Date());
   const tagArr = getDayTagArray(new Date());
 
-  // Fetch the board/cells from DB and update local state
   useEffect(() => {
+    if (!board) {
+      console.warn("No board prop was passed in!");
+      return;
+    }
+
     const fetchUsersFromDb = async () => {
-      const userFromDb = await fetchUser();
-      console.log("Fetched user from DB in NOT EMPTY streaker grid:", userFromDb);
+      try {
+        console.log("Attempting to fetch user from DB...");
+        const userFromDb = await fetchUser();
+        if (!userFromDb) {
+          console.error("No user returned from fetchUser() in production!");
+          return;
+        }
+        console.log("userFromDb:", userFromDb);
 
-      const userBoard = await getCurrentUserBoardFromDb(userFromDb.email);
-      console.log("Fetched board from DB in NOT EMPTY streaker grid:", userBoard);
+        console.log("Now fetching current user's board from DB...");
+        const userBoard = await getCurrentUserBoardFromDb(userFromDb.email);
 
-      // Update the local cellsArray from DB
-      setCellsArray(userBoard.cells);
-      return userFromDb;
+        if (!userBoard || !userBoard.cells) {
+          console.warn(
+            "userBoard is empty or undefined. Possibly no board found for this user in production."
+          );
+        } else {
+          console.log("Successfully fetched userBoard:", userBoard);
+        }
+
+        setCellsArray(userBoard?.cells || []);
+      } catch (error) {
+        console.error("Error while fetching user or board from DB:", error);
+      }
     };
 
-    // Only fetch if `board` is defined
-    if (board) {
-      fetchUsersFromDb();
-    }
+    fetchUsersFromDb();
   }, [board]);
 
-  // Additional logs, if you want them:
+  // Additional logs if you need them:
   useEffect(() => {
-    console.log("Board (prop) in History GRID updated:", board);
+    console.log("Board prop changed. board:", board);
   }, [board]);
 
   return (
@@ -81,22 +95,21 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({ board }) => {
 
           <section className={styles.streakerGrid}>
             {Array.from({ length: days }).map((_, dayIndex) => {
-              const today = dayjs().format("D");
+              const today = Number(dayjs().format("D"));
 
-              // Use cellsArray instead of board?.cells:
+              // Render using cellsArray
               const cellProps = habits.map((_, colIndex) => {
-                const cell = cellsArray.find(
-                  (c) => c.id === `${dayIndex + 1}-${colIndex + 1}`
-                );
+                const cellId = `${dayIndex + 1}-${colIndex + 1}`;
+                const cell = cellsArray.find((c) => c.id === cellId);
 
                 return {
                   rowNr: dayIndex + 1,
                   colNr: colIndex + 1,
-                  isDone: cell ? cell.isDone : false,
-                  isClear: cell ? cell.isClear : true,
+                  isDone: cell?.isDone ?? false,
+                  isClear: cell?.isClear ?? true,
                   message: cell?.comment,
-                  isToday: dayIndex + 1 === Number(today),
-                  cell: cell,
+                  isToday: dayIndex + 1 === today,
+                  cell,
                 };
               });
 
@@ -123,6 +136,7 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({ board }) => {
 };
 
 export default StreakerHistoryGrid;
+
 
 
 
