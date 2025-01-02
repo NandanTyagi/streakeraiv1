@@ -4,8 +4,8 @@ export default function HistoryLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-background">
-      <main className="flex-1">{children}</main>
+    <div className="min-h-screen bg-background overflow-auto pb-10">
+      <main className="">{children}</main>
     </div>
   )
 }
