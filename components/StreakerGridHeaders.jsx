@@ -8,7 +8,7 @@ import { useSearchParams } from "next/navigation";
 import HeaderItem from "./HeaderItem";
 import dayjs from "dayjs";
 
-const StreakerGridHeaders = ({ isEmpty = false, isHistory }) => {
+const StreakerGridHeaders = ({ isEmpty = false, isHistory, month }) => {
   const { board, setBoard, isAppLoading, setisAppLoading, setIsCellLoading } =
     useContext(AppContext);
   const [headerNamesLocal, setHeaderNamesLocal] = useState();
@@ -63,7 +63,9 @@ const StreakerGridHeaders = ({ isEmpty = false, isHistory }) => {
     return (
       <>
         <div className="flex flex-col justify-center items-center text-[0.65rem] sm:text-[0.8rem] sm:font-semibold">
-          <strong className="text-[0.7rem]">{dayjs().format("MMM")}</strong>
+          <strong className="text-[0.7rem]">
+            {isHistory ? month : dayjs().format("MMM")}
+          </strong>
         </div>
         {(headerNamesLocal ? headerNamesLocal : board?.headerNames || []).map(
           (name, i) => (
