@@ -38,12 +38,14 @@ interface Board {
 
 interface StreakerHistoryGridProps {
   board: Board;
-  cells: Cell[]; // these are the "history" cells we want to display
+  cells: Cell[]; // these are the "history" cells we want to display'
+  month: string;
 }
 
 const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
   board,
   cells,
+  month
 }) => {
   const { isAppLoading } = useContext(AppContext);
   const { isLoading, user } = useKindeBrowserClient();
@@ -72,7 +74,7 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
   return (
     <>
       <section className={styles.streakerGrid}>
-        <StreakerGridHeaders isHistory />
+        <StreakerGridHeaders isHistory month={month?.substring(0,3)} />
       </section>
 
       <section className={styles.streakerGrid}>
