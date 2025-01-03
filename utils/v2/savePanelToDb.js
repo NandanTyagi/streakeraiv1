@@ -104,6 +104,10 @@ function setHistory(panel) {
 
   const currentYear = dayjs().format("YYYY");
   const currentMonthName = dayjs().format("MMMM");
+  const currentGoal = panel.goalToAchieve;
+  const currentHabitsNames = panel.habitsNames;
+  const currentHabitsValues = panel.habitsValues;
+  const currentDays = panel.days;
 
   // Check if this year/month already exists
   const existingHistoryIndex = panel.history.findIndex(
@@ -119,9 +123,17 @@ function setHistory(panel) {
       year: currentYear,
       month: currentMonthName,
       cells: panel.cells,
+      goalToAchieve: currentGoal,
+      habitsNames: currentHabitsNames,
+      habitsValues: currentHabitsValues,
+      days: currentDays,
     });
   } else {
     panel.history[existingHistoryIndex].cells = panel.cells;
+    panel.history[existingHistoryIndex].goalToAchieve = currentGoal;
+    panel.history[existingHistoryIndex].habitsNames = currentHabitsNames;
+    panel.history[existingHistoryIndex].habitsValues = currentHabitsValues;
+    panel.history[existingHistoryIndex].days = currentDays
   }
 
   return panel.history;
@@ -138,6 +150,10 @@ function setNewHistory(panel) {
       year: dayjs().format("YYYY"),
       month: dayjs().format("MMMM"),
       cells: panel.cells,
+      goalToAchieve: panel.goalToAchieve,
+      habitsNames: panel.habitsNames,
+      habitsValues: panel.habitsValues,
+      days: panel.days,
     },
   ];
 }

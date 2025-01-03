@@ -40,12 +40,14 @@ interface StreakerHistoryGridProps {
   board: Board;
   cells: Cell[]; // these are the "history" cells we want to display
   month?: string;
+  daysFromProps?: number;
 }
 
 const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
   board,
   cells,
-  month
+  month,
+  daysFromProps,
 }) => {
   const { isAppLoading } = useContext(AppContext);
   const { isLoading, user } = useKindeBrowserClient();
@@ -60,11 +62,12 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
 
   // If you have habits at the board level
   const habits = board?.habitsNames || Array.from({ length: 5 });
-  
+
   // Just an example of how you might decide how many days to show:
   // If your board has a "days" field, you can use it.
   // Otherwise, you might default to the current month, etc.
-  const days = board?.days ?? getDaysInMonth(new Date());
+  // const days = daysFromProps || (board?.days ?? getDaysInMonth(new Date()));
+  const days = daysFromProps;
   const tagArr = getDayTagArray(new Date());
 
   if (isAppLoading || isLoading) {
@@ -78,7 +81,7 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
       </section>
 
       <section className={styles.streakerGrid}>
-        {Array.from({ length: days }).map((_, dayIndex) => {
+        {Array.from({ length: days || 30 }).map((_, dayIndex) => {
           const today = dayjs().format("D");
 
           // For each day row, we map across the habits columns

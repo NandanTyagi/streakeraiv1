@@ -2,7 +2,6 @@
 import { use, useEffect, useState } from "react";
 import { useSearchParams, useParams } from "next/navigation";
 
-
 import fetchPanelById from "@/utils/v2/fetchPanelById";
 
 import StreakerHistoryGrid from "@/components/v1/StreakerHistoryGrid";
@@ -14,6 +13,7 @@ const PanelPage = () => {
   const { id } = useParams();
   const currentYear = searchParams.get("year");
   const currentMonth = searchParams.get("month");
+  const currentDays = searchParams.get("days");
 
   const [currentHistoryPanel, setCurrentHistoryPanel] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -46,7 +46,7 @@ const PanelPage = () => {
     fetchPanel();
   }, [id]);
 
-  // 2) Once the panel is fetched or year/month changes, 
+  // 2) Once the panel is fetched or year/month changes,
   //    find the correct history entry and set `localHistoryCells`.
   useEffect(() => {
     if (currentHistoryPanel?.history) {
@@ -57,14 +57,16 @@ const PanelPage = () => {
     }
   }, [currentHistoryPanel, currentYear, currentMonth]);
 
-
   // Set the main cells from the history entry
   useEffect(() => {
     if (currentHistoryPanel?.history) {
       const historyEntry = currentHistoryPanel.history.find(
         (h) => h.year === currentYear && h.month === currentMonth
       );
-      setCurrentHistoryPanel(prev => ({...prev, cells: historyEntry?.cells || []}));
+      setCurrentHistoryPanel((prev) => ({
+        ...prev,
+        cells: historyEntry?.cells || [],
+      }));
     }
   }, []);
 
@@ -93,7 +95,12 @@ const PanelPage = () => {
       <Nav isNav={false} isHistory />
       <main className="overflowY-scroll relative z-1">
         {localHistoryCells.length > 0 && (
-          <StreakerHistoryGrid board={currentHistoryPanel} cells={localHistoryCells} month={currentMonth?.substring(0,3)} />
+          <StreakerHistoryGrid
+            board={currentHistoryPanel}
+            cells={localHistoryCells}
+            month={currentMonth?.substring(0, 3)}
+            daysFromProps={currentDays}
+          />
         )}
       </main>
     </>

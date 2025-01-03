@@ -4,7 +4,7 @@ export default function HistoryLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-background overflow-auto pb-10">
+    <div className="min-h-screen bg-background overflow-auto pb-[82px]">
       <main className="">{children}</main>
     </div>
   )

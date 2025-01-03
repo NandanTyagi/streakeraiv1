@@ -1,4 +1,5 @@
 import { Schema, model, models } from "mongoose";
+import { string } from "zod";
 
 const CellSchema = new Schema(
   {
@@ -44,6 +45,26 @@ const HistorySchema = new Schema({
     type: String,
   },
   cells: [CellSchema],
+  goalToAchieve: {
+    type: String,
+    required: true,
+  },
+  habitsNames: [
+    {
+      type: String,
+      required: [true, "Please provide a habit name"],
+    },
+  ],
+  habitsValues: [
+    {
+      type: String,
+      required: [true, "Please provide a habit value"],
+    },
+  ],
+  days: {
+    type: Number,
+    required: true,
+  },
 });
 
 const PanelSchema = new Schema(

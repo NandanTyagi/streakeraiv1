@@ -15,6 +15,10 @@ interface Item {
   createdAt: Date;
   year: string;
   month: string;
+  goalToAchieve?: string;
+  habitsNames: string[];
+  days?: number;
+  habitsValues?: string[];
 }
 
 interface HistoryListProps {
@@ -48,7 +52,9 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
         visible: { opacity: 1, y: 0, transition: { delay: index * 0.1 } },
       }}
     >
-      <Link href={`/history/${board._id}?year=${item.year}&month=${item.month}`}>
+      <Link
+        href={`/history/${board._id}?year=${item.year}&month=${item.month}&days=${item.days}`}
+      >
         <Card>
           <CardHeader>
             <CardTitle>
@@ -57,17 +63,19 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
           </CardHeader>
           <CardContent>
             <div className="text-md text-muted-foreground mt-2 mb-2 font-bold">
-              {board.goalToAchieve}
+              {item.goalToAchieve}
             </div>
             <div key={index} className="flex flex-col items-start gap-2">
-              {board &&
-                board.habitsNames.map((habit, index) => (
+              {item &&
+                item.habitsNames.map((habit, index) => (
                   <p
                     key={index}
                     className="  text-sm text-muted-foreground flex sm:gap-2"
                   >
                     <span>{habit}</span>
-                    <span className="ml-1">{board.habitsValues[index]}</span>
+                    <span className="ml-1">
+                      {item.habitsValues ? item.habitsValues[index] : ""}
+                    </span>
                   </p>
                 ))}
             </div>
@@ -82,15 +90,17 @@ export default function HistoryList({ items }: HistoryListProps) {
   const [filteredItems, setFilteredItems] = useState(
     items?.filter(
       (item) =>
-       item.year && item.month !== dayjs().format('MMMM') && item.year !== dayjs().format('YYYY')
+        item.year &&
+        item.month !== dayjs().format("MMMM") &&
+        item.year !== dayjs().format("YYYY")
     )
   );
 
   useEffect(() => {
     console.log("theItem", filteredItems);
-    console.log('dayjs().month()', dayjs().month());
-    console.log('dayjs().year()', dayjs().year());
-  } , [filteredItems]);
+    console.log("dayjs().month()", dayjs().month());
+    console.log("dayjs().year()", dayjs().year());
+  }, [filteredItems]);
   return (
     <ScrollArea className="h-[calc(100vh-200px)]">
       <div className="space-y-4 sm:pr-4">
@@ -104,9 +114,7 @@ export default function HistoryList({ items }: HistoryListProps) {
             Your past history will be displayed here.
           </div>
         )}
-
       </div>
     </ScrollArea>
   );
 }
-

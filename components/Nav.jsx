@@ -260,7 +260,7 @@ const Nav = ({ isNav = true, isHistory }) => {
                   router.push(
                     `${
                       location.origin
-                    }/${pathname}/dashboard/${searchParams.toString()}`
+                    }/${pathname}/dashboard?${searchParams.toString()}`
                   )
                 }
                 title="dashboard"
