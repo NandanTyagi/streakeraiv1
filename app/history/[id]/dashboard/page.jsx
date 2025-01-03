@@ -43,17 +43,18 @@ const DashboardLoading = () => (
 );
 
 const HistoryDashboard = () => {
-  const { board } = useContext(AppContext);
+  const { currentHistoryPanel } = useContext(AppContext);
 
   // ========== UPDATED columnStats logic ==========
   const columnStats = useMemo(() => {
+    console.log("Generating column stats...", currentHistoryPanel);
     // Early return if board or habit names aren't loaded
-    if (!board?.cells || !board?.habitsNames) return [];
+    if (!currentHistoryPanel?.cells || !currentHistoryPanel?.habitsNames) return [];
 
     // Number of days in current month up to today's date
     const currentDay = dayjs().date(); // e.g., 30 if today is the 30th
     // Number of habits (columns)
-    const numberOfHabits = board.habitsNames.length;
+    const numberOfHabits = currentHistoryPanel.habitsNames.length;
 
     // Prepare structures to hold totals/streaks for each column
     const columnTotals = {};
@@ -79,7 +80,7 @@ const HistoryDashboard = () => {
     for (let day = 1; day <= currentDay; day++) {
       for (let colNr = 1; colNr <= numberOfHabits; colNr++) {
         // Attempt to find a matching cell
-        const cell = board.cells.find((c) => c.rowNr === day && c.colNr === colNr);
+        const cell = currentHistoryPanel.cells.find((c) => c.rowNr === day && c.colNr === colNr);
 
         if (!cell) {
           // No cell => user hasn't interacted => unreviewed
@@ -139,13 +140,13 @@ const HistoryDashboard = () => {
 
       return {
         colNr,
-        headerName: board.habitsNames[colNr - 1] || `Column ${colNr}`,
+        headerName: currentHistoryPanel.habitsNames[colNr - 1] || `Column ${colNr}`,
         ...stats,
         longestStreak: columnStreaks[colNr].longestStreak,
         hitRate: `${hitRate}%`,
       };
     });
-  }, [board]);
+  }, [currentHistoryPanel]);
 
   // ====== Prepare Data for each column's Bar Chart ======
   const barchartDataAndOptionsArray = useMemo(() => {
@@ -242,7 +243,7 @@ const HistoryDashboard = () => {
       const currentDay = dayjs().date();
       // Filter the board cells for matching colNr and day <= currentDay
       const cellsForColumn =
-        board?.cells
+        currentHistoryPanel?.cells
           ?.filter((cell) => cell.colNr === col.colNr)
           .filter((cell) => cell.rowNr <= currentDay) || [];
 
@@ -265,7 +266,7 @@ const HistoryDashboard = () => {
     });
 
     return { labels, datasets };
-  }, [columnStats, board]);
+  }, [columnStats, currentHistoryPanel]);
 
   useEffect(() => {
     console.log("Column Stats Updated:", columnStats);
@@ -296,7 +297,7 @@ const HistoryDashboard = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        {board?.goalToAchieve}
+        {currentHistoryPanel?.goalToAchieve}
       </motion.h2>
 
       {/* Stat Cards */}

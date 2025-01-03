@@ -7,6 +7,9 @@ import fetchPanelById from "@/utils/v2/fetchPanelById";
 import StreakerHistoryGrid from "@/components/v1/StreakerHistoryGrid";
 import Nav from "@/components/Nav";
 import Loading from "@/components/Loading";
+import { useContext } from "react";
+import { AppContext } from "@/context/appContext";
+import { set } from "mongoose";
 
 const PanelPage = () => {
   const searchParams = useSearchParams();
@@ -15,7 +18,8 @@ const PanelPage = () => {
   const currentMonth = searchParams.get("month");
   const currentDays = searchParams.get("days");
 
-  const [currentHistoryPanel, setCurrentHistoryPanel] = useState(null);
+  const { currentHistoryPanel, currentHistoryItem, setCurrentHistoryPanel, setCurrentHistoryItem } =
+    useContext(AppContext);
   const [loading, setLoading] = useState(false);
   const [localHistoryCells, setLocalHistoryCells] = useState([]);
 
@@ -34,6 +38,9 @@ const PanelPage = () => {
       try {
         const fetchedPanel = await fetchPanelById(id);
         setCurrentHistoryPanel(fetchedPanel);
+
+        setCurrentHistoryItem(fetchedPanel.history.find((h) => h.year === currentYear && h.month === currentMonth));
+        
         console.log("Fetched panel:", fetchedPanel);
       } catch (error) {
         console.error("Error fetching panel by ID:", error);
@@ -57,6 +64,10 @@ const PanelPage = () => {
     }
   }, [currentHistoryPanel, currentYear, currentMonth]);
 
+  useEffect(() => {
+    console.log("currentHistoryItem in history", currentHistoryItem);
+  }, [currentHistoryItem]);
+
   // Set the main cells from the history entry
   useEffect(() => {
     if (currentHistoryPanel?.history) {
@@ -64,7 +75,10 @@ const PanelPage = () => {
         (h) => h.year === currentYear && h.month === currentMonth
       );
       setCurrentHistoryPanel((prev) => ({
-        ...prev,
+        goalToAchieve: historyEntry?.goalToAchieve || "",
+        habitsNames: historyEntry?.habitsNames || [],
+        habitsValues: historyEntry?.habitsValues || [],
+        days: historyEntry?.days || 0,
         cells: historyEntry?.cells || [],
       }));
     }

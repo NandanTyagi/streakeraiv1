@@ -3,7 +3,7 @@ import Link from "next/link";
 import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import DialogButton from "@/components/ui/Dialog";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, use } from "react";
 import { AppContext } from "@/context/appContext";
 import savePanelToDb from "@/utils/v2/savePanelToDb";
 import ThreeDButton from "@/components/ui/button/3DButton";
@@ -30,7 +30,7 @@ const Nav = ({ isNav = true, isHistory }) => {
   const pathname = usePathname();
   const [isAppLoading, setisAppLoading] = useState(false);
   const [showPanelSavedDialog, setShowPanelSavedDialog] = useState(false);
-  const { board, setBoard, isSaved, setIsSaved } = useContext(AppContext);
+  const { board, setBoard, isSaved, setIsSaved, currentHistoryPanel, currentHistoryItem } = useContext(AppContext);
   const [dialogValue, setDialogValue] = useState(board?.goalToAchieve || "");
 
   // 2. State for a generic "Confirm" dialog (to replace window.confirm)
@@ -48,6 +48,29 @@ const Nav = ({ isNav = true, isHistory }) => {
     });
     setConfirmOpen(true);
   };
+
+  useEffect(() => {
+    console.log("currentHistoryPanel in NAV", currentHistoryPanel);
+  }, [currentHistoryPanel]);
+
+  useEffect(() => {
+    const hasSearchParams = searchParams.has("headerNames");
+    if (!hasSearchParams) {
+      return;
+    }
+    const savePanel = async () => {
+      if (!board) return;
+      const panelSaved = await savePanelToDb(board, user?.email);
+      if (panelSaved) {
+        setIsSaved(true);
+        setTimeout(() => {
+          router.push("/panel");
+        }, 500);
+      }
+    };
+    savePanel();
+  }, [isAppLoading, board, isSaved, searchParams]);
+
 
   const handelCtxMenu = async (e) => {
     const hasSearchParams = searchParams.has("headerNames");
@@ -245,7 +268,7 @@ const Nav = ({ isNav = true, isHistory }) => {
           <RegisterLink>Sign up free to save your board</RegisterLink>
         ) : (
           <DialogButton
-            value={dialogValue}
+            value={isHistory ? currentHistoryItem.goalToAchieve : dialogValue}
             onChange={handelClick}
             isHistory={isHistory}
           />
@@ -283,7 +306,7 @@ const Nav = ({ isNav = true, isHistory }) => {
                 router.push(
                   `${
                     location.origin
-                  }/${pathname}/dashboard/${searchParams.toString()}`
+                  }/${pathname}/dashboard?${searchParams.toString()}`
                 )
               }
             >

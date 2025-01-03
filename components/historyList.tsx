@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import { AppContext } from "../context/appContext";
 import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
 
 interface Item {
   id: string;
@@ -26,7 +27,14 @@ interface HistoryListProps {
 }
 
 function HistoryItem({ item, index }: { item: Item; index: number }) {
-  const { cells, board, isAppLoading } = useContext(AppContext);
+  const router = useRouter();
+  const {
+    cells,
+    board,
+    isAppLoading,
+    currentHistoryPanel,
+    setCurrentHistoryPanel,
+  } = useContext(AppContext);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const controls = useAnimation();
@@ -42,6 +50,18 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
     console.log("item", item);
   }, [cells, board, item]);
 
+  function handleHistoryItemClick(
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ): void {
+    event.preventDefault();
+    console.log("History item clicked:", item);
+    // You can add more logic here if needed, such as navigating to a different page or updating state
+    setCurrentHistoryPanel(item);
+    router.push(
+      `/history/${board._id}?year=${item.year}&month=${item.month}&days=${item.days}`
+    );
+  }
+
   return (
     <motion.div
       ref={ref}
@@ -53,9 +73,10 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
       }}
     >
       <Link
-        href={`/history/${board._id}?year=${item.year}&month=${item.month}&days=${item.days}`}
+        // href={`/history/${board._id}?year=${item.year}&month=${item.month}&days=${item.days}`}
+        href={``}
       >
-        <Card>
+        <Card onClick={handleHistoryItemClick}>
           <CardHeader>
             <CardTitle>
               {item.month} - {item.year}
