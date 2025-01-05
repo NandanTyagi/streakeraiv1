@@ -3,7 +3,7 @@ import Link from "next/link";
 import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import DialogButton from "@/components/ui/Dialog";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, use } from "react";
 import { AppContext } from "@/context/appContext";
 import savePanelToDb from "@/utils/v2/savePanelToDb";
 import ThreeDButton from "@/components/ui/button/3DButton";
@@ -30,6 +30,11 @@ const Nav = ({ isNav = true, isHistory }) => {
   const [showPanelSavedDialog, setShowPanelSavedDialog] = useState(false);
   const { board, setBoard, isSaved, setIsSaved } = useContext(AppContext);
   const [dialogValue, setDialogValue] = useState(board?.goalToAchieve || "");
+
+  useEffect(() => {
+  // Refersh the page usint the router
+    router.push('/panel');
+  }, []);
 
   // 2. State for a generic "Confirm" dialog (to replace window.confirm)
   const [confirmOpen, setConfirmOpen] = useState(false);
