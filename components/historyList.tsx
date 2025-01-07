@@ -15,6 +15,9 @@ interface Item {
   createdAt: Date;
   year: string;
   month: string;
+  goalToAchieve: string;
+  habitsNames: string[];
+  habitsValues: number[];
 }
 
 interface HistoryListProps {
@@ -57,17 +60,17 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
           </CardHeader>
           <CardContent>
             <div className="text-md text-muted-foreground mt-2 mb-2 font-bold">
-              {board.goalToAchieve}
+              {item.goalToAchieve}
             </div>
             <div key={index} className="flex flex-col items-start gap-2">
-              {board &&
-                board.habitsNames.map((habit, index) => (
+              {item &&
+                item.habitsNames.map((habit, index) => (
                   <p
                     key={index}
                     className="  text-sm text-muted-foreground flex sm:gap-2"
                   >
                     <span>{habit}</span>
-                    <span className="ml-1">{board.habitsValues[index]}</span>
+                    <span className="ml-1">{item.habitsValues[index]}</span>
                   </p>
                 ))}
             </div>
