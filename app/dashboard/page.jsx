@@ -81,7 +81,7 @@ const Dashboard = () => {
         // Attempt to find a matching cell
         const cell = board.cells.find((c) => c.rowNr === day && c.colNr === colNr);
 
-        if (!cell) {
+        if (cell.isDone === false && cell.isClear === true) {
           // No cell => user hasn't interacted => unreviewed
           columnTotals[colNr].unreviewed++;
         } else {
