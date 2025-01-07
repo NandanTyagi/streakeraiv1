@@ -81,7 +81,12 @@ const Dashboard = () => {
         // Attempt to find a matching cell
         const cell = board.cells.find((c) => c.rowNr === day && c.colNr === colNr);
 
-        if (cell.isDone === false && cell.isClear === true) {
+        if(!cell) {
+          // If no cell is found, increment unreviewed
+          columnTotals[colNr].unreviewed++;
+        }
+
+        if (cell && cell.isDone === false && cell.isClear === true) {
           // No cell => user hasn't interacted => unreviewed
           columnTotals[colNr].unreviewed++;
         } else {
@@ -92,7 +97,7 @@ const Dashboard = () => {
             .date(day)
             .format("MMM D, YYYY");
 
-          if (cell.isDone) {
+          if (cell && cell.isDone) {
             columnTotals[colNr].isDone++;
             columnStreaks[colNr].currentStreak++;
             // Update longest streak if needed
@@ -105,9 +110,9 @@ const Dashboard = () => {
             }
           } else {
             // If cell is explicitly cleared, increment isClear
-            if (cell.isClear) {
+            if (cell && cell.isClear) {
               columnTotals[colNr].isClear++;
-            } else {
+            } else if (cell && !cell.isClear) {
               // Otherwise, mark it as missed
               columnTotals[colNr].missed++;
             }
@@ -116,7 +121,7 @@ const Dashboard = () => {
           }
 
           // Push comments if any
-          if (cell.comment) {
+          if (cell && cell.comment) {
             columnTotals[colNr].comments.push({
               text: cell.comment,
               date: cellDate,
