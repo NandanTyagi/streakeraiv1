@@ -31,11 +31,6 @@ const Nav = ({ isNav = true, isHistory }) => {
   const { board, setBoard, isSaved, setIsSaved } = useContext(AppContext);
   const [dialogValue, setDialogValue] = useState(board?.goalToAchieve || "");
 
-  useEffect(() => {
-  // Refersh the page usint the router
-    router.push('/panel');
-  }, []);
-
   // 2. State for a generic "Confirm" dialog (to replace window.confirm)
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmTitle, setConfirmTitle] = useState("");
