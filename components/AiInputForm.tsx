@@ -147,13 +147,13 @@ function AiInputForm() {
           name="goal"
           render={({ field }) => (
             <FormItem className="w-full text-center tracking-wide">
-              <FormLabel className="font-semibold">What&apos;s your goal?</FormLabel>
+              <FormLabel className="font-semibold">What&apos;s your dream?</FormLabel>
               <FormControl>
                 <Input type="textarea" className="bg-white p-1 text-left" placeholder="I want to live a healthy life." {...field} />
               </FormControl>
               <FormMessage />
               <FormDescription className="text-[1.4rem] font-semibold tracking-wide">
-              We&apos;ll help you achieve this by recommending 5 daily habits tailored to your goal.
+              We&apos;ll help you achieve this by recommending 5 daily habits tailored to your dream.
               </FormDescription>
             </FormItem>
           )}

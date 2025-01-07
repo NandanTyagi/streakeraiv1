@@ -8,7 +8,7 @@ const withPWA = require('next-pwa')({
 
 const nextConfig = {
   images: {
-    domains: ['lh3.googleusercontent.com','media.licdn.com'],
+    domains: ['lh3.googleusercontent.com','media.licdn.com','gravatar.com'],
   },
   experimental: {
     serverComponentsExternalPackages: ['mongodb'],

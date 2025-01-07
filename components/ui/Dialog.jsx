@@ -37,12 +37,12 @@ const DialogButton = ({ habit = null, value, onChange, isHistory }) => (
       <Dialog.Overlay className="DialogOverlay" />
       <Dialog.Content className="DialogContent">
         <Dialog.Title className="DialogTitle">
-          <strong>Edit {habit ? "activity" : "goal"}</strong>
+          <strong>Edit {habit ? "activity" : "dream"}</strong>
           {habit && `: ${habit} - ${value}`}
           {!habit && value && `: ${value}`}
         </Dialog.Title>
         <Dialog.Description className="DialogDescription">
-          Make changes to your tracked {habit ? "activity" : "goal"} here.
+          Make changes to your tracked {habit ? "activity" : "dream"} here.
         </Dialog.Description>
         {habit && (
           <fieldset className="Fieldset">

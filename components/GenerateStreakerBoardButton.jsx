@@ -20,7 +20,7 @@ const GenerateStreakerBoardButton = ({
   const router = useRouter();
 
   return (
-    <div className="p-6 overflow-x-hidden max-h-[80vh]">
+    <div className="p-6 overflow-x-hidden max-h-[80vh] max-w-[800px]">
       <div className="text-center text-[#530DA2] font-semibold text-lg mb-1 sm:mb-6">
         {`Five habits you should track every day to achieve:`}
         <br />
@@ -37,24 +37,7 @@ const GenerateStreakerBoardButton = ({
               <div className="font-normal">{openAIResponse[index + 5]}</div>
             </div>
           ))}
-
-
       </div>
-      {/* <div className="mb-1 sm:mb-6 flex justify-evenly gap-1 text-[0.8rem] sm:text-lg italic">
-        {openAIResponse &&
-          openAIResponse.map(
-            (response, index) =>
-              index > 4 &&
-              index < 10 && (
-                <div
-                  className="flex justify-center items-center text-center"
-                  key={index}
-                >
-                  {response}
-                </div>
-              )
-          )}
-      </div> */}
 
       <div
         className={`${styles.description} text-left bg-slate-100 p-2 text-[#272727] font-medium text-md mb-1 sm:mb-1`}

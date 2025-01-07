@@ -39,13 +39,13 @@ body {
   display: flex;
   justify-content: center;
   height: 100vh;
+  background: linear-gradient(90deg, #DBEAFE 0%, #F3E8FF 100%);
 }
 
 main:not(.zero-m) {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  /* margin-bottom: 20px; */
 }
 
 .main-layout {
@@ -189,6 +189,6 @@ footer {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gradient-to-r from-black to-black text-foreground ;
   }
 }

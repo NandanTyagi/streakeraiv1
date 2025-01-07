@@ -59,16 +59,15 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
             <div className="text-md text-muted-foreground mt-2 mb-2 font-bold">
               {board.goalToAchieve}
             </div>
-            <div key={index} className="flex items-center gap-2">
+            <div key={index} className="flex flex-col items-start gap-2">
               {board &&
                 board.habitsNames.map((habit, index) => (
                   <p
                     key={index}
-                    className="  text-sm text-muted-foreground flex flex-col sm:flex-row sm:gap-2"
+                    className="  text-sm text-muted-foreground flex sm:gap-2"
                   >
                     <span>{habit}</span>
-                    <span className="text-xs">{board.habitsValues[index]}</span>
-                    <span className="hidden sm:block">|</span>
+                    <span className="ml-1">{board.habitsValues[index]}</span>
                   </p>
                 ))}
             </div>

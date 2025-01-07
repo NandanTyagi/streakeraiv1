@@ -2,15 +2,27 @@
 import Link from "next/link";
 import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import Dialog from "@/components/ui/Dialog";
-import { useState, useContext, useEffect } from "react";
+import DialogButton from "@/components/ui/Dialog";
+import { useState, useContext, useEffect, use } from "react";
 import { AppContext } from "@/context/appContext";
 import savePanelToDb from "@/utils/v2/savePanelToDb";
 import ThreeDButton from "@/components/ui/button/3DButton";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/shad-dialog";
 
 const Nav = ({ isNav = true, isHistory }) => {
+  const { toast } = useToast();
   const { user } = useKindeBrowserClient();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -19,43 +31,80 @@ const Nav = ({ isNav = true, isHistory }) => {
   const { board, setBoard, isSaved, setIsSaved } = useContext(AppContext);
   const [dialogValue, setDialogValue] = useState(board?.goalToAchieve || "");
 
+  useEffect(() => {
+  // Refersh the page usint the router
+    router.push('/panel');
+  }, []);
+
+  // 2. State for a generic "Confirm" dialog (to replace window.confirm)
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmTitle, setConfirmTitle] = useState("");
+  const [confirmDescription, setConfirmDescription] = useState("");
+  const [onConfirmCallback, setOnConfirmCallback] = useState(() => {});
+
+  const openConfirmDialog = ({ title, description, onConfirm }) => {
+    setConfirmTitle(title);
+    setConfirmDescription(description);
+    setOnConfirmCallback(() => () => {
+      setConfirmOpen(false);
+      onConfirm();
+    });
+    setConfirmOpen(true);
+  };
+
   const handelCtxMenu = async (e) => {
     const hasSearchParams = searchParams.has("headerNames");
     if (isSaved) {
-      alert("No changes to save");
+      toast({
+        title: "No changes to save",
+      });
       return;
     }
     e.preventDefault();
 
-    console.log("ctx menu", board);
+    openConfirmDialog({
+      title: "Save Changes?",
+      description: "Do you want to save your current changes?",
+      onConfirm: async () => {
+        // Move the "save" logic into onConfirm
+        if (!board) return;
 
-    const save = window.confirm("Do you want to save changes?");
-    if (save) {
-      console.log("save board", board);
-      if (!board) {
-        return;
-      }
-      if (!user) {
-        alert(`Not saved! Please login to save changes.`);
+        if (!user) {
+          // Old: alert("Not saved! Please login to save changes.");
+          toast({
+            title: "Not saved!",
+            description: "Please login to save changes.",
+            variant: "destructive",
+          });
+          setIsSaved(true);
+          return;
+        }
+
+        const panelSaved = await savePanelToDb(board, user?.email);
+
+        // If saving returns an error:
+        if (panelSaved && !panelSaved.saved) {
+          toast({
+            title: "Saving Failed",
+            description: `Is panel saved: ${panelSaved.saved}`,
+            variant: "destructive",
+          });
+          return;
+        }
+        toast({
+          title: "All changes saved!",
+          variant: "success",
+        });
         setIsSaved(true);
-        return;
-      }
-      const panelSaved = await savePanelToDb(board, user?.email);
-      if (panelSaved && !panelSaved.saved) {
-        debugger;
-        alert(`Is panel saved: ${panelSaved.saved}`);
-        return;
-      }
-      setIsSaved(true);
-      alert("All changes saved!");
-      if (hasSearchParams) {
-        router.push("/panel");
-      }
-    }
+
+        if (hasSearchParams) {
+          router.push("/panel");
+        }
+      },
+    });
   };
 
   const handelClick = (e) => {
-    // const input = window.prompt("What do you want to achieve?");
     if (isSaved) {
       setIsSaved(false);
     }
@@ -99,14 +148,14 @@ const Nav = ({ isNav = true, isHistory }) => {
       try {
         // Save the updated board to the database
         const panelSaved = await savePanelToDb(updatedBoard, user?.email);
-        debugger
+        debugger;
 
         if (panelSaved && !panelSaved.saved) {
           console.error("Error saving panel:", panelSaved.saved);
           alert(`${panelSaved.message}`);
           return;
         }
-        
+
         console.log("NOT Error saving panel:", panelSaved.message);
         setIsSaved(true);
 
@@ -145,9 +194,6 @@ const Nav = ({ isNav = true, isHistory }) => {
     return (
       <nav>
         <ul className="flex gap-6 sm:gap-20 bg-gradient-to-r from-blue-100 to-purple-100">
-          {/* <li>
-            <Link href={"/about"}>About</Link>
-          </li> */}
           <li>
             <Link href={"/generategoals"}>Identify</Link>
           </li>
@@ -166,7 +212,11 @@ const Nav = ({ isNav = true, isHistory }) => {
     return (
       <div className="flex justify-center items-center bg-[#EBEBEB] text-md font-semibold cursor-pointer relative">
         {user && (
-          <div className={`absolute left-2 md:left-2 ${isHistory ? "hidden" : null}`}>
+          <div
+            className={`absolute left-2 md:left-2 ${
+              isHistory ? "hidden" : null
+            }`}
+          >
             <div className={`hidden md:block`}>
               <ThreeDButton
                 isSaved={true}
@@ -184,7 +234,9 @@ const Nav = ({ isNav = true, isHistory }) => {
               </ThreeDButton>
             </div>
             <button
-              className={`flex flex-col justify-center items-center md:hidden w-[40px] ${isHistory ? "hidden" : null}`}
+              className={`flex flex-col justify-center items-center md:hidden w-[40px] ${
+                isHistory ? "hidden" : null
+              }`}
               onClick={(e) => handleClearPanel(e)}
             >
               <span className="text-[0.7rem] sm:text-[0.7rem]">X</span>
@@ -195,9 +247,8 @@ const Nav = ({ isNav = true, isHistory }) => {
         {!user ? (
           <RegisterLink>Sign up free to save your board</RegisterLink>
         ) : (
-          <Dialog
-            value={
-              dialogValue}
+          <DialogButton
+            value={dialogValue}
             onChange={handelClick}
             isHistory={isHistory}
           />
@@ -224,7 +275,9 @@ const Nav = ({ isNav = true, isHistory }) => {
             </ThreeDButton>
           </div>
           <button
-            className={`flex flex-col md:hidden w-[14px] pt-1 ${isHistory ? "hidden" : null}`}
+            className={`flex flex-col md:hidden w-[14px] pt-1 ${
+              isHistory ? "hidden" : null
+            }`}
             onClick={handelCtxMenu}
           >
             {isSaved ? (
@@ -249,6 +302,30 @@ const Nav = ({ isNav = true, isHistory }) => {
             </span>
           </button>
         </div>
+        {confirmOpen && (
+          <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+            <DialogContent className="bg-white">
+              <DialogHeader>
+                <DialogTitle>{confirmTitle}</DialogTitle>
+                <DialogDescription>{confirmDescription}</DialogDescription>
+              </DialogHeader>
+              <DialogFooter className="gap-2">
+                <button
+                  className="border px-4 py-2 rounded-md"
+                  onClick={() => setConfirmOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-gradient-to-br from-primary to-[#330594] text-white px-4 py-2 rounded-md"
+                  onClick={onConfirmCallback}
+                >
+                  Confirm
+                </button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
     );
   }

@@ -52,7 +52,7 @@ const StreakerGrid = () => {
         <Loading />
       ) : (
         <>
-          <section className={styles.streakerGrid}>
+          <section className={`${styles.streakerGrid}`}>
             <StreakerGridHeaders />
           </section>
           <section className={styles.streakerGrid}>

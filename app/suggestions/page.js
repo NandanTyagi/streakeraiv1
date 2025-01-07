@@ -34,11 +34,10 @@ export default function Home() {
 
   return (
     <>
-      
       {isAppLoading ? (
         <Loading />
       ) : (
-        <main className="scroller m-[auto]  min-h-[80vh] flex flex-col justify-center items-center">
+        <main className="scroller m-[auto] min-w-full  min-h-[calc(100vh-80px)] flex flex-col justify-center items-center bg-gradient-to-r from-blue-100 to-purple-100">
           {openAIResponse ? (
             <GenerateStreakerBoardButton
               openAIResponse={openAIResponse}
@@ -47,7 +46,6 @@ export default function Home() {
           ) : (
             <>
               <AiInputForm />
-              {/* <ButtonGroup /> */}
             </>
           )}
         </main>
