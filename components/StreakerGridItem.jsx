@@ -5,7 +5,6 @@ import styles from "../styles/StreakerGridItem.module.css";
 import { useState, useEffect, useContext, useRef } from "react";
 import { AppContext } from "@/context/appContext";
 import dayjs from "dayjs";
-import handelDbCells from "../utils/handelDbCells";
 
 // 1. Import shadcn UI toast & dialog components
 import { useToast } from "@/hooks/use-toast";
@@ -130,7 +129,6 @@ const StreakerGridItem = ({
       return;
     }
 
-    handelDbCells(board, currentCellIndexLocal, updatedCell);
     setIsCellLoading(false);
   };
 

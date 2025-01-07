@@ -12,6 +12,7 @@ export const AppContext = createContext({
   users: [],
   boardUser: {},
   boards: [],
+  currentHistoryPanel: {},
   board: {
     _id: "",
     goalToAchieve: "",
@@ -44,6 +45,7 @@ export const AppContext = createContext({
   setOpenAIResponseDescription: () => {},
   setIsCellLoading: () => {},
   setBoard: () => {},
+  setCurrentHistoryPanel: (items) => {},
   setBoardUser: () => {},
   setOpenAIResponseHeadersNames: () => {},
   setOpenAIResponseHeadersValues: () => {},
@@ -55,6 +57,7 @@ export function AppContextProvider({ children }) {
   const [users, setUsers] = useState();
   const [boardUser, setBoardUser] = useState(user?.email || {});
   const [boards, setBoards] = useState([]);
+  const [currentHistoryPanel, setCurrentHistoryPanel] = useState();
   const [board, setBoard] = useState();
   const [cells, setCells] = useState();
   const [columns, setColumns] = useState();
@@ -145,6 +148,7 @@ export function AppContextProvider({ children }) {
         boardUser,
         boards,
         board,
+        currentHistoryPanel,
         cells,
         columns,
         column,
@@ -163,6 +167,7 @@ export function AppContextProvider({ children }) {
         setUsers,
         setBoardUser,
         setBoards,
+        setCurrentHistoryPanel,
         setBoard,
         setCells,
         setColumns,

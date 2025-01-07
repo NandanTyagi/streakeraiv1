@@ -28,8 +28,11 @@ const Nav = ({ isNav = true, isHistory }) => {
   const searchParams = useSearchParams();
   const [isAppLoading, setisAppLoading] = useState(false);
   const [showPanelSavedDialog, setShowPanelSavedDialog] = useState(false);
-  const { board, setBoard, isSaved, setIsSaved } = useContext(AppContext);
-  const [dialogValue, setDialogValue] = useState(board?.goalToAchieve || "");
+  const { board, setBoard, isSaved, setIsSaved, currentHistoryPanel } =
+    useContext(AppContext);
+  const [dialogValue, setDialogValue] = useState(
+    isHistory ? currentHistoryPanel?.goalToAchieve : board?.goalToAchieve || ""
+  );
 
   // 2. State for a generic "Confirm" dialog (to replace window.confirm)
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -166,8 +169,8 @@ const Nav = ({ isNav = true, isHistory }) => {
   };
 
   useEffect(() => {
-    setDialogValue(board?.goalToAchieve || "");
-  }, [board, user]);
+    setDialogValue(isHistory? currentHistoryPanel?.goalToAchieve : board?.goalToAchieve || "");
+  }, [board, user, currentHistoryPanel]);
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {

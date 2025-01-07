@@ -25,7 +25,7 @@ interface HistoryListProps {
 }
 
 function HistoryItem({ item, index }: { item: Item; index: number }) {
-  const { cells, board, isAppLoading } = useContext(AppContext);
+  const { cells, board, isAppLoading, setCurrentHistoryPanel } = useContext(AppContext);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const controls = useAnimation();
@@ -63,7 +63,7 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
               {item.goalToAchieve}
             </div>
             <div key={index} className="flex flex-col items-start gap-2">
-              {item &&
+              {item && item.habitsNames &&
                 item.habitsNames.map((habit, index) => (
                   <p
                     key={index}
@@ -82,18 +82,22 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
 }
 
 export default function HistoryList({ items }: HistoryListProps) {
+  const { setCurrentHistoryPanel, currentHistoryPanel } = useContext(AppContext);
   const [filteredItems, setFilteredItems] = useState(
     items?.filter(
       (item) =>
        item.year && item.month !== dayjs().format('MMMM') && item.year !== dayjs().format('YYYY')
     )
   );
-
+  
   useEffect(() => {
     console.log("theItem", filteredItems);
     console.log('dayjs().month()', dayjs().month());
     console.log('dayjs().year()', dayjs().year());
-  } , [filteredItems]);
+    console.log('cuttentHistoryPanel', currentHistoryPanel);
+    setCurrentHistoryPanel(filteredItems?.[0]);
+    
+  } , [filteredItems, currentHistoryPanel]);
   return (
     <ScrollArea className="h-[calc(100vh-200px)]">
       <div className="space-y-4 sm:pr-4">

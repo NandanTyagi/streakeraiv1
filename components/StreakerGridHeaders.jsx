@@ -9,7 +9,7 @@ import HeaderItem from "./HeaderItem";
 import dayjs from "dayjs";
 
 const StreakerGridHeaders = ({ isHistory }) => {
-  const { board, setBoard } = useContext(AppContext);
+  const { board, setBoard, currentHistoryPanel } = useContext(AppContext);
 
   const [headerNamesLocal, setHeaderNamesLocal] = useState([]);
   const [headerValuesLocal, setHeaderValuesLocal] = useState([]);
@@ -18,34 +18,40 @@ const StreakerGridHeaders = ({ isHistory }) => {
   const { user } = useKindeBrowserClient();
   const params = useSearchParams();
 
+  /**
+   * Parse and trim comma-separated strings, then update local state + global board
+   */
   const handleNamesAndValues = (headerNames, headerValues, headerGoal) => {
-    const namesArray = headerNames.split(",") || [];
-    const valuesArray = headerValues.split(",") || [];
+    // Safely split and trim
+    const namesArray = headerNames.split(",").map((str) => str.trim()) || [];
+    const valuesArray = headerValues.split(",").map((str) => str.trim()) || [];
+    const goalTrimmed = headerGoal.trim();
 
-    // Optional: Validate that arrays are same length
+    // Optional: Validate that arrays are the same length
     if (namesArray.length !== valuesArray.length) {
       console.warn("Header names and values arrays do not match in length.");
-      // Decide how you want to handle this scenario:
-      // either return early or proceed.
+      // Decide how you want to handle this scenario
     }
 
     setHeaderNamesLocal(namesArray);
     setHeaderValuesLocal(valuesArray);
 
-    // IMPORTANT: update board AND call `handleBoards` inside the same callback
+    // Update board & call `handleBoards`
     setBoard((prevBoard) => {
       const updatedBoard = {
         ...prevBoard,
         habitsNames: namesArray,
         habitsValues: valuesArray,
-        goalToAchieve: headerGoal,
+        goalToAchieve: goalTrimmed,
       };
       handleBoards(updatedBoard, user?.email);
       return updatedBoard;
     });
   };
 
-  // Effect 1: If URL has headerNames, parse them and update state.
+  /**
+   * Effect 1: If the URL has `headerNames`, parse them and update state
+   */
   useEffect(() => {
     const headerNamesParams = params.get("headerNames");
     if (!headerNamesParams) return;
@@ -55,12 +61,6 @@ const StreakerGridHeaders = ({ isHistory }) => {
     const headerValuesParams = params.get("headerValues") || "";
     const headerGoalParams = params.get("goalToAchieve") || "";
 
-    console.log(
-      "board in StreakerGridHeaders params",
-      headerNamesParams,
-      headerValuesParams
-    );
-
     handleNamesAndValues(
       headerNamesParams,
       headerValuesParams,
@@ -68,7 +68,9 @@ const StreakerGridHeaders = ({ isHistory }) => {
     );
   }, [params]);
 
-  // Effect 2: If we have no headerNames in the URL, use board values.
+  /**
+   * Effect 2: If there are no `headerNames` in the URL, fall back to board data
+   */
   useEffect(() => {
     const headerNamesParams = params.get("headerNames");
     if (!headerNamesParams) {
@@ -77,37 +79,51 @@ const StreakerGridHeaders = ({ isHistory }) => {
     }
   }, [board, params]);
 
-  // If AI generated or user is logged in:
+  /**
+   * If AI-generated or user is logged in, render dynamic headers
+   */
   if (isAiGenerated || user) {
+    // Decide which data to display
+    const namesToRender = isHistory
+      ? currentHistoryPanel?.habitsNames || []
+      : headerNamesLocal?.length
+      ? headerNamesLocal
+      : board?.habitsNames || [];
+
+    const valuesToRender = isHistory
+      ? currentHistoryPanel?.habitsValues || []
+      : headerValuesLocal?.length
+      ? headerValuesLocal
+      : board?.habitsValues || [];
+
+    const monthToDisplay = isHistory
+      ? currentHistoryPanel?.month.substring(0, 3)
+      : dayjs().format("MMM");
+
     return (
       <>
-        {/* Month header */}
+        {/* Month Header */}
         <div className="flex flex-col justify-center items-center text-[0.65rem] sm:text-[0.8rem] sm:font-semibold">
-          <strong className="text-[0.7rem]">{dayjs().format("MMM")}</strong>
+          <strong className="text-[0.7rem]">{monthToDisplay}</strong>
         </div>
 
         {/* Render each header item */}
-        {(headerNamesLocal?.length
-          ? headerNamesLocal
-          : board?.headerNames || []
-        ).map((name, i) => (
+        {namesToRender.map((name, i) => (
           <HeaderItem
             key={i}
             column={i}
             description={name}
             isHistory={isHistory}
-            value={
-              headerValuesLocal?.length
-                ? headerValuesLocal[i]
-                : board?.habitsValues?.[i] || ""
-            }
+            value={valuesToRender[i] || ""}
           />
         ))}
       </>
     );
   }
 
-  // Fallback if not AI-generated and no user
+  /**
+   * Fallback if not AI-generated and no user
+   */
   return (
     <>
       <div className="flex flex-col justify-center items-center text-[0.65rem] sm:text-[0.8rem] sm:font-semibold">

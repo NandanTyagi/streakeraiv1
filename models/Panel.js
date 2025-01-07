@@ -44,6 +44,22 @@ const HistorySchema = new Schema({
     type: String,
   },
   cells: [CellSchema],
+  goalToAchieve: {
+    type: String,
+  },
+  habitsNames: [
+    {
+      type: String,
+    },
+  ],
+  habitsValues: [
+    {
+      type: String,
+    },
+  ],
+  days: {
+    type: Number,
+  },
 });
 
 const PanelSchema = new Schema(

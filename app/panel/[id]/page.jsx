@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useSearchParams, useParams } from "next/navigation";
+import { AppContext } from "@/context/appContext";
 
 
 import fetchPanelById from "@/utils/v2/fetchPanelById";
@@ -10,14 +11,15 @@ import Nav from "@/components/Nav";
 import Loading from "@/components/Loading";
 
 const PanelPage = () => {
+  const { currentHistoryPanel } = useContext(AppContext);
   const searchParams = useSearchParams();
   const { id } = useParams();
   const currentYear = searchParams.get("year");
   const currentMonth = searchParams.get("month");
 
-  const [panel, setPanel] = useState(null);
+  const [panel, setPanel] = useState(currentHistoryPanel);
   const [loading, setLoading] = useState(false);
-  const [localHistoryCells, setLocalHistoryCells] = useState([]);
+  const [localHistoryCells, setLocalHistoryCells] = useState(currentHistoryPanel?.cells || []);
 
   // 1) Refetch whenever `id` changes
   useEffect(() => {
@@ -53,7 +55,7 @@ const PanelPage = () => {
       const historyEntry = panel.history.find(
         (h) => h.year === currentYear && h.month === currentMonth
       );
-      setLocalHistoryCells(historyEntry?.cells || []);
+      // setLocalHistoryCells(historyEntry?.cells || []);
     }
   }, [panel, currentYear, currentMonth]);
 

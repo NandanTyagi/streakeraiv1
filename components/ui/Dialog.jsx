@@ -19,14 +19,14 @@ const DialogButton = ({ habit = null, value, onChange, isHistory }) => (
         )}
         {!habit && (
           <span className="font-extrabold text-[1rem] md:hidden">
-            {value.length > 25
+            {value && value.length > 25
               ? value.substring(0, 25) + "..."
               : value || "I want to live a healthy life"}
           </span>
         )}
         {!habit && (
           <span className="font-extrabold text-[1rem] hidden md:block">
-            {value.length > 60
+            {value && value.length > 60
               ? value.substring(0, 60) + "..."
               : value || "I want to live a healthy life"}
           </span>
