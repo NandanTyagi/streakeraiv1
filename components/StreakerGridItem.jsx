@@ -349,7 +349,7 @@ const StreakerGridItem = ({
       ) : isClearLocal ? (
         <button
           className={`${styles.streakerGridItem} ${
-            isTodayLocal ? styles.streakerGridItemToday : ""
+            (isTodayLocal && ! isHistory ? styles.streakerGridItemToday : "")
           }`}
           onClick={handleClick}
           onDoubleClick={handleDoubleClick}
@@ -367,7 +367,7 @@ const StreakerGridItem = ({
             isDoneLocal
               ? styles.streakerGridItemDoneTrue
               : styles.streakerGridItemDoneFalse
-          } ${isTodayLocal ? styles.streakerGridItemToday : ""}`}
+          } ${(isTodayLocal && ! isHistory ? styles.streakerGridItemToday : "")}`}
           onClick={handleClick}
           onDoubleClick={handleDoubleClick}
           onMouseDown={handleMouseDown}
