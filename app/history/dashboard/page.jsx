@@ -238,7 +238,7 @@ const Dashboard = () => {
   // ====== Prepare Data for the combined Line Chart (Streak Trends) ======
   const lineChartData = useMemo(() => {
     // Label the X axis as 1..n days in the current month
-    const totalDays = currentHistoryPanel.days;
+    const totalDays = currentHistoryPanel?.days;
     const labels = Array.from({ length: totalDays }, (_, i) => i + 1);
 
     // Build a dataset for each column/habit
@@ -248,7 +248,7 @@ const Dashboard = () => {
       const cellsForColumn =
         currentHistoryPanel?.cells
           ?.filter((cell) => cell.colNr === col.colNr)
-          .filter((cell) => cell.rowNr <= currentHistoryPanel.days) || [];
+          .filter((cell) => cell.rowNr <= currentHistoryPanel?.days) || [];
 
       // Convert isDone into 1 or 0 for each day that has a cell
       // If a day has no cell, you could consider it 0 or skip it
@@ -377,7 +377,6 @@ const Dashboard = () => {
                       },
                       scales: {
                         y: { beginAtZero: true,},
-                        x: { beginAtZero: true},
                       },
                     }}
                   />
