@@ -51,7 +51,7 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
         visible: { opacity: 1, y: 0, transition: { delay: index * 0.1 } },
       }}
     >
-      <Link href={`/panel/${board._id}?year=${item.year}&month=${item.month}`}>
+      <Link href={`/history/${board._id}?year=${item.year}&month=${item.month}`}>
         <Card>
           <CardHeader>
             <CardTitle>

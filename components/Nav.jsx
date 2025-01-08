@@ -10,6 +10,7 @@ import ThreeDButton from "@/components/ui/button/3DButton";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import { DashboardIcon } from "@radix-ui/react-icons";
 
 import {
   Dialog,
@@ -251,6 +252,9 @@ const Nav = ({ isNav = true, isHistory }) => {
             isHistory={isHistory}
           />
         )}
+        {isHistory && <Link href="/history/dashboard">
+        <DashboardIcon className="w-4 h-4 absolute right-[12px] top-[25%]" />
+        </Link>}
         <div className={`absolute right-6 ${isHistory ? "hidden" : null}`}>
           <div
             className={`hidden md:block ${

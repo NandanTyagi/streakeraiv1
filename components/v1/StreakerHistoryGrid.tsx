@@ -70,12 +70,12 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
   }
 
   return (
-    <>
+    <div className={'relative max-h-[calc(100vh-150px)] overflow-auto'}>
       <section className={styles.streakerGrid}>
         <StreakerGridHeaders isHistory />
       </section>
 
-      <section className={styles.streakerGrid}>
+      <section className={`${styles.streakerGrid}`}>
         {Array.from({ length: days }).map((_, dayIndex) => {
           const today = dayjs().format("D");
 
@@ -112,7 +112,7 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
           );
         })}
       </section>
-    </>
+    </div>
   );
 };
 
