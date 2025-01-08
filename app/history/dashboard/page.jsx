@@ -94,12 +94,6 @@ const Dashboard = () => {
           // No cell => user hasn't interacted => unreviewed
           columnTotals[colNr].unreviewed++;
         } else {
-          // Build a date string for any comment
-          const cellDate = dayjs()
-            .year(currentHistoryPanel.year)
-            .month(currentHistoryPanel.month)
-            .date(day)
-            .format("MMM D, YYYY");
 
           if (cell && cell.isDone) {
             columnTotals[colNr].isDone++;
@@ -244,7 +238,7 @@ const Dashboard = () => {
   // ====== Prepare Data for the combined Line Chart (Streak Trends) ======
   const lineChartData = useMemo(() => {
     // Label the X axis as 1..n days in the current month
-    const totalDays = dayjs().daysInMonth();
+    const totalDays = currentHistoryPanel.days;
     const labels = Array.from({ length: totalDays }, (_, i) => i + 1);
 
     // Build a dataset for each column/habit
@@ -254,7 +248,7 @@ const Dashboard = () => {
       const cellsForColumn =
         currentHistoryPanel?.cells
           ?.filter((cell) => cell.colNr === col.colNr)
-          .filter((cell) => cell.rowNr <= currentDay) || [];
+          .filter((cell) => cell.rowNr <= currentHistoryPanel.days) || [];
 
       // Convert isDone into 1 or 0 for each day that has a cell
       // If a day has no cell, you could consider it 0 or skip it
@@ -306,7 +300,7 @@ const Dashboard = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        Dashboard
+        History Dashboard
       </motion.h1>
 
       {/* Goal Heading */}
@@ -382,7 +376,8 @@ const Dashboard = () => {
                         legend: { display: false },
                       },
                       scales: {
-                        y: { beginAtZero: true },
+                        y: { beginAtZero: true,},
+                        x: { beginAtZero: true},
                       },
                     }}
                   />
