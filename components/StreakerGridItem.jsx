@@ -45,6 +45,7 @@ const StreakerGridItem = ({
     isAppLoading,
     isSaved,
     setIsSaved,
+    currentHistoryPanel
   } = useContext(AppContext);
 
   // 2. Destructure the toast function
@@ -64,7 +65,9 @@ const StreakerGridItem = ({
   const [noteValue, setNoteValue] = useState("");
 
   // Find the current cell index from the board
-  const currentCellIndexLocal = board?.cells?.findIndex(
+  const currentCellIndexLocal =isHistory ? currentHistoryPanel?.cells?.findIndex(
+    (cell) => cell.id === `${rowNr}-${colNr}`
+  ) : board?.cells?.findIndex(
     (cell) => cell.id === `${rowNr}-${colNr}`
   );
 

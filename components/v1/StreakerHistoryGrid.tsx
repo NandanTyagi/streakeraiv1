@@ -45,7 +45,7 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
   board,
   cells,
 }) => {
-  const { isAppLoading } = useContext(AppContext);
+  const { isAppLoading, currentHistoryPanel } = useContext(AppContext);
   const { isLoading, user } = useKindeBrowserClient();
 
   // Local state for cells (optional if you need to modify them)
@@ -70,7 +70,7 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
   }
 
   return (
-    <div className={'relative max-h-[calc(100vh-150px)] overflow-auto'}>
+    <div className={'relative max-h-[calc(100vh-180px)] overflow-auto'}>
       <section className={styles.streakerGrid}>
         <StreakerGridHeaders isHistory />
       </section>

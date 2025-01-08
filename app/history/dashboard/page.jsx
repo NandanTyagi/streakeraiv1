@@ -53,7 +53,7 @@ const Dashboard = () => {
       return [];
 
     // Number of days in current month up to today's date
-    const currentDay = dayjs().date(); // e.g., 30 if today is the 30th
+    const currentDay = currentHistoryPanel.days;
     // Number of habits (columns)
     const numberOfHabits = currentHistoryPanel.habitsNames.length;
 

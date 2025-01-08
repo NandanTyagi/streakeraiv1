@@ -7,12 +7,19 @@ import getCurrentUserBoardFromDb from "@/utils/getCurrentUserBoardFromDb";
 import generateEmptyBoardCells from "@/utils/generateEmptyBoardCells";
 import getDaysInMonth from "@/utils/getDaysInMonth";
 import createPanelInDb from "@/utils/v2/createPanelInDb";
+import { number } from "zod";
 
 export const AppContext = createContext({
   users: [],
   boardUser: {},
   boards: [],
-  currentHistoryPanel: {},
+  currentHistoryPanel: {
+    goalToAchieve: "",
+    habitsNames: [],
+    habitsValues: [],
+    days: number,
+    cells: [],
+  },
   board: {
     _id: "",
     goalToAchieve: "",
