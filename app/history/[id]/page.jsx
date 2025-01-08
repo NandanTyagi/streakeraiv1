@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useContext } from "react";
-import { useSearchParams, useParams } from "next/navigation";
+import { useSearchParams, useParams, useRouter } from "next/navigation";
 import { AppContext } from "@/context/appContext";
 
 
@@ -11,6 +11,7 @@ import Nav from "@/components/Nav";
 import Loading from "@/components/Loading";
 
 const PanelPage = () => {
+  const router = useRouter();
   const { currentHistoryPanel } = useContext(AppContext);
   const searchParams = useSearchParams();
   const { id } = useParams();
@@ -20,6 +21,12 @@ const PanelPage = () => {
   const [panel, setPanel] = useState(currentHistoryPanel);
   const [loading, setLoading] = useState(false);
   const [localHistoryCells, setLocalHistoryCells] = useState(currentHistoryPanel?.cells || []);
+
+   useEffect(() => {
+      if(!currentHistoryPanel) {
+        router.push("/history");
+      }
+    }, [currentHistoryPanel]);
 
   // 1) Refetch whenever `id` changes
   useEffect(() => {

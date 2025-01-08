@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useContext, useMemo, Suspense, useEffect } from "react";
+import React, { useContext, useMemo, Suspense, useEffect, use } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { AppContext } from "@/context/appContext";
 import dayjs from "dayjs";
@@ -44,7 +45,14 @@ const DashboardLoading = () => (
 );
 
 const Dashboard = () => {
+  const router = useRouter();
   const { currentHistoryPanel } = useContext(AppContext);
+
+  useEffect(() => {
+    if(!currentHistoryPanel) {
+      router.push("/history");
+    }
+  }, [currentHistoryPanel]);
 
   // ========== UPDATED columnStats logic ==========
   const columnStats = useMemo(() => {
@@ -377,6 +385,12 @@ const Dashboard = () => {
                       },
                       scales: {
                         y: { beginAtZero: true,},
+                        x: {
+                          type: 'linear',
+                          ticks: {
+                            stepSize: 1
+                          }
+                        }
                       },
                     }}
                   />
