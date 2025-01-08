@@ -96,8 +96,8 @@ const Dashboard = () => {
         } else {
           // Build a date string for any comment
           const cellDate = dayjs()
-            .year(dayjs().year())
-            .month(dayjs().month())
+            .year(currentHistoryPanel.year)
+            .month(currentHistoryPanel.month)
             .date(day)
             .format("MMM D, YYYY");
 
@@ -128,7 +128,7 @@ const Dashboard = () => {
           if (cell && cell.comment) {
             columnTotals[colNr].comments.push({
               text: cell.comment,
-              date: cellDate,
+              date: currentHistoryPanel.month.substring(0,3) + " " + day + ", " + currentHistoryPanel.year,
             });
           }
         }
