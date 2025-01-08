@@ -320,6 +320,14 @@ const Dashboard = () => {
       >
         {currentHistoryPanel?.goalToAchieve}
       </motion.h2>
+      <motion.h3
+        className="text-xl font-bold text-center mb-10"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
+        {currentHistoryPanel?.year} {currentHistoryPanel?.month}
+      </motion.h3>
 
       {/* Stat Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
