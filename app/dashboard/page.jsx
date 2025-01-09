@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useContext, useMemo, Suspense, useEffect } from "react";
+import { ArrowLeftIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { AppContext } from "@/context/appContext";
 import dayjs from "dayjs";
@@ -282,8 +283,13 @@ const Dashboard = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-100 p-8 pb-20"
+      className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-100 p-8 pb-20 relative"
     >
+         <ArrowLeftIcon
+          size={24}
+          className="absolute top-4 left-2 cursor-pointer"
+          onClick={() => window.history.back()}
+        />
       {/* Page Title */}
       <motion.h1
         className="text-3xl font-extrabold text-center mb-10"

@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { DashboardIcon } from "@radix-ui/react-icons";
+import { ArrowLeftIcon, CrossIcon, X } from "lucide-react";
 
 import {
   Dialog,
@@ -210,6 +211,10 @@ const Nav = ({ isNav = true, isHistory }) => {
   } else {
     return (
       <div className="flex justify-center items-center bg-[#EBEBEB] text-md font-semibold cursor-pointer relative">
+         {isHistory && <Link href="/history" className="absolute left-[12px] top-[25%] flex items-center justify-center gap-1 ">
+        <ArrowLeftIcon size={24} className="w-4 h-4 sm:w-6 sm:h-4 " />
+        <p className="text-sm font-semibold hidden sm:block">Back</p>
+        </Link>}
         {user && (
           <div
             className={`absolute left-2 md:left-2 ${
@@ -228,7 +233,7 @@ const Nav = ({ isNav = true, isHistory }) => {
                   Reset
                 </span>
                 <span className="w-[20%] flex justify-center items-center">
-                  x
+                  <X />
                 </span>
               </ThreeDButton>
             </div>
@@ -238,7 +243,7 @@ const Nav = ({ isNav = true, isHistory }) => {
               }`}
               onClick={(e) => handleClearPanel(e)}
             >
-              <span className="text-[0.7rem] sm:text-[0.7rem]">X</span>
+              <span className="text-[0.7rem] sm:text-[0.7rem]"><X size={18}/></span>
               <span className="text-[0.7rem] sm:text-[0.7rem]">Reset</span>
             </button>
           </div>
@@ -252,8 +257,9 @@ const Nav = ({ isNav = true, isHistory }) => {
             isHistory={isHistory}
           />
         )}
-        {isHistory && <Link href="/history/dashboard">
-        <DashboardIcon className="w-4 h-4 absolute right-[12px] top-[25%]" />
+        {isHistory && <Link href="/history/dashboard" className="absolute right-[12px] top-[25%] flex items-center justify-center gap-1 ">
+        <DashboardIcon className="w-4 h-4 sm:w-6 sm:h-4 " />
+        <p className="text-sm font-semibold hidden sm:block">Dashboard</p>
         </Link>}
         <div className={`absolute right-6 ${isHistory ? "hidden" : null}`}>
           <div
