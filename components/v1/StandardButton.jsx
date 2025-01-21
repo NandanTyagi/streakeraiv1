@@ -9,7 +9,7 @@ const StandardButton = ({
   type = "pill",
   pushTo = "",
   newWindow = false,
-  onClick = null,
+  onClick
 }) => {
   const buttonRef = useRef(text);
   const router = useRouter();
