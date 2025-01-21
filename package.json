@@ -47,6 +47,7 @@
     "radix-ui": "^1.0.1",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",
+    "react-device-detect": "^2.2.3",
     "react-dom": "^18",
     "react-heatmap-grid": "^0.9.1",
     "react-hook-form": "^7.49.2",

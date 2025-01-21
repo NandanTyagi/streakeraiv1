@@ -1,11 +1,10 @@
-"use client";
 import { useEffect, useState } from "react";
+import { isMobile } from "react-device-detect";
 import StandardButton from "./StandardButton";
 
 export default function DownloadApp() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isPWAInstallable, setIsPWAInstallable] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
@@ -19,17 +18,8 @@ export default function DownloadApp() {
     // Listen for the `beforeinstallprompt` event
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
-    // Detect if the user is on a mobile device
-    const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(
-      navigator.userAgent
-    );
-    setIsMobile(isMobileDevice);
-
     return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt
-      );
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
   }, []);
 
@@ -49,7 +39,7 @@ export default function DownloadApp() {
   return (
     <div className="w-full">
       {
-    //   isPWAInstallable && isMobile &&
+      isPWAInstallable && isMobile &&
        (
         <StandardButton
           text={`Download app`}

@@ -47,11 +47,11 @@ const NewIntro = () => {
                 </StandardButton>
               </LoginLink>
               <div className="mt-10 w-full">
-              <DownloadApp/>
 
               </div>
             </>
           )}
+          <DownloadApp/>
           {/* <ButtonGroup /> */}
         </div>
       </section>
