@@ -48,7 +48,9 @@ export default function DownloadApp() {
   };
   return (
     <div className="w-full">
-      {isPWAInstallable && isMobile && (
+      {
+    //   isPWAInstallable && isMobile &&
+       (
         <StandardButton
           text={`Download app`}
           type="pill"
