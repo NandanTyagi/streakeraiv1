@@ -9,6 +9,7 @@ const StandardButton = ({
   type = "pill",
   pushTo = "",
   newWindow = false,
+  onClick
 }) => {
   const buttonRef = useRef(text);
   const router = useRouter();
@@ -155,7 +156,7 @@ const StandardButton = ({
   if (type === "pill") {
     return (
       <button
-        onClick={() => handleClick(buttonRef.current.id)}
+        onClick={onClick ? onClick : () => handleClick(buttonRef.current.id)}
         title={text}
         type={action}
         id={text}
