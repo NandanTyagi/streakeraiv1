@@ -14,6 +14,7 @@ const StreakerGridHeaders = ({ isHistory }) => {
   const [headerNamesLocal, setHeaderNamesLocal] = useState([]);
   const [headerValuesLocal, setHeaderValuesLocal] = useState([]);
   const [isAiGenerated, setIsAiGenerated] = useState(false);
+  const [historyIndex, setHistoryIndex] = useState(null);
 
   const { user } = useKindeBrowserClient();
   const params = useSearchParams();
@@ -61,12 +62,19 @@ const StreakerGridHeaders = ({ isHistory }) => {
     const headerValuesParams = params.get("headerValues") || "";
     const headerGoalParams = params.get("goalToAchieve") || "";
 
+    const indexParams = params.get("index");
+
+    if (indexParams) {
+      setHistoryIndex(parseInt(indexParams));
+    }
+
+
     handleNamesAndValues(
       headerNamesParams,
       headerValuesParams,
       headerGoalParams
     );
-  }, [params]);
+  }, [params, historyIndex]);
 
   /**
    * Effect 2: If there are no `headerNames` in the URL, fall back to board data
@@ -77,6 +85,12 @@ const StreakerGridHeaders = ({ isHistory }) => {
       setHeaderNamesLocal(board?.habitsNames || []);
       setHeaderValuesLocal(board?.habitsValues || []);
     }
+    if(isHistory && params.get("index")) {
+      const index = params.get("index")
+      console.log("index", currentHistoryPanel);
+      setHeaderNamesLocal(board?.history[index]?.habitsNames || []);
+      setHeaderValuesLocal(board?.history[index]?.habitsValues || []);
+    }
   }, [board, params]);
 
   /**
@@ -85,13 +99,13 @@ const StreakerGridHeaders = ({ isHistory }) => {
   if (isAiGenerated || user) {
     // Decide which data to display
     const namesToRender = isHistory
-      ? currentHistoryPanel?.habitsNames || []
+      ? headerNamesLocal || []
       : headerNamesLocal?.length
       ? headerNamesLocal
       : board?.habitsNames || [];
 
     const valuesToRender = isHistory
-      ? currentHistoryPanel?.habitsValues || []
+      ? headerValuesLocal || []
       : headerValuesLocal?.length
       ? headerValuesLocal
       : board?.habitsValues || [];

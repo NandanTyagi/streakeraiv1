@@ -23,7 +23,7 @@ import {
   DialogDescription,
 } from "@/components/ui/shad-dialog";
 
-const Nav = ({ isNav = true, isHistory }) => {
+const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
   const { toast } = useToast();
   const { user } = useKindeBrowserClient();
   const router = useRouter();
@@ -33,7 +33,7 @@ const Nav = ({ isNav = true, isHistory }) => {
   const { board, setBoard, isSaved, setIsSaved, currentHistoryPanel } =
     useContext(AppContext);
   const [dialogValue, setDialogValue] = useState(
-    isHistory ? currentHistoryPanel?.goalToAchieve : board?.goalToAchieve || ""
+    isHistory ? 'hello' : board?.goalToAchieve || ""
   );
 
   // 2. State for a generic "Confirm" dialog (to replace window.confirm)
@@ -171,7 +171,7 @@ const Nav = ({ isNav = true, isHistory }) => {
   };
 
   useEffect(() => {
-    setDialogValue(isHistory? currentHistoryPanel?.goalToAchieve : board?.goalToAchieve || "");
+    setDialogValue(isHistory? currentHistoryItem?.goalToAchieve : board?.goalToAchieve || "");
   }, [board, user, currentHistoryPanel]);
 
   useEffect(() => {
