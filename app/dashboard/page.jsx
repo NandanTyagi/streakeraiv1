@@ -435,7 +435,7 @@ const Dashboard = () => {
 export default function DashboardWrapper() {
   return (
     <Suspense fallback={<DashboardLoading />}>
-      <div className="min-h-screen overflow-x-hidden overflow-y-auto">
+      <div className="min-h-[calc(100vh-80px)] overflow-x-hidden overflow-y-auto">
         <Dashboard />
       </div>
     </Suspense>
