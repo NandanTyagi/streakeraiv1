@@ -66,7 +66,6 @@ export function AppContextProvider({ children }) {
   const [boards, setBoards] = useState([]);
   const [currentHistoryPanel, setCurrentHistoryPanel] = useState();
   const [board, setBoard] = useState();
-  const [currentHistoryPanel, setCurrentHistoryPanel] = useState();
   const [cells, setCells] = useState();
   const [columns, setColumns] = useState();
   const [column, setColumn] = useState();
