@@ -351,6 +351,7 @@ const StreakerGridItem = ({
         </div>
       ) : isClearLocal ? (
         <button
+        title="Click to mark as done/missed, hold for 3 seconds to add a note"
           className={`${styles.streakerGridItem} ${
             (isTodayLocal && ! isHistory ? styles.streakerGridItemToday : "")
           }`}
@@ -366,6 +367,7 @@ const StreakerGridItem = ({
         ></button>
       ) : (
         <button
+        title="Click to mark as done/missed, double-click to clear, hold for 3 seconds to add a note"
           className={`${styles.streakerGridItem} ${
             isDoneLocal
               ? styles.streakerGridItemDoneTrue
