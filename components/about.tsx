@@ -22,7 +22,7 @@ export default function About() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-100 overflow-scroll pb-40"
+      className="min-h-[calc(100vh-80px)] bg-gradient-to-r from-blue-100 to-purple-100 overflow-scroll pb-40"
     >
       <Hero />
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-100 to-purple-100">
