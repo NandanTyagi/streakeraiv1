@@ -40,6 +40,7 @@ body {
   justify-content: center;
   height: 100vh;
   background: linear-gradient(90deg, #DBEAFE 0%, #F3E8FF 100%);
+  position: relative;
 }
 
 main:not(.zero-m) {

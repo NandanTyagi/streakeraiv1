@@ -7,12 +7,19 @@ import getCurrentUserBoardFromDb from "@/utils/getCurrentUserBoardFromDb";
 import generateEmptyBoardCells from "@/utils/generateEmptyBoardCells";
 import getDaysInMonth from "@/utils/getDaysInMonth";
 import createPanelInDb from "@/utils/v2/createPanelInDb";
+import { number } from "zod";
 
 export const AppContext = createContext({
   users: [],
   boardUser: {},
   boards: [],
-  currentHistoryPanel: {},
+  currentHistoryPanel: {
+    goalToAchieve: "",
+    habitsNames: [],
+    habitsValues: [],
+    days: number,
+    cells: [],
+  },
   board: {
     _id: "",
     goalToAchieve: "",
@@ -45,7 +52,7 @@ export const AppContext = createContext({
   setOpenAIResponseDescription: () => {},
   setIsCellLoading: () => {},
   setBoard: () => {},
-  setCurrentHistoryPanel: () => {},
+  setCurrentHistoryPanel: (items) => {},
   setBoardUser: () => {},
   setOpenAIResponseHeadersNames: () => {},
   setOpenAIResponseHeadersValues: () => {},
@@ -57,6 +64,7 @@ export function AppContextProvider({ children }) {
   const [users, setUsers] = useState();
   const [boardUser, setBoardUser] = useState(user?.email || {});
   const [boards, setBoards] = useState([]);
+  const [currentHistoryPanel, setCurrentHistoryPanel] = useState();
   const [board, setBoard] = useState();
   const [currentHistoryPanel, setCurrentHistoryPanel] = useState();
   const [cells, setCells] = useState();
@@ -167,6 +175,7 @@ export function AppContextProvider({ children }) {
         setUsers,
         setBoardUser,
         setBoards,
+        setCurrentHistoryPanel,
         setBoard,
         setCurrentHistoryPanel,
         setCells,

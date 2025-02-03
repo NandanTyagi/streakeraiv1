@@ -47,7 +47,7 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
   cells,
   month
 }) => {
-  const { isAppLoading } = useContext(AppContext);
+  const { isAppLoading, currentHistoryPanel } = useContext(AppContext);
   const { isLoading, user } = useKindeBrowserClient();
 
   // Local state for cells (optional if you need to modify them)
@@ -72,12 +72,12 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
   }
 
   return (
-    <>
+    <div className={'relative max-h-[calc(100vh-180px)] overflow-auto'}>
       <section className={styles.streakerGrid}>
         <StreakerGridHeaders isHistory month={month?.substring(0,3)} />
       </section>
 
-      <section className={styles.streakerGrid}>
+      <section className={`${styles.streakerGrid}`}>
         {Array.from({ length: days }).map((_, dayIndex) => {
           const today = dayjs().format("D");
 
@@ -114,7 +114,7 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
           );
         })}
       </section>
-    </>
+    </div>
   );
 };
 

@@ -5,7 +5,6 @@ import styles from "../styles/StreakerGridItem.module.css";
 import { useState, useEffect, useContext, useRef } from "react";
 import { AppContext } from "@/context/appContext";
 import dayjs from "dayjs";
-import handelDbCells from "../utils/handelDbCells";
 
 // 1. Import shadcn UI toast & dialog components
 import { useToast } from "@/hooks/use-toast";
@@ -46,6 +45,7 @@ const StreakerGridItem = ({
     isAppLoading,
     isSaved,
     setIsSaved,
+    currentHistoryPanel
   } = useContext(AppContext);
 
   // 2. Destructure the toast function
@@ -65,7 +65,9 @@ const StreakerGridItem = ({
   const [noteValue, setNoteValue] = useState("");
 
   // Find the current cell index from the board
-  const currentCellIndexLocal = board?.cells?.findIndex(
+  const currentCellIndexLocal =isHistory ? currentHistoryPanel?.cells?.findIndex(
+    (cell) => cell.id === `${rowNr}-${colNr}`
+  ) : board?.cells?.findIndex(
     (cell) => cell.id === `${rowNr}-${colNr}`
   );
 
@@ -130,7 +132,6 @@ const StreakerGridItem = ({
       return;
     }
 
-    handelDbCells(board, currentCellIndexLocal, updatedCell);
     setIsCellLoading(false);
   };
 
@@ -351,7 +352,7 @@ const StreakerGridItem = ({
       ) : isClearLocal ? (
         <button
           className={`${styles.streakerGridItem} ${
-            (isTodayLocal && !isHistory) ? styles.streakerGridItemToday : ""
+            (isTodayLocal && ! isHistory ? styles.streakerGridItemToday : "")
           }`}
           onClick={handleClick}
           onDoubleClick={handleDoubleClick}
@@ -369,7 +370,7 @@ const StreakerGridItem = ({
             isDoneLocal
               ? styles.streakerGridItemDoneTrue
               : styles.streakerGridItemDoneFalse
-          } ${(isTodayLocal && !isHistory) ? styles.streakerGridItemToday : ""}`}
+          } ${(isTodayLocal && ! isHistory ? styles.streakerGridItemToday : "")}`}
           onClick={handleClick}
           onDoubleClick={handleDoubleClick}
           onMouseDown={handleMouseDown}

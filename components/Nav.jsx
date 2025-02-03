@@ -3,7 +3,7 @@ import Link from "next/link";
 import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import DialogButton from "@/components/ui/Dialog";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, use } from "react";
 import { AppContext } from "@/context/appContext";
 import savePanelToDb from "@/utils/v2/savePanelToDb";
 import ThreeDButton from "@/components/ui/button/3DButton";
@@ -12,6 +12,7 @@ import { useSearchParams, useParams, usePathname } from "next/navigation";
 
 import { useToast } from "@/hooks/use-toast";
 import { DashboardIcon } from "@radix-ui/react-icons";
+import { ArrowLeftIcon, CrossIcon, X } from "lucide-react";
 
 import {
   Dialog,
@@ -23,7 +24,7 @@ import {
   DialogDescription,
 } from "@/components/ui/shad-dialog";
 
-const Nav = ({ isNav = true, isHistory }) => {
+const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
   const { toast } = useToast();
   const { user } = useKindeBrowserClient();
   const router = useRouter();
@@ -32,8 +33,11 @@ const Nav = ({ isNav = true, isHistory }) => {
   const pathname = usePathname();
   const [isAppLoading, setisAppLoading] = useState(false);
   const [showPanelSavedDialog, setShowPanelSavedDialog] = useState(false);
-  const { board, setBoard, isSaved, setIsSaved } = useContext(AppContext);
-  const [dialogValue, setDialogValue] = useState(board?.goalToAchieve || "");
+  const { board, setBoard, isSaved, setIsSaved, currentHistoryPanel } =
+    useContext(AppContext);
+  const [dialogValue, setDialogValue] = useState(
+    isHistory ? 'hello' : board?.goalToAchieve || ""
+  );
 
   // 2. State for a generic "Confirm" dialog (to replace window.confirm)
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -170,8 +174,8 @@ const Nav = ({ isNav = true, isHistory }) => {
   };
 
   useEffect(() => {
-    setDialogValue(board?.goalToAchieve || "");
-  }, [board, user]);
+    setDialogValue(isHistory? currentHistoryItem?.goalToAchieve : board?.goalToAchieve || "");
+  }, [board, user, currentHistoryPanel]);
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {
@@ -210,6 +214,10 @@ const Nav = ({ isNav = true, isHistory }) => {
   } else {
     return (
       <div className="flex justify-center items-center bg-[#EBEBEB] text-md font-semibold cursor-pointer relative">
+         {isHistory && <Link href="/history" className="absolute left-[12px] top-[25%] flex items-center justify-center gap-1 ">
+        <ArrowLeftIcon size={24} className="w-4 h-4 sm:w-6 sm:h-4 " />
+        <p className="text-sm font-semibold hidden sm:block">Back</p>
+        </Link>}
         {user && (
           <div
             className={`absolute left-2 md:left-2 ${
@@ -228,7 +236,7 @@ const Nav = ({ isNav = true, isHistory }) => {
                   Reset
                 </span>
                 <span className="w-[20%] flex justify-center items-center">
-                  x
+                  <X />
                 </span>
               </ThreeDButton>
             </div>
@@ -238,7 +246,7 @@ const Nav = ({ isNav = true, isHistory }) => {
               }`}
               onClick={(e) => handleClearPanel(e)}
             >
-              <span className="text-[0.7rem] sm:text-[0.7rem]">X</span>
+              <span className="text-[0.7rem] sm:text-[0.7rem]"><X size={18}/></span>
               <span className="text-[0.7rem] sm:text-[0.7rem]">Reset</span>
             </button>
           </div>
@@ -252,7 +260,11 @@ const Nav = ({ isNav = true, isHistory }) => {
             isHistory={isHistory}
           />
         )}
-        <div className={`absolute right-6 ${isHistory ? null : null}`}>
+        {isHistory && <Link href="/history/dashboard" className="absolute right-[12px] top-[25%] flex items-center justify-center gap-1 ">
+        <DashboardIcon className="w-4 h-4 sm:w-6 sm:h-4 " />
+        <p className="text-sm font-semibold hidden sm:block">Dashboard</p>
+        </Link>}
+        <div className={`absolute right-6 ${isHistory ? "hidden" : null}`}>
           <div
             className={`hidden md:block ${
               !isSaved && !isHistory

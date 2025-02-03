@@ -55,6 +55,16 @@ export default function MainLayout({ children }) {
         <footer className="flex flex-col justify-center w-full items-center sm:items-end sm:pr-6 z-[0] absolute bottom-0 max-w-[1480px] bg-[#EBEBEB]"></footer>
       </div>
     );
+  } else if (pathname === "/dashboard") {
+    return (
+      <div className="main-layout-container">
+        <div className="main-layout">
+          <Header />
+          {children}
+        </div>
+        {/* <footer className="flex flex-col justify-center w-full items-center sm:items-end sm:pr-6 z-[0] absolute bottom-0 max-w-[1480px] bg-[#EBEBEB]"></footer> */}
+      </div>
+    );
   } else {
     return (
       <div className="main-layout-container">

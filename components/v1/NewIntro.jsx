@@ -1,5 +1,6 @@
 import StandardButton from "@/components/v1/StandardButton";
 import ButtonGroup from "@/components/v1/ButtonGroup";
+import DownloadApp from "@/components/v1/DownloadApp";
 import Hero from "@/components/v1/Hero";
 import {
   RegisterLink,
@@ -45,8 +46,12 @@ const NewIntro = () => {
                   Login
                 </StandardButton>
               </LoginLink>
+              <div className="mt-10 w-full">
+
+              </div>
             </>
           )}
+          <DownloadApp/>
           {/* <ButtonGroup /> */}
         </div>
       </section>

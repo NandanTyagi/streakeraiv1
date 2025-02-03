@@ -31,10 +31,10 @@ const scienceItems = [
     title: "Step Ladders",
     content: `Break down your goals into manageable, incremental steps to build momentum and confidence.`,
   },
-  {
-    title: "Community",
-    content: `Leverage social support with our upcoming community features to share progress and celebrate milestones.`,
-  },
+  // {
+  //   title: "Community",
+  //   content: `Leverage social support with our upcoming community features to share progress and celebrate milestones.`,
+  // },
   {
     title: "Important",
     content: `Streaker aligns your habits with your personal values to ensure meaningful and lasting change.`,
@@ -51,16 +51,16 @@ const scienceItems = [
     title: "Captivating",
     content: `Engaging visuals and gamified rewards make forming new habits an enjoyable process.`,
   },
-  {
-    title: "Engrained",
-    content: `Focus on daily actions to engrain habits into your routine for long-term success.`,
-  },
+  // {
+  //   title: "Engrained",
+  //   content: `Focus on daily actions to engrain habits into your routine for long-term success.`,
+  // },
 ];
 
 export default function Content() {
   return (
-    <section className="py-20 px-6 sm:px-8 lg:px-12 bg-gradient-to-r from-blue-100 to-purple-100 text-gray-800">
-      <div className="max-w-6xl mx-auto">
+    <section className="py-10 px-6 sm:px-8 lg:px-12 bg-gradient-to-r from-blue-100 to-purple-100 text-gray-800">
+      <div className="max-w-6xl mx-auto mb-10">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
