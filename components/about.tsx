@@ -22,10 +22,10 @@ export default function About() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-[calc(100vh-80px)] bg-gradient-to-r from-blue-100 to-purple-100 overflow-scroll pb-40"
+      className="min-h-[calc(100vh-80px)] bg-gradient-to-r from-blue-100 to-purple-100 overflow-scroll overflow-x-hidden pb-40"
     >
       <Hero />
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-100 to-purple-100">
+      <section className="py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-100 to-purple-100">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row justify-center gap-10">
             <AnimatedCard
@@ -51,7 +51,7 @@ export default function About() {
           </div>
         </div>
       </section>
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-100 to-purple-100 ">
+      <section className="py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-100 to-purple-100 ">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold mb-6 sm:text-center">Discover Your Dashboard</h2>
           <p className="text-lg text-gray-700 mb-10">
@@ -74,6 +74,20 @@ export default function About() {
       </section>
       <Content />
       <VideoBlock />
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-100 to-purple-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col sm:flex-row justify-center gap-10">
+            <AnimatedCard
+              title="Inverstors"
+              description="Check out our business plan to learn more about our vision and goals."
+              icon={<Star size={48} className="text-white" />}
+              btnText="To Business Plan"
+              href="https://streaker-xqt5f0f.gamma.site/"
+              newWindow
+            />
+          </div>
+        </div>
+      </section>
     </motion.div>
 
   );

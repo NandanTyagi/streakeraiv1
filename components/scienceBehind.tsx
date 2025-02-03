@@ -30,14 +30,14 @@ const principles = [
       "The app breaks down big goals into small, actionable steps. Each step is tracked as a mini-milestone, helping users stay motivated by celebrating incremental progress.",
     icon: <Flag size={36} className="text-white" />,
   },
-  {
-    id: 2,
-    title: "Community",
-    tag: "Stick With It",
-    description:
-      "Users can join communities of like-minded individuals, share their progress, and get accountability partners to keep each other on track.",
-    icon: <Users size={36} className="text-white" />,
-  },
+  // {
+  //   id: 2,
+  //   title: "Community",
+  //   tag: "Stick With It",
+  //   description:
+  //     "Users can join communities of like-minded individuals, share their progress, and get accountability partners to keep each other on track.",
+  //   icon: <Users size={36} className="text-white" />,
+  // },
   {
     id: 3,
     title: "Important Milestones",
@@ -70,14 +70,14 @@ const principles = [
       "Make it Obvious, Attractive, Easy, and Satisfying: Streaker uses cues, gamifies rewards, simplifies setup, and provides immediate feedback for every habit.",
     icon: <Settings size={36} className="text-white" />,
   },
-  {
-    id: 7,
-    title: "Identity-Based Habits",
-    tag: "Atomic Habits",
-    description:
-      "Streaker allows users to define their goals based on who they want to become (e.g., “I want to be a runner”), ensuring the habits align with their personal identity.",
-    icon: <UserCheck size={36} className="text-white" />,
-  },
+  // {
+  //   id: 7,
+  //   title: "Identity-Based Habits",
+  //   tag: "Atomic Habits",
+  //   description:
+  //     "Streaker allows users to define their goals based on who they want to become (e.g., “I want to be a runner”), ensuring the habits align with their personal identity.",
+  //   icon: <UserCheck size={36} className="text-white" />,
+  // },
   {
     id: 8,
     title: "Neuroscience",
@@ -86,14 +86,14 @@ const principles = [
       "The app reinforces habits by pairing actions with positive outcomes, such as instant rewards, and uses cues to anchor habits in daily routines.",
     icon: <Brain size={36} className="text-white" />,
   },
-  {
-    id: 9,
-    title: "Engrained Practices",
-    tag: "Stick With It",
-    description:
-      "Streaker integrates habits into your daily schedule by offering time-blocking and routine-building tools, so habits become second nature.",
-    icon: <Repeat size={36} className="text-white" />,
-  },
+  // {
+  //   id: 9,
+  //   title: "Engrained Practices",
+  //   tag: "Stick With It",
+  //   description:
+  //     "Streaker integrates habits into your daily schedule by offering time-blocking and routine-building tools, so habits become second nature.",
+  //   icon: <Repeat size={36} className="text-white" />,
+  // },
 ];
 
 // Framer Motion Variants for Animation
@@ -110,7 +110,7 @@ export default function ScienceBehind() {
   return (
     <section className="mx-auto w-full max-w-6xl px-4 py-8">
       <motion.h1
-        className="mb-8 sm:text-center text-3xl font-bold text-gray-800 mt-8"
+        className="mb-10 sm:text-center text-3xl font-bold text-gray-800 mt-8"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
