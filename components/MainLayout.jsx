@@ -10,6 +10,12 @@ export default function MainLayout({ children }) {
   const pathname = usePathname();
   const { user } = useKindeBrowserClient();
 
+  const allowedUsers = process.env.NEXT_PUBLIC_ALLOWED_USERS;
+  const allowedUsersArray = allowedUsers.split(",");
+  console.log("allowed users", allowedUsersArray);
+
+  const isAllowedUser = allowedUsersArray.includes(user?.email);
+
 
 
   if (pathname === "/") {
@@ -57,7 +63,7 @@ export default function MainLayout({ children }) {
           <Header />
           {children}
         </div>
-        <footer id="footer" className="flex flex-col justify-center w-full items-center sm:items-end sm:pr-6 z-[0] absolute bottom-0 max-w-[1480px] bg-[#EBEBEB] sm:hidden">{user?.email === 'nandantyagi@gmail.com' && <ScreenshotButton />}</footer>
+        <footer id="footer" className="flex flex-col justify-center w-full items-center sm:items-end sm:pr-6 z-[0] absolute bottom-0 max-w-[1480px] bg-[#EBEBEB] sm:hidden">{ isAllowedUser && <ScreenshotButton />}</footer>
       </div>
     );
   } else if (pathname === "/dashboard") {
