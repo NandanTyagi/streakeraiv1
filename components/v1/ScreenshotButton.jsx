@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import html2canvas from "html2canvas";
 import ThreeDButton from "../ui/button/3DButton";
@@ -6,16 +7,16 @@ import ThreeDButton from "../ui/button/3DButton";
 const ScreenshotButton = () => {
   const [screenshotUrl, setScreenshotUrl] = useState("");
 
-  // Capture the entire document body
+  // 1. Capture the entire document body, scaled for higher resolution
   const captureViewport = async () => {
     const canvas = await html2canvas(document.body, {
-      scale: window.devicePixelRatio,
+      scale: window.devicePixelRatio || 1,
       useCORS: true,
     });
     return canvas;
   };
 
-  // Crop a canvas: crop area defined by (cropX, cropY, cropWidth, cropHeight)
+  // 2. Crop a canvas to a given region
   const cropCanvas = (sourceCanvas, cropX, cropY, cropWidth, cropHeight) => {
     const croppedCanvas = document.createElement("canvas");
     croppedCanvas.width = cropWidth;
@@ -24,20 +25,20 @@ const ScreenshotButton = () => {
 
     ctx.drawImage(
       sourceCanvas,
-      cropX,       // source x
-      cropY,       // source y
-      cropWidth,   // source width (the area we want to crop)
-      cropHeight,  // source height (original height minus 220px)
-      0,           // destination x
-      0,           // destination y
-      cropWidth,   // destination width
-      cropHeight   // destination height
+      cropX,         // source x
+      cropY,         // source y
+      cropWidth,     // source width
+      cropHeight,    // source height
+      0,             // destination x
+      0,             // destination y
+      cropWidth,     // destination width
+      cropHeight     // destination height
     );
 
     return croppedCanvas;
   };
 
-  // Resize a canvas to a specific target resolution (408x800)
+  // 3. Resize a canvas to a specific target resolution (e.g., 480×800)
   const resizeCanvas = (sourceCanvas, targetWidth, targetHeight) => {
     const resizedCanvas = document.createElement("canvas");
     resizedCanvas.width = targetWidth;
@@ -61,25 +62,38 @@ const ScreenshotButton = () => {
 
   const handleSaveScreenshot = async () => {
     try {
-      // 1. Capture the full viewport
+      // A) Capture the full page
       const fullCanvas = await captureViewport();
 
-      // 2. Crop the canvas: remove 220px from the height
+      // B) Find the footer's top position (if it exists)
+      let scaledFooterTop = fullCanvas.height; // default: no footer, capture entire canvas
+      const footerElement = document.getElementById("footer");
+      if (footerElement) {
+        // getBoundingClientRect().top + scrollY = the footer’s top in page coordinates
+        const rect = footerElement.getBoundingClientRect();
+        const footerTop = rect.top + window.scrollY;
+
+        // Multiply by the same scale we used for the screenshot
+        const scale = window.devicePixelRatio || 1;
+        scaledFooterTop = Math.floor(footerTop * scale);
+      }
+
+      // C) Crop the canvas from the top to the footer’s top
       const cropX = 0;
       const cropY = 0;
       const cropWidth = fullCanvas.width;
-      const cropHeight = fullCanvas.height - 220; // your custom height adjustment
+      const cropHeight = scaledFooterTop; 
       const croppedCanvas = cropCanvas(fullCanvas, cropX, cropY, cropWidth, cropHeight);
 
-      // 3. Resize the cropped canvas to exactly 408×800 pixels
+      // D) Resize to exactly 480×800 (optional)
       const targetWidth = 480;
       const targetHeight = 800;
       const finalCanvas = resizeCanvas(croppedCanvas, targetWidth, targetHeight);
 
-      // 4. Convert the final canvas to an image data URL
+      // E) Convert the final canvas to a data URL
       const imageData = finalCanvas.toDataURL("image/png");
 
-      // 5. Post the image data to your API route
+      // F) Upload the screenshot to your API route
       const res = await fetch("/api/v2/upload-screenshot", {
         method: "POST",
         headers: {
@@ -99,12 +113,6 @@ const ScreenshotButton = () => {
   return (
     <div>
       <ThreeDButton onClick={handleSaveScreenshot}>Send to display</ThreeDButton>
-      {/* {screenshotUrl && (
-        <div>
-          <h3>Screenshot Saved:</h3>
-          <img src={screenshotUrl} alt="Screenshot" />
-        </div>
-      )} */}
     </div>
   );
 };

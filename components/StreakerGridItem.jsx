@@ -91,17 +91,17 @@ const StreakerGridItem = ({
     if (todaysDate == rowNr) {
       setIsTodayLocal(true);
     }
-    // if (todayRef.current !== null) {
-    //   todayRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-    // }
+    if (todayRef.current !== null) {
+      todayRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
 
     if (parseInt(todaysDate) + 2 === parseInt(rowNr)) {
       setIsTwoDaysFromTodayLocal(true);
     }
 
-    if (twoDaysFromTodayRef.current !== null) {
-      twoDaysFromTodayRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-    }
+    // if (twoDaysFromTodayRef.current !== null) {
+    //   twoDaysFromTodayRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    // }
   }, [isTodayLocal, rowNr, todaysDate, isTwoDaysFromTodayLocal]);
 
   const handelCells = (cellProps) => {
