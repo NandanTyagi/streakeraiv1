@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import html2canvas from "html2canvas";
 import ThreeDButton from "../ui/button/3DButton";
@@ -7,12 +6,16 @@ import ThreeDButton from "../ui/button/3DButton";
 const ScreenshotButton = () => {
   const [screenshotUrl, setScreenshotUrl] = useState("");
 
+  // Capture the entire document body
   const captureViewport = async () => {
-    // Capture the entire document body
-    const canvas = await html2canvas(document.body, {scale: window.devicePixelRatio, useCORS: true });
+    const canvas = await html2canvas(document.body, {
+      scale: window.devicePixelRatio,
+      useCORS: true,
+    });
     return canvas;
   };
 
+  // Crop a canvas: crop area defined by (cropX, cropY, cropWidth, cropHeight)
   const cropCanvas = (sourceCanvas, cropX, cropY, cropWidth, cropHeight) => {
     const croppedCanvas = document.createElement("canvas");
     croppedCanvas.width = cropWidth;
@@ -21,12 +24,12 @@ const ScreenshotButton = () => {
 
     ctx.drawImage(
       sourceCanvas,
-      cropX,       // x start in source
-      cropY,       // y start in source
-      cropWidth,   // width to crop
-      cropHeight,  // height to crop
-      0,           // x in destination
-      0,           // y in destination
+      cropX,       // source x
+      cropY,       // source y
+      cropWidth,   // source width (the area we want to crop)
+      cropHeight,  // source height (original height minus 220px)
+      0,           // destination x
+      0,           // destination y
       cropWidth,   // destination width
       cropHeight   // destination height
     );
@@ -34,24 +37,49 @@ const ScreenshotButton = () => {
     return croppedCanvas;
   };
 
+  // Resize a canvas to a specific target resolution (408x800)
+  const resizeCanvas = (sourceCanvas, targetWidth, targetHeight) => {
+    const resizedCanvas = document.createElement("canvas");
+    resizedCanvas.width = targetWidth;
+    resizedCanvas.height = targetHeight;
+    const ctx = resizedCanvas.getContext("2d");
+
+    ctx.drawImage(
+      sourceCanvas,
+      0,
+      0,
+      sourceCanvas.width,
+      sourceCanvas.height,
+      0,
+      0,
+      targetWidth,
+      targetHeight
+    );
+
+    return resizedCanvas;
+  };
+
   const handleSaveScreenshot = async () => {
     try {
       // 1. Capture the full viewport
       const fullCanvas = await captureViewport();
-  
-      // 2. Convert percentage values to pixels
+
+      // 2. Crop the canvas: remove 220px from the height
       const cropX = 0;
       const cropY = 0;
-      const cropWidth = fullCanvas.width;        
-      const cropHeight = fullCanvas.height - 220;   
-  
-      // 3. Crop the captured canvas
+      const cropWidth = fullCanvas.width;
+      const cropHeight = fullCanvas.height - 220; // your custom height adjustment
       const croppedCanvas = cropCanvas(fullCanvas, cropX, cropY, cropWidth, cropHeight);
-  
-      // 4. Convert cropped canvas to image data URL
-      const imageData = croppedCanvas.toDataURL("image/png");
-  
-      // 5. Post the image data to the API route
+
+      // 3. Resize the cropped canvas to exactly 408×800 pixels
+      const targetWidth = 408;
+      const targetHeight = 800;
+      const finalCanvas = resizeCanvas(croppedCanvas, targetWidth, targetHeight);
+
+      // 4. Convert the final canvas to an image data URL
+      const imageData = finalCanvas.toDataURL("image/png");
+
+      // 5. Post the image data to your API route
       const res = await fetch("/api/v2/upload-screenshot", {
         method: "POST",
         headers: {
@@ -59,7 +87,7 @@ const ScreenshotButton = () => {
         },
         body: JSON.stringify({ image: imageData }),
       });
-  
+
       const data = await res.json();
       setScreenshotUrl(data.url);
       console.log("Screenshot URL:", data.url);
@@ -67,13 +95,19 @@ const ScreenshotButton = () => {
       console.error("Error capturing or uploading screenshot:", error);
     }
   };
-  
 
   return (
     <div>
       <ThreeDButton onClick={handleSaveScreenshot}>Send to display</ThreeDButton>
+      {/* {screenshotUrl && (
+        <div>
+          <h3>Screenshot Saved:</h3>
+          <img src={screenshotUrl} alt="Screenshot" />
+        </div>
+      )} */}
     </div>
   );
 };
 
 export default ScreenshotButton;
+
