@@ -72,7 +72,7 @@ const ScreenshotButton = () => {
       const croppedCanvas = cropCanvas(fullCanvas, cropX, cropY, cropWidth, cropHeight);
 
       // 3. Resize the cropped canvas to exactly 408×800 pixels
-      const targetWidth = 408;
+      const targetWidth = 480;
       const targetHeight = 800;
       const finalCanvas = resizeCanvas(croppedCanvas, targetWidth, targetHeight);
 
