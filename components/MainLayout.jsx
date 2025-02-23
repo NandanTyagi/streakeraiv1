@@ -3,9 +3,12 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { usePathname } from "next/navigation";
 import { Toaster } from "./ui/toaster";
+import ScreenshotButton from "./v1/ScreenshotButton";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 export default function MainLayout({ children }) {
   const pathname = usePathname();
+  const { isAuthenticated , user } = useKindeBrowserClient();
 
   if (pathname === "/") {
     return (
@@ -52,7 +55,7 @@ export default function MainLayout({ children }) {
           <Header />
           {children}
         </div>
-        <footer className="flex flex-col justify-center w-full items-center sm:items-end sm:pr-6 z-[0] absolute bottom-0 max-w-[1480px] bg-[#EBEBEB]"></footer>
+        <footer className="flex flex-col justify-center w-full items-center sm:items-end sm:pr-6 z-[0] absolute bottom-0 max-w-[1480px] bg-[#EBEBEB] sm:hidden">{user?.email === 'nandantyagi@gmail.com' && <ScreenshotButton/>}</footer>
       </div>
     );
   } else if (pathname === "/dashboard") {

@@ -57,6 +57,8 @@ const StreakerGridItem = ({
   const [clickTimeout, setClickTimeout] = useState(null);
   const [todaysDate, settodaysDate] = useState(dayjs().format("D"));
   const [isTodayLocal, setIsTodayLocal] = useState(isToday);
+  // const [twoDaysFromTodayLocal, setTwoDaysFromTodayLocal] = useState(todaysDate + 2);
+  const [isTwoDaysFromTodayLocal, setIsTwoDaysFromTodayLocal] = useState(parseInt(todaysDate) + 2 === parseInt(rowNr));
   const [labelLocal, setLabelLocal] = useState(label);
   const [timer, setTimer] = useState(null);
 
@@ -72,6 +74,7 @@ const StreakerGridItem = ({
   );
 
   const todayRef = useRef(null);
+  const twoDaysFromTodayRef = useRef(null);
 
   useEffect(() => {
     if (currentCellIndexLocal == null || currentCellIndexLocal < 0) return;
@@ -88,10 +91,18 @@ const StreakerGridItem = ({
     if (todaysDate == rowNr) {
       setIsTodayLocal(true);
     }
-    if (todayRef.current !== null) {
-      todayRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    // if (todayRef.current !== null) {
+    //   todayRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    // }
+
+    if (parseInt(todaysDate) + 2 === parseInt(rowNr)) {
+      setIsTwoDaysFromTodayLocal(true);
     }
-  }, [isTodayLocal, rowNr, todaysDate]);
+
+    if (twoDaysFromTodayRef.current !== null) {
+      twoDaysFromTodayRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  }, [isTodayLocal, rowNr, todaysDate, isTwoDaysFromTodayLocal]);
 
   const handelCells = (cellProps) => {
     setIsCellLoading(true);
@@ -342,7 +353,7 @@ const StreakerGridItem = ({
     <>
       {type === "nr" ? (
         <div
-          ref={isTodayLocal ? todayRef : null}
+          ref={isTodayLocal ? todayRef : isTwoDaysFromTodayLocal ? twoDaysFromTodayRef : null}
           className={`${styles.streakerGridItem} ${styles.streakerGridItemNoBg} flex flex-col`}
           onClick={handleClick}
         >

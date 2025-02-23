@@ -29,6 +29,7 @@ const Header = () => {
             <Image
               src="/streaker-logo.png"
               alt="logo"
+              unoptimized
               priority
               width={60}
               height={60}
@@ -55,6 +56,7 @@ const Header = () => {
                     className="rounded-full w-8 h-8 mr-[32px]"
                     src={user.picture}
                     alt="profile-pic"
+                    unoptimized
                     priority
                     width={30}
                     height={30}
