@@ -1,11 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import html2canvas from "html2canvas";
 import ThreeDButton from "../ui/button/3DButton";
 
 const ScreenshotButton = () => {
   const [screenshotUrl, setScreenshotUrl] = useState("");
+
+  /**
+   * @typedef {"interactive-color" | "snapshot-eink"} RenderMode
+   */
+  const setRenderMode = (mode) => {
+    const next =
+      mode === "snapshot-eink" ? "eink" : "interactive";
+    document.documentElement.dataset.renderMode = next;
+  };
+
+  const waitForFontsAndLayout = async () => {
+    if (document.fonts && document.fonts.ready) {
+      await document.fonts.ready;
+    }
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+  };
+
+  useEffect(() => {
+    setRenderMode("interactive-color");
+  }, []);
 
   // 1. Capture the entire document body, scaled for higher resolution
   const captureViewport = async () => {
@@ -62,6 +83,9 @@ const ScreenshotButton = () => {
 
   const handleSaveScreenshot = async () => {
     try {
+      setRenderMode("snapshot-eink");
+      await waitForFontsAndLayout();
+
       // A) Capture the full page
       const fullCanvas = await captureViewport();
 
@@ -93,6 +117,8 @@ const ScreenshotButton = () => {
       // E) Convert the final canvas to a data URL
       const imageData = finalCanvas.toDataURL("image/png");
 
+      setRenderMode("interactive-color");
+
       // F) Upload the screenshot to your API route
       const res = await fetch("/api/v2/upload-screenshot", {
         method: "POST",
@@ -107,6 +133,8 @@ const ScreenshotButton = () => {
       console.log("Screenshot URL:", data.url);
     } catch (error) {
       console.error("Error capturing or uploading screenshot:", error);
+    } finally {
+      setRenderMode("interactive-color");
     }
   };
 

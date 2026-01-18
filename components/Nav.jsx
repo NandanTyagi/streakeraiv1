@@ -210,7 +210,7 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
     );
   } else {
     return (
-      <div className="flex justify-center items-center bg-[#EBEBEB] text-md font-semibold cursor-pointer relative">
+      <div className="panel-header flex justify-center items-center bg-[#EBEBEB] text-md font-semibold cursor-pointer relative">
          {isHistory && <Link href="/history" className="absolute left-[12px] top-[25%] flex items-center justify-center gap-1 ">
         <ArrowLeftIcon size={24} className="w-4 h-4 sm:w-6 sm:h-4 " />
         <p className="text-sm font-semibold hidden sm:block">Back</p>

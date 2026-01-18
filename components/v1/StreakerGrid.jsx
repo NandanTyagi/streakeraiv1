@@ -52,10 +52,10 @@ const StreakerGrid = () => {
         <Loading />
       ) : (
         <>
-          <section className={`${styles.streakerGrid}`}>
+          <section className={`${styles.streakerGrid}`} data-role="streaker-grid">
             <StreakerGridHeaders />
           </section>
-          <section className={styles.streakerGrid}>
+          <section className={styles.streakerGrid} data-role="streaker-grid">
             {Array.from({ length: days }).map((_, dayIndex) => {
               const today = dayjs().format("D");
 

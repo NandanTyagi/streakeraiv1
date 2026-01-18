@@ -18,6 +18,53 @@
   --m-footer-height: auto;
 }
 
+html[data-render-mode="interactive"] {
+  --grid-gutter: 16px;
+  --grid-gap: 8px;
+  --grid-row-height: 40px;
+  --grid-bg: #ffffff;
+  --grid-cell-bg: #ebebeb;
+  --grid-cell-empty-bg: #ffffff;
+  --grid-cell-done-bg: rgba(0, 255, 87, 0.42);
+  --grid-cell-missed-bg: rgba(255, 23, 0, 0.52);
+  --grid-cell-border: 0 solid transparent;
+  --grid-cell-hover-border: #000000;
+  --grid-cell-today-border: 4px solid #000000;
+  --grid-cell-message: #530da2;
+  --grid-cell-radius: 4px;
+  --grid-cell-opacity: 0.6;
+  --panel-bg: #ebebeb;
+}
+
+html[data-render-mode="eink"] {
+  --grid-gutter: 20px;
+  --grid-gap: 10px;
+  --grid-row-height: 46px;
+  --grid-bg: #f5f5f2;
+  --grid-cell-bg: #f1f1ef;
+  --grid-cell-empty-bg: #f6f6f4;
+  --grid-cell-done-bg: #2b2b2b;
+  --grid-cell-missed-bg: #f6f6f4;
+  --grid-cell-border: 2px solid #1f1f1f;
+  --grid-cell-hover-border: #1f1f1f;
+  --grid-cell-today-border: 3px solid #1a1a1a;
+  --grid-cell-message: #1a1a1a;
+  --grid-cell-radius: 6px;
+  --grid-cell-opacity: 1;
+  --panel-bg: #efefec;
+  --eink-paper: #f5f5f2;
+  --eink-ink: #1a1a1a;
+  --eink-border: #1f1f1f;
+  --eink-line: #1f1f1f;
+  --eink-hatch: #dcdcd7;
+  --eink-cell-bg: #f1f1ef;
+  --eink-rail-bg: #eeeeea;
+  --eink-done-fill: #2b2b2b;
+  --eink-button-bg: #f0f0ed;
+  --eink-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --eink-sans: "Trebuchet MS", "Gill Sans", Verdana, sans-serif;
+}
+
 body {
   background-color: white;
   min-height: 100dvh;
@@ -105,6 +152,85 @@ footer {
   background-color: white;
   /* background: transparent;
   opacity: 0; */
+}
+
+html[data-render-mode="eink"] body {
+  background-color: var(--eink-paper);
+  background-image:
+    linear-gradient(0deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02)),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.03) 0 1px, transparent 1px 8px);
+  color: var(--eink-ink);
+  font-family: var(--eink-serif);
+}
+
+html[data-render-mode="eink"] .main-layout-container {
+  background: var(--eink-paper) !important;
+}
+
+html[data-render-mode="eink"] .main-layout {
+  background-color: var(--eink-paper);
+}
+
+html[data-render-mode="eink"] .panel-header,
+html[data-render-mode="eink"] footer {
+  background-color: var(--panel-bg) !important;
+  border-bottom: 2px solid var(--eink-border);
+}
+
+html[data-render-mode="eink"] .panel-header .Button.violet span {
+  font-family: var(--eink-serif);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+html[data-render-mode="eink"] [data-role="streaker-grid"] {
+  font-family: var(--eink-sans);
+}
+
+html[data-render-mode="eink"] [data-role="streaker-grid"] .Button.violet span:first-child {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-family: var(--eink-sans);
+  font-weight: 700;
+}
+
+html[data-render-mode="eink"] [data-role="streaker-grid"] .Button.violet span:last-child {
+  font-family: var(--eink-serif);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+html[data-render-mode="eink"] .panel-header button,
+html[data-render-mode="eink"] footer button {
+  background: var(--eink-button-bg) !important;
+  background-image: none !important;
+  border: 2px solid var(--eink-border) !important;
+  box-shadow: none !important;
+  color: var(--eink-ink) !important;
+}
+
+html[data-render-mode="eink"] .panel-header button svg,
+html[data-render-mode="eink"] footer button svg {
+  fill: var(--eink-ink) !important;
+  stroke: var(--eink-ink) !important;
+}
+
+html[data-render-mode="eink"] .DialogOverlay,
+html[data-render-mode="eink"] .DialogContent {
+  animation: none !important;
+}
+
+html[data-render-mode="eink"] *,
+html[data-render-mode="eink"] *::before,
+html[data-render-mode="eink"] *::after {
+  animation: none !important;
+  transition: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+html[data-render-mode="eink"] img[src*="spinner"] {
+  display: none;
 }
 
 .spin {

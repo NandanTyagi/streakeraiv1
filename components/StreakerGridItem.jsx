@@ -373,8 +373,8 @@ const StreakerGridItem = ({
           onTouchStart={handleMouseDown}
           onTouchEnd={handleMouseUp}
           id={`${rowNr}-${colNr}`}
-          data-is-clear={isClear ? "true" : "false"}
-          data-is-done={isDone ? "true" : "false"}
+          data-is-clear={isClearLocal ? "true" : "false"}
+          data-is-done={isDoneLocal ? "true" : "false"}
         ></button>
       ) : (
         <button
@@ -391,8 +391,8 @@ const StreakerGridItem = ({
           onTouchStart={handleMouseDown}
           onTouchEnd={handleMouseUp}
           id={`${rowNr}-${colNr}`}
-          data-is-clear={isClear ? "true" : "false"}
-          data-is-done={isDone ? "true" : "false"}
+          data-is-clear={isClearLocal ? "true" : "false"}
+          data-is-done={isDoneLocal ? "true" : "false"}
         >
           {message || messageLocal ? (
             <Image
@@ -475,6 +475,33 @@ const StreakerGridItem = ({
               }}
             />
           )}
+          <svg
+            className={styles.einkCheck}
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M4 12.5l5 5L20 6.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <svg
+            className={styles.einkCross}
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M6 6l12 12M18 6L6 18"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3.2"
+              strokeLinecap="round"
+            />
+          </svg>
         </button>
       )}
 

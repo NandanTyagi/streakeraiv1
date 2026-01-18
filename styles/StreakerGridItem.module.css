@@ -2,18 +2,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ebebeb;
-    opacity: 0.6;
+    background-color: var(--grid-cell-bg);
+    opacity: var(--grid-cell-opacity);
     position: relative;
     cursor: pointer;
     overflow: hidden;
     transition: all 0.3s ease;
-    border-radius: 4px;
+    border-radius: var(--grid-cell-radius);
+    border: var(--grid-cell-border);
 }
 
 .streakerGridItem:hover {
     opacity: 1;
-    border: 2px solid black;
+    border: 2px solid var(--grid-cell-hover-border);
 }
 
 .streakerGridItem:active {
@@ -21,26 +22,101 @@
 }
 
 .streakerGridItemNoBg {
-background-color: #fff;
+    background-color: var(--grid-cell-empty-bg);
 }
 
 .streakerGridItemDoneTrue {
     opacity: 1;
-    background: rgba(0, 255, 87, 0.42);
+    background: var(--grid-cell-done-bg);
 }
 
 .streakerGridItemDoneFalse {
     opacity: 1;
-    background: rgba(255, 23, 0, 0.52);;
+    background: var(--grid-cell-missed-bg);
 }
 
 .streakerGridItemHasMessage {
-    color: #530DA2;
+    color: var(--grid-cell-message);
     position: absolute;
     top: -8px;
     right: 0;
 }
 
 .streakerGridItemToday {
-    border: 4px solid black;
+    border: var(--grid-cell-today-border);
+}
+
+:global([data-render-mode="eink"]) .streakerGridItem {
+    background-color: var(--eink-cell-bg);
+    border: 2px solid var(--eink-border);
+    border-radius: 6px;
+    opacity: 1;
+    transition: none;
+    padding: 6px;
+}
+
+:global([data-render-mode="eink"]) .streakerGridItem:hover {
+    border-color: var(--eink-border);
+}
+
+:global([data-render-mode="eink"]) .streakerGridItemNoBg {
+    background-color: var(--eink-rail-bg);
+    border: 2px solid var(--eink-border);
+}
+
+:global([data-render-mode="eink"]) .streakerGridItemNoBg div {
+    font-family: var(--eink-sans);
+    letter-spacing: 0.08em;
+}
+
+:global([data-render-mode="eink"]) .streakerGridItemToday {
+    border: 3px solid var(--eink-ink);
+}
+
+:global([data-render-mode="eink"]) .streakerGridItem[data-is-clear="true"] {
+    background-image: repeating-linear-gradient(
+        135deg,
+        var(--eink-hatch) 0,
+        var(--eink-hatch) 2px,
+        var(--eink-paper) 2px,
+        var(--eink-paper) 6px
+    );
+}
+
+:global([data-render-mode="eink"]) .streakerGridItem[data-is-done="true"] {
+    background-color: var(--eink-done-fill);
+}
+
+:global([data-render-mode="eink"]) .streakerGridItem[data-is-done="true"]::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    width: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--eink-line);
+    opacity: 0.35;
+}
+
+:global([data-render-mode="eink"]) .streakerGridItem img {
+    display: none;
+}
+
+.einkCheck,
+.einkCross {
+    display: none;
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    color: var(--eink-ink);
+}
+
+:global([data-render-mode="eink"]) .streakerGridItem[data-is-done="true"] .einkCheck {
+    display: block;
+    color: var(--eink-paper);
+}
+
+:global([data-render-mode="eink"]) .streakerGridItem[data-is-done="false"][data-is-clear="false"] .einkCross {
+    display: block;
 }
