@@ -250,7 +250,7 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
             <button
               className={`inline-flex items-center gap-2 border px-3 py-1 rounded-md text-xs sm:text-sm font-semibold ${
                 !isSaved
-                  ? "border-[var(--accent-color)] text-[var(--accent-color)]"
+                  ? "border-[hsl(var(--destructive))] text-[hsl(var(--destructive))]"
                   : "border-[var(--ink)] text-[var(--ink)]"
               } cursor-pointer hover:opacity-80`}
               onClick={handelCtxMenu}

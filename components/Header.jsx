@@ -22,19 +22,19 @@ const Header = () => {
     // Header with a blurred background
 
     <header
-      className="flex items-center justify-between px-4 bg-[var(--paper-veil)] border-b border-[var(--surface-border)] relative py-2"
-      style={{ height: "var(--header-height)" }}
+      className="flex items-center justify-between px-4 bg-[var(--paper-veil)] border-b border-[var(--surface-border)] relative py-3"
+      style={{ minHeight: "var(--header-height)" }}
     >
       <a href="/">
         <div className="flex items-center gap-1">
-          <div className="relative rounded-full overflow-hidden border border-[var(--surface-border)] bg-[var(--surface)] cursor-pointer hover:opacity-80">
+          <div className="relative rounded-full overflow-hidden border border-[var(--surface-border)] bg-[var(--surface)] cursor-pointer hover:opacity-80 w-[30px] h-[30px]">
             <Image
               src="/streaker-logo.png"
               alt="logo"
               unoptimized
               priority
-              width={42}
-              height={42}
+              width={30}
+              height={30}
             />
           </div>
           <div className="text-[1.4rem] sm:text-[1.6rem] flex font-semibold text-[var(--ink)]">
@@ -82,7 +82,7 @@ const Header = () => {
       </div>
       {isMenuOpen && (
         <div
-          className={`absolute inset-0 z-50 flex justify-center items-center bg-[var(--paper)] ${
+          className={`fixed left-0 right-0 z-50 flex justify-center items-center bg-[var(--paper)] ${
             isAnimating ? "animate-fadeOut" : "animate-fadeIn"
           }`}
           style={{

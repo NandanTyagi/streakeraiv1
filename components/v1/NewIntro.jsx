@@ -10,23 +10,21 @@ import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 const NewIntro = () => {
   const { user } = useKindeBrowserClient();
   return (
-    <div className="min-h-screen flex flex-col">
-      <section>
+    <div className="min-h-screen flex flex-col relative">
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.62) 45%, rgba(0,0,0,0.58) 100%)",
+        }}
+      />
+      <section className="relative z-10">
         <Hero />
       </section>
-      <section className="flex flex-1 items-center justify-center px-6 sm:px-10 py-16">
-        <div className="w-full max-w-2xl space-y-6">
-          <p className="text-sm uppercase tracking-[0.28em] text-[var(--ink-soft)]">
-            Begin here
-          </p>
-          <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--ink)]">
-            Name the practice. Keep the record.
-          </h2>
-          <p className="text-base text-[var(--ink-soft)] leading-relaxed">
-            Streaker offers a calm ledger. It holds the days as they pass, without
-            reward or reprimand.
-          </p>
-          <div className="flex flex-col gap-3">
+      <section className="relative z-10 flex flex-1 items-start justify-center px-6 sm:px-0 py-0">
+        <div className="w-full max-w-2xl text-[#f7f4ee]">
+          <div className="mt-6 flex flex-col gap-3">
             {user && (
               <StandardButton
                 text={`Return, ${user.given_name}`}
@@ -44,7 +42,7 @@ const NewIntro = () => {
                 </LoginLink>
               </>
             )}
-            <StandardButton text="Enter the ledger" type="pill" pushTo="/panel" />
+            <StandardButton text="Enter the ledger" type="pill" pushTo="/about" />
             <DownloadApp />
           </div>
         </div>

@@ -10,13 +10,20 @@
     transition: border-color 0.2s ease, background-color 0.2s ease;
     border-radius: var(--grid-cell-radius);
     border: var(--grid-cell-border);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .streakerGridItem:hover {
-    border-color: var(--grid-cell-hover-border);
-    background-color: var(--grid-cell-empty-bg);
+    opacity: var(--grid-cell-opacity);
+    border-color: inherit;
+    background-color: inherit;
 }
 
+.streakerGridItem:focus,
+.streakerGridItem:focus-visible,
+.streakerGridItem:active {
+    outline: none;
+}
 .streakerGridItemNoBg {
     background-color: var(--grid-cell-empty-bg);
 }
@@ -57,10 +64,6 @@
     opacity: 1;
     transition: none;
     padding: 6px;
-}
-
-:global([data-render-mode="snapshot-eink"]) .streakerGridItem:hover {
-    border-color: var(--eink-border);
 }
 
 :global([data-render-mode="snapshot-eink"]) .streakerGridItemNoBg {

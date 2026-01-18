@@ -81,12 +81,19 @@ const ScrollRig = ({
   const baseY = 6.5;
 
   useFrame(() => {
+    const t = performance.now() * 0.0001;
+    const driftX = Math.sin(t * 0.7) * 0.35;
+    const driftY = Math.sin(t * 0.55) * 0.15;
     const targetZ = baseZ - progress * travel;
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.06);
-    camera.position.x = THREE.MathUtils.lerp(camera.position.x, pointer.x * 0.6, 0.04);
+    camera.position.x = THREE.MathUtils.lerp(
+      camera.position.x,
+      pointer.x * 0.6 + driftX,
+      0.04
+    );
     camera.position.y = THREE.MathUtils.lerp(
       camera.position.y,
-      baseY + pointer.y * 0.25,
+      baseY + pointer.y * 0.25 + driftY,
       0.04
     );
     camera.lookAt(0, 0, camera.position.z - 4);

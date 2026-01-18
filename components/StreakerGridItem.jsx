@@ -54,7 +54,6 @@ const StreakerGridItem = ({
   const [isDoneLocal, setIsDoneLocal] = useState(isDone);
   const [isClearLocal, setIsClearLocal] = useState(isClear);
   const [messageLocal, setMessageLocal] = useState(message);
-  const [clickTimeout, setClickTimeout] = useState(null);
   const [todaysDate, settodaysDate] = useState(dayjs().format("D"));
   const [isTodayLocal, setIsTodayLocal] = useState(isToday);
   // const [twoDaysFromTodayLocal, setTwoDaysFromTodayLocal] = useState(todaysDate + 2);
@@ -219,6 +218,7 @@ const StreakerGridItem = ({
   };
 
   const handleClick = (e) => {
+    if (e?.detail && e.detail > 1) return;
     if (checkIfCurrentRowIsAfterToday()) return;
 
     if (isHistory) return;
@@ -226,56 +226,42 @@ const StreakerGridItem = ({
       setIsSaved(false);
     }
 
-    // Handle double-click detection
-    if (clickTimeout) {
-      clearTimeout(clickTimeout);
-      setClickTimeout(null);
-      handleDoubleClick();
+    // Notify parent of current cell index
+    if (
+      onCellClick &&
+      currentCellIndexLocal != null &&
+      currentCellIndexLocal >= 0
+    ) {
+      onCellClick(currentCellIndexLocal);
+    }
+
+    setIsDoneLocal(!isDoneLocal);
+    const cellExists = board?.cells?.[currentCellIndexLocal];
+    if (
+      cellExists &&
+      board.cells[currentCellIndexLocal].id === `${rowNr}-${colNr}`
+    ) {
+      setIsClearLocal(false);
+      const updatedCell = {
+        ...board.cells[currentCellIndexLocal],
+        isDone: !isDoneLocal,
+        isClear: false,
+        label: labelLocal,
+      };
+      handelCells(updatedCell);
     } else {
-      // Start a timeout for single-click
-      const newTimeout = setTimeout(() => {
-        // Single-click logic
+      setIsClearLocal(false);
 
-        // Notify parent of current cell index
-        if (
-          onCellClick &&
-          currentCellIndexLocal != null &&
-          currentCellIndexLocal >= 0
-        ) {
-          onCellClick(currentCellIndexLocal);
-        }
-
-        setIsDoneLocal(!isDoneLocal);
-        const cellExists = board?.cells?.[currentCellIndexLocal];
-        if (
-          cellExists &&
-          board.cells[currentCellIndexLocal].id === `${rowNr}-${colNr}`
-        ) {
-          setIsClearLocal(false);
-          const updatedCell = {
-            ...board.cells[currentCellIndexLocal],
-            isDone: !isDoneLocal,
-            isClear: false,
-            label: labelLocal,
-          };
-          handelCells(updatedCell);
-        } else {
-          setIsClearLocal(false);
-
-          const newCell = {
-            id: `${rowNr}-${colNr}`,
-            boardId: board?.boardId,
-            rowNr: rowNr,
-            colNr: colNr,
-            isDone: !isDoneLocal,
-            isClear: false,
-            label: labelLocal,
-          };
-          handelCells(newCell);
-        }
-        setClickTimeout(null);
-      }, 400);
-      setClickTimeout(newTimeout);
+      const newCell = {
+        id: `${rowNr}-${colNr}`,
+        boardId: board?.boardId,
+        rowNr: rowNr,
+        colNr: colNr,
+        isDone: !isDoneLocal,
+        isClear: false,
+        label: labelLocal,
+      };
+      handelCells(newCell);
     }
   };
 
