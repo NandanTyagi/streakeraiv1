@@ -288,7 +288,7 @@ const Dashboard = () => {
   }) => (
     <motion.div
       key={col.colNr}
-      className="p-4 bg-white rounded-lg shadow-md hover:shadow-lg transform transition-transform duration-300 flex flex-col justify-center items-center"
+      className="p-4 bg-[var(--paper-veil)] border border-[var(--surface-border)] rounded-lg flex flex-col justify-center items-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: col.colNr * 0.1 }}
@@ -321,7 +321,7 @@ const Dashboard = () => {
       <div className="w-full mt-4">
         <Accordion type="single" collapsible className="w-full mb-2">
           <AccordionItem value="charts">
-            <AccordionTrigger className="bg-gradient-to-br from-primary to-[#330594] text-white py-2 px-4 rounded-lg focus:outline-none">
+            <AccordionTrigger className="bg-[var(--paper-veil)] border border-[var(--surface-border)] text-[var(--ink)] py-2 px-4 rounded-lg focus:outline-none">
               Charts
             </AccordionTrigger>
             <AccordionContent className="mt-4 bg-gray-100 rounded-lg p-4">
@@ -351,7 +351,7 @@ const Dashboard = () => {
         </Accordion>
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="notes">
-            <AccordionTrigger className="bg-gradient-to-br from-primary to-[#330594] text-white py-2 px-4 rounded-lg focus:outline-none">
+            <AccordionTrigger className="bg-[var(--paper-veil)] border border-[var(--surface-border)] text-[var(--ink)] py-2 px-4 rounded-lg focus:outline-none">
               Notes
             </AccordionTrigger>
             <AccordionContent className="mt-4 bg-gray-100 rounded-lg p-4">
@@ -377,7 +377,8 @@ const Dashboard = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-100 p-8 pb-20 relative"
+      className="min-h-screen bg-[var(--paper)] p-8 pb-20 relative"
+      data-scroll-root
     >
       <ArrowLeftIcon
         size={24}

@@ -6,13 +6,13 @@ import { CSPostHogProvider } from "@/app/providers";
 export const metadata = {
   metadataBase: new URL("https://www.streaker.ai"),
   title: "Streaker.ai",
-  description: "Track the things that matter to you!",
+  description: "A discipline ledger that makes continuity visible.",
   openGraph: {
     images: "/opengraph-image.png",
     url: "https://www.streaker.ai/",
     type: "website",
   },
-  themeColor: "#330594",
+  themeColor: "#6a6b5f",
   alternates: {
     canonical: "/",
   },

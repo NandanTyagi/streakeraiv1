@@ -5,6 +5,8 @@ import { AIGroundingContext } from "../../application/projections/types";
 export class OpenAIAdapter implements AIProvider {
   private readonly client: OpenAI;
   private readonly model: string;
+  private readonly reflectionSystemPrompt =
+    "You are a quiet witness in a discipline ledger. Use reflective, observational language. No coaching, no praise, no commands. Use short, grounded sentences. Prefer phrases like 'I notice' or 'There was' and avoid exclamation marks.";
 
   constructor(apiKey: string, model = "gpt-4o-mini") {
     this.client = new OpenAI({ apiKey });
@@ -24,7 +26,10 @@ export class OpenAIAdapter implements AIProvider {
     const start = Date.now();
     const completion = await this.client.chat.completions.create({
       model: this.model,
-      messages: [{ role: "user", content: prompt }],
+      messages: [
+        { role: "system", content: this.reflectionSystemPrompt },
+        { role: "user", content: prompt },
+      ],
     });
     const end = Date.now();
 

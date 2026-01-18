@@ -48,10 +48,9 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
       initial="hidden"
       animate={controls}
       variants={{
-        hidden: { opacity: 0, y: 20 },
+        hidden: { opacity: 0 },
         visible: {
           opacity: 1,
-          y: 0,
           transition: { delay: index * 0.1 },
         },
       }}

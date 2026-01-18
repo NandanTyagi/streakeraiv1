@@ -6,7 +6,6 @@ import DialogButton from "@/components/ui/Dialog";
 import { useState, useContext, useEffect, use } from "react";
 import { AppContext } from "@/context/appContext";
 import savePanelToDb from "@/utils/v2/savePanelToDb";
-import ThreeDButton from "@/components/ui/button/3DButton";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
@@ -56,15 +55,15 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
     const hasSearchParams = searchParams.has("headerNames");
     if (isSaved) {
       toast({
-        title: "No changes to save",
+        title: "Nothing new to save",
       });
       return;
     }
     e.preventDefault();
 
     openConfirmDialog({
-      title: "Save Changes?",
-      description: "Do you want to save your current changes?",
+      title: "Save to the ledger?",
+      description: "Write the current marks to the record?",
       onConfirm: async () => {
         // Move the "save" logic into onConfirm
         if (!board) return;
@@ -72,8 +71,8 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
         if (!user) {
           // Old: alert("Not saved! Please login to save changes.");
           toast({
-            title: "Not saved!",
-            description: "Please login to save changes.",
+            title: "Not saved",
+            description: "Sign in to preserve the ledger.",
             variant: "destructive",
           });
           setIsSaved(true);
@@ -92,7 +91,7 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
           return;
         }
         toast({
-          title: "All changes saved!",
+          title: "Saved",
           variant: "success",
         });
         setIsSaved(true);
@@ -128,12 +127,12 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
     e.preventDefault();
 
     if (!user) {
-      alert("Please log in to clear and save your panel.");
+      alert("Please log in to clear and preserve this ledger.");
       return;
     }
 
     const clear = window.confirm(
-      "Are you sure you want to clear the panel? This action cannot be undone."
+      "Clear the ledger for this panel? This cannot be undone."
     );
     if (clear) {
       // Create the updated board with cells cleared
@@ -165,7 +164,7 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
         }, 500);
       } catch (error) {
         console.error("Error saving panel:", error);
-        alert("An error occurred while saving your panel. Please try again.");
+        alert("An error occurred while saving. Please try again.");
       }
     }
   };
@@ -193,7 +192,7 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
   if (isNav) {
     return (
       <nav>
-        <ul className="flex gap-6 sm:gap-20 bg-gradient-to-r from-blue-100 to-purple-100">
+        <ul className="flex gap-6 sm:gap-20 bg-[var(--paper-veil)] border-b border-[var(--surface-border)] px-4 py-2 text-[var(--ink)]">
           <li>
             <Link href={"/generategoals"}>Identify</Link>
           </li>
@@ -210,122 +209,73 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
     );
   } else {
     return (
-      <div className="panel-header flex justify-center items-center bg-[#EBEBEB] text-md font-semibold cursor-pointer relative">
-         {isHistory && <Link href="/history" className="absolute left-[12px] top-[25%] flex items-center justify-center gap-1 ">
-        <ArrowLeftIcon size={24} className="w-4 h-4 sm:w-6 sm:h-4 " />
-        <p className="text-sm font-semibold hidden sm:block">Back</p>
-        </Link>}
-        {user && (
-          <div
-            className={`absolute left-2 md:left-2 ${
-              isHistory ? "hidden" : null
-            }`}
-          >
-            <div className={`hidden md:block`}>
-              <ThreeDButton
-                isSaved={true}
-                text="Clear"
-                onClick={(e) => handleClearPanel(e)}
-                title="Reset panel"
-              >
-                {" "}
-                <span className="w-[80%] font-semibold hidden sm:block">
-                  Reset
-                </span>
-                <span className="w-[20%] flex justify-center items-center">
-                  <X />
-                </span>
-              </ThreeDButton>
-            </div>
+      <div className="panel-header grid grid-cols-[auto,1fr,auto] items-center gap-3 bg-[var(--paper-veil)] text-md font-semibold cursor-pointer border-b border-[var(--surface-border)] px-4 h-10">
+        <div className="flex items-center gap-3">
+          {isHistory && (
+            <Link href="/history" className="flex items-center justify-center gap-1">
+              <ArrowLeftIcon size={16} className="w-4 h-4" />
+              <p className="text-sm font-semibold hidden sm:block">Back</p>
+            </Link>
+          )}
+          {user && !isHistory && (
             <button
-              className={`flex flex-col justify-center items-center md:hidden w-[40px] ${
-                isHistory ? "hidden" : null
-              }`}
+              className="inline-flex items-center gap-2 border border-[var(--ink)] text-[var(--ink)] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold cursor-pointer hover:opacity-80"
               onClick={(e) => handleClearPanel(e)}
+              title="Reset panel"
             >
-              <span className="text-[0.7rem] sm:text-[0.7rem]"><X size={18}/></span>
-              <span className="text-[0.7rem] sm:text-[0.7rem]">Reset</span>
+              Reset
+              <X size={14} />
             </button>
-          </div>
-        )}
-        {!user ? (
-          <RegisterLink>Sign up free to save your board</RegisterLink>
-        ) : (
-          <DialogButton
-            value={dialogValue}
-            onChange={handelClick}
-            isHistory={isHistory}
-          />
-        )}
-        {isHistory && <Link href="/history/dashboard" className="absolute right-[12px] top-[25%] flex items-center justify-center gap-1 ">
-        <DashboardIcon className="w-4 h-4 sm:w-6 sm:h-4 " />
-        <p className="text-sm font-semibold hidden sm:block">Dashboard</p>
-        </Link>}
-        <div className={`absolute right-6 ${isHistory ? "hidden" : null}`}>
-          <div
-            className={`hidden md:block ${
-              !isSaved ? "border-red-500 border-2 rounded-lg" : null
-            }`}
-          >
-            <ThreeDButton
-              isSaved={isSaved}
-              text="Save"
+          )}
+        </div>
+        <div className="flex justify-center">
+          {!user ? (
+            <RegisterLink>Sign up to preserve the ledger</RegisterLink>
+          ) : (
+            <DialogButton
+              value={dialogValue}
+              onChange={handelClick}
+              isHistory={isHistory}
+            />
+          )}
+        </div>
+        <div className="flex items-center justify-end gap-3">
+          {isHistory && (
+            <Link href="/history/dashboard" className="flex items-center justify-center gap-1">
+              <DashboardIcon className="w-4 h-4" />
+              <p className="text-sm font-semibold hidden sm:block">Dashboard</p>
+            </Link>
+          )}
+          {!isHistory && (
+            <button
+              className={`inline-flex items-center gap-2 border px-3 py-1 rounded-md text-xs sm:text-sm font-semibold ${
+                !isSaved
+                  ? "border-[var(--accent-color)] text-[var(--accent-color)]"
+                  : "border-[var(--ink)] text-[var(--ink)]"
+              } cursor-pointer hover:opacity-80`}
               onClick={handelCtxMenu}
-              title="save"
-            >
-              {" "}
-              <span className="w-[80%] font-semibold">Save</span>
-              <span className="w-[20%] flex justify-center items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                  <path d="M48 96V416c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16V170.5c0-4.2-1.7-8.3-4.7-11.3l33.9-33.9c12 12 18.7 28.3 18.7 45.3V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96C0 60.7 28.7 32 64 32H309.5c17 0 33.3 6.7 45.3 18.7l74.5 74.5-33.9 33.9L320.8 84.7c-.3-.3-.5-.5-.8-.8V184c0 13.3-10.7 24-24 24H104c-13.3 0-24-10.7-24-24V80H64c-8.8 0-16 7.2-16 16zm80-16v80H272V80H128zm32 240a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z" />
-                </svg>
-              </span>
-            </ThreeDButton>
-          </div>
-          <button
-            className={`flex flex-col md:hidden w-[14px] pt-1 ${
-              isHistory ? "hidden" : null
-            }`}
-            onClick={handelCtxMenu}
-          >
-            {isSaved ? (
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path d="M48 96V416c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16V170.5c0-4.2-1.7-8.3-4.7-11.3l33.9-33.9c12 12 18.7 28.3 18.7 45.3V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96C0 60.7 28.7 32 64 32H309.5c17 0 33.3 6.7 45.3 18.7l74.5 74.5-33.9 33.9L320.8 84.7c-.3-.3-.5-.5-.8-.8V184c0 13.3-10.7 24-24 24H104c-13.3 0-24-10.7-24-24V80H64c-8.8 0-16 7.2-16 16zm80-16v80H272V80H128zm32 240a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z" />
-              </svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path
-                  d="M48 96V416c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16V170.5c0-4.2-1.7-8.3-4.7-11.3l33.9-33.9c12 12 18.7 28.3 18.7 45.3V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96C0 60.7 28.7 32 64 32H309.5c17 0 33.3 6.7 45.3 18.7l74.5 74.5-33.9 33.9L320.8 84.7c-.3-.3-.5-.5-.8-.8V184c0 13.3-10.7 24-24 24H104c-13.3 0-24-10.7-24-24V80H64c-8.8 0-16 7.2-16 16zm80-16v80H272V80H128zm32 240a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z"
-                  fill="red"
-                />
-              </svg>
-            )}
-
-            <span
-              className={`text-[0.7rem] md:text-[0.7rem] ml-[-6px] mt-[-2px] ${
-                !isSaved ? " text-red-500 font-bold" : "font-light"
-              }`}
+              title="Save"
             >
               Save
-            </span>
-          </button>
+            </button>
+          )}
         </div>
         {confirmOpen && (
           <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-            <DialogContent className="bg-white">
+            <DialogContent className="bg-[var(--paper-veil)] border border-[var(--surface-border)]">
               <DialogHeader>
                 <DialogTitle>{confirmTitle}</DialogTitle>
                 <DialogDescription>{confirmDescription}</DialogDescription>
               </DialogHeader>
               <DialogFooter className="gap-2">
                 <button
-                  className="border px-4 py-2 rounded-md"
+                  className="border border-[var(--surface-border)] px-4 py-2 rounded-md"
                   onClick={() => setConfirmOpen(false)}
                 >
                   Cancel
                 </button>
                 <button
-                  className="bg-gradient-to-br from-primary to-[#330594] text-white px-4 py-2 rounded-md"
+                  className="bg-[var(--accent-color)] text-[var(--paper-veil)] px-4 py-2 rounded-md"
                   onClick={onConfirmCallback}
                 >
                   Confirm

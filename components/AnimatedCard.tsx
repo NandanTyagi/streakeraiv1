@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Card,
@@ -11,7 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Zap } from "lucide-react";
-import { useRouter } from "next/navigation";
 import StandardButton from "./v1/StandardButton";
 
 interface AnimatedCardProps {
@@ -33,41 +31,31 @@ export default function AnimatedCard({
   newWindow,
   tag,
 }: AnimatedCardProps) {
-  const [isHovered, setIsHovered] = useState(false);
-  const router = useRouter();
-
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
       viewport={{ once: true, margin: "-100px" }}
     >
       <Card
-        className="w-full max-w-sm mx-auto overflow-hidden"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        className="w-full max-w-sm mx-auto overflow-hidden border border-[var(--surface-border)] bg-[var(--paper-veil)] shadow-none"
       >
-        <CardHeader className="relative overflow-hidden h-40">
-          <motion.div
-            initial={{ scale: 1.2, opacity: 0 }}
-            animate={{ scale: isHovered ? 1.1 : 1, opacity: 1 }}
-            transition={{ duration: 0.4 }}
-            className="absolute inset-0 bg-gradient-to-br from-[#330594] to-primary"
-          />
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="relative z-[0] flex items-center justify-center h-full"
-          >
-            {icon || <Zap size={48} className="text-white" />}
-          </motion.div>
+        <CardHeader className="flex flex-row items-center gap-3">
+          <div className="h-10 w-10 rounded-full border border-[var(--surface-border)] bg-[var(--surface)] flex items-center justify-center">
+            {icon || <Zap size={20} className="text-[var(--accent-color)]" />}
+          </div>
+          <div>
+            <CardTitle className="text-lg font-semibold text-[var(--ink)]">
+              {title}
+            </CardTitle>
+            {tag && <span className="text-xs text-[var(--ink-soft)]">{tag}</span>}
+          </div>
         </CardHeader>
-        <CardContent className="mt-4">
-          <CardTitle className="text-2xl font-bold">{title}</CardTitle>
-          {tag && ( <span className="text-sm text-gray-300">{tag}</span> )}
-          <CardDescription className="mt-2">{description}</CardDescription>
+        <CardContent className="pt-0">
+          <CardDescription className="text-sm text-[var(--ink-soft)] leading-relaxed">
+            {description}
+          </CardDescription>
         </CardContent>
         <CardFooter>
           <StandardButton

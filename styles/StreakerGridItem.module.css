@@ -7,18 +7,14 @@
     position: relative;
     cursor: pointer;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
     border-radius: var(--grid-cell-radius);
     border: var(--grid-cell-border);
 }
 
 .streakerGridItem:hover {
-    opacity: 1;
-    border: 2px solid var(--grid-cell-hover-border);
-}
-
-.streakerGridItem:active {
-    transform: scale(0.95);
+    border-color: var(--grid-cell-hover-border);
+    background-color: var(--grid-cell-empty-bg);
 }
 
 .streakerGridItemNoBg {
@@ -46,7 +42,15 @@
     border: var(--grid-cell-today-border);
 }
 
-:global([data-render-mode="eink"]) .streakerGridItem {
+.streakerGridItem[data-today-row="true"] {
+    border: 2px solid var(--ink);
+}
+
+.streakerGridItemNoBg[data-today-row="true"] {
+    border: 2px solid var(--ink);
+}
+
+:global([data-render-mode="snapshot-eink"]) .streakerGridItem {
     background-color: var(--eink-cell-bg);
     border: 2px solid var(--eink-border);
     border-radius: 6px;
@@ -55,39 +59,39 @@
     padding: 6px;
 }
 
-:global([data-render-mode="eink"]) .streakerGridItem:hover {
+:global([data-render-mode="snapshot-eink"]) .streakerGridItem:hover {
     border-color: var(--eink-border);
 }
 
-:global([data-render-mode="eink"]) .streakerGridItemNoBg {
+:global([data-render-mode="snapshot-eink"]) .streakerGridItemNoBg {
     background-color: var(--eink-rail-bg);
     border: 2px solid var(--eink-border);
 }
 
-:global([data-render-mode="eink"]) .streakerGridItemNoBg div {
+:global([data-render-mode="snapshot-eink"]) .streakerGridItemNoBg div {
     font-family: var(--eink-sans);
     letter-spacing: 0.08em;
 }
 
-:global([data-render-mode="eink"]) .streakerGridItemToday {
+:global([data-render-mode="snapshot-eink"]) .streakerGridItemToday {
     border: 3px solid var(--eink-ink);
 }
 
-:global([data-render-mode="eink"]) .streakerGridItem[data-is-clear="true"] {
-    background-image: repeating-linear-gradient(
-        135deg,
-        var(--eink-hatch) 0,
-        var(--eink-hatch) 2px,
-        var(--eink-paper) 2px,
-        var(--eink-paper) 6px
-    );
+:global([data-render-mode="snapshot-eink"]) .streakerGridItem[data-today-row="true"],
+:global([data-render-mode="snapshot-eink"]) .streakerGridItemNoBg[data-today-row="true"] {
+    border: 3px solid var(--eink-ink);
 }
 
-:global([data-render-mode="eink"]) .streakerGridItem[data-is-done="true"] {
+:global([data-render-mode="snapshot-eink"]) .streakerGridItem[data-is-clear="true"] {
+    background-color: var(--eink-paper);
+    border-style: dashed;
+}
+
+:global([data-render-mode="snapshot-eink"]) .streakerGridItem[data-is-done="true"] {
     background-color: var(--eink-done-fill);
 }
 
-:global([data-render-mode="eink"]) .streakerGridItem[data-is-done="true"]::before {
+:global([data-render-mode="snapshot-eink"]) .streakerGridItem[data-is-done="true"]::before {
     content: "";
     position: absolute;
     top: 6px;
@@ -99,7 +103,7 @@
     opacity: 0.35;
 }
 
-:global([data-render-mode="eink"]) .streakerGridItem img {
+:global([data-render-mode="snapshot-eink"]) .streakerGridItem img {
     display: none;
 }
 
@@ -107,16 +111,16 @@
 .einkCross {
     display: none;
     position: absolute;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     color: var(--eink-ink);
 }
 
-:global([data-render-mode="eink"]) .streakerGridItem[data-is-done="true"] .einkCheck {
+:global([data-render-mode="snapshot-eink"]) .streakerGridItem[data-is-done="true"] .einkCheck {
     display: block;
     color: var(--eink-paper);
 }
 
-:global([data-render-mode="eink"]) .streakerGridItem[data-is-done="false"][data-is-clear="false"] .einkCross {
+:global([data-render-mode="snapshot-eink"]) .streakerGridItem[data-is-done="false"][data-is-clear="false"] .einkCross {
     display: block;
 }

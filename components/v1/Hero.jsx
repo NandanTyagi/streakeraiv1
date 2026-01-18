@@ -1,16 +1,18 @@
-import Image from "next/image";
-
 const Hero = () => {
   return (
-    <div className="">
-      <div className="absolute z-[10] inset-0 bg-black opacity-60"></div>
-
-      <Image className="md:hidden" src="/mobile-fade.webp" alt="logo" priority fill />
-      <Image className="hidden md:block" src="/streaker-bg-landscape-fade.webp" alt="logo" priority fill />
-
-      <h1 className="absolute z-[10] bottom-[80px] sm:bottom-[80px] text-[2.6rem] pb-2 sm:text-6xl font-semibold text-center text-white w-[100%] font-lato tracking-[4px]">
-        Streaker.ai
-      </h1>
+    <div className="relative py-20 px-6 sm:px-10">
+      <div className="max-w-3xl mx-auto">
+        <p className="text-xs uppercase tracking-[0.28em] text-[var(--ink-soft)] mb-4">
+          Streaker.ai
+        </p>
+        <h1 className="text-4xl sm:text-5xl font-semibold text-[var(--ink)] leading-tight">
+          A discipline ledger for the long arc
+        </h1>
+        <p className="mt-6 text-lg text-[var(--ink-soft)] leading-relaxed">
+          A quiet instrument for recording intention. It does not reward. It
+          remembers.
+        </p>
+      </div>
     </div>
   );
 };

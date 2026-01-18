@@ -19,10 +19,9 @@ input {
 }
 
 .DialogContent {
-  background-color: white;
+  background-color: var(--paper-veil);
   border-radius: 6px;
-  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
-    hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  border: 1px solid var(--surface-border);
   position: fixed;
   top: 50%;
   left: 50%;
@@ -41,13 +40,13 @@ input {
 .DialogTitle {
   margin: 0;
   font-weight: 500;
-  color: var(--mauve-12);
+  color: var(--ink);
   font-size: 17px;
 }
 
 .DialogDescription {
   margin: 10px 0 20px;
-  color: var(--mauve-11);
+  color: var(--ink-soft);
   font-size: 15px;
   line-height: 1.5;
 }
@@ -66,7 +65,7 @@ input {
 }
 .Button.violet {
   background-color: transparent;
-  color: var(--black-a9);
+  color: var(--ink);
   /* box-shadow: 0 2px 10px var(--black-a7); */
 }
 /* .Button.violet:hover {
@@ -76,8 +75,8 @@ input {
   border-bottom: 1px solid var(--violet-11);
 } */
 .Button.save {
-  background-color: var(--violet-11);
-  color: white;
+  background-color: var(--accent-color);
+  color: var(--paper-veil);
   padding: 0 15px;
   border-radius: 4px;
 }
@@ -97,17 +96,17 @@ input {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--violet-11);
+  color: var(--ink);
   position: absolute;
   top: 10px;
   right: 10px;
 }
 .IconButton:hover {
-  background-color: var(--violet-4);
+  background-color: var(--secondary-color);
   cursor: pointer;
 }
 .IconButton:focus {
-  box-shadow: 0 0 0 2px var(--violet-7);
+  box-shadow: 0 0 0 2px var(--surface-border);
 }
 
 .Fieldset {
@@ -119,7 +118,7 @@ input {
 
 .Label {
   font-size: 15px;
-  color: var(--violet-11);
+  color: var(--ink);
   width: 90px;
   text-align: right;
 }
@@ -134,12 +133,12 @@ input {
   padding: 0 10px;
   font-size: 15px;
   line-height: 1;
-  color: var(--violet-11);
-  box-shadow: 0 0 0 1px var(--violet-7);
+  color: var(--ink);
+  box-shadow: 0 0 0 1px var(--surface-border);
   height: 35px;
 }
 .Input:focus {
-  box-shadow: 0 0 0 2px var(--violet-8);
+  box-shadow: 0 0 0 2px var(--surface-border);
 }
 
 @keyframes overlayShow {

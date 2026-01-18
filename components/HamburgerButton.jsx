@@ -10,12 +10,12 @@ const HamburgerButton = ({ isMenuOpen, setIsMenuOpen }) => {
 
   return (
     <button
-      className="text-xl relative w-[2.2rem] h-[36px] cursor-pointer"
+      className="text-xl relative w-[2.2rem] h-[36px] cursor-pointer hover:opacity-80"
       onClick={handleMenuClick}
     >
       <Image
         id={isMenuOpen ? "close-menu" : "open-menu"}
-        src={isMenuOpen ? "/burger-white-cross.svg" : "/burger-white.svg"}
+        src={isMenuOpen ? "/burger-cross.svg" : "/burger.svg"}
         alt="menu-button"
         priority
         fill

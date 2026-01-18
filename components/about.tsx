@@ -1,94 +1,84 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Hero from "./hero";
 import VideoBlock from "./video-block";
 import Content from "./content";
-import AnimatedCard from "@/components/AnimatedCard";
-import {
-  Coffee,
-  Heart,
-  Star,
-  Target,
-  Binoculars,
-  BrainCircuit,
-} from "lucide-react";
-import Image from "next/image";
-import { DashboardIcon } from "@radix-ui/react-icons";
+import StandardButton from "./v1/StandardButton";
 
 export default function About() {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-[calc(100vh-80px)] bg-gradient-to-r from-blue-100 to-purple-100 overflow-scroll overflow-x-hidden pb-40"
-    >
+    <div className="min-h-[calc(100vh-80px)] bg-[var(--paper)] text-[var(--ink)] overflow-x-hidden pb-32">
       <Hero />
-      <section className="py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-100 to-purple-100">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row justify-center gap-10">
-            <AnimatedCard
-              title="Track Anything"
-              description="Track anything you want, from your daily habits to your life goals."
-              icon={<Target size={48} className="text-white" />}
-              btnText="Start Tracking"
-              href="/panel"
-            />
-            <AnimatedCard
-              title="Stay Accountable"
-              description="Get direct visual feedback on your progress to keep you motivated."
-              btnText="Explore"
-              href="/panel"
-            />
-            <AnimatedCard
-              title="AI Recommendations"
-              description="Get personalized recommendations based on your goals."
-              icon={<BrainCircuit size={48} className="text-white rotate-90" />}
-              btnText="Identify"
-              href="/generategoals"
-            />
+      <section className="px-6 sm:px-10 py-12">
+        <div className="max-w-3xl mx-auto space-y-10">
+          <div>
+            <p className="text-sm uppercase tracking-[0.28em] text-[var(--ink-soft)] mb-3">
+              What this is
+            </p>
+            <p className="text-lg text-[var(--ink)] leading-relaxed">
+              Streaker is not a habit tracker. It is not a productivity tool. It is
+              not a gamified system. It is a discipline ledger and a temporal mirror
+              of intention, a place where truth over time is made visible.
+            </p>
+          </div>
+          <div>
+            <p className="text-sm uppercase tracking-[0.28em] text-[var(--ink-soft)] mb-3">
+              Continuity over intensity
+            </p>
+            <p className="text-lg text-[var(--ink)] leading-relaxed">
+              We value the long arc. Quiet repetitions matter more than bursts of
+              effort. What remains is what is practiced.
+            </p>
+          </div>
+          <div>
+            <p className="text-sm uppercase tracking-[0.28em] text-[var(--ink-soft)] mb-3">
+              Streaks as consequence, not reward
+            </p>
+            <p className="text-lg text-[var(--ink)] leading-relaxed">
+              A streak is a trace, not a prize. It is the shadow cast by repeated
+              action, a record of what actually happened.
+            </p>
+          </div>
+          <div>
+            <p className="text-sm uppercase tracking-[0.28em] text-[var(--ink-soft)] mb-3">
+              AI as witness, not manipulator
+            </p>
+            <p className="text-lg text-[var(--ink)] leading-relaxed">
+              The AI does not coach or cheer. It reflects. It notices rhythm, names
+              pauses, and holds the facts without judgment.
+            </p>
+          </div>
+          <div>
+            <p className="text-sm uppercase tracking-[0.28em] text-[var(--ink-soft)] mb-3">
+              Practice as a lifelong arc
+            </p>
+            <p className="text-lg text-[var(--ink)] leading-relaxed">
+              This is a place to return to for years. The ledger endures, and so do
+              you. Over time, the record becomes a mirror.
+            </p>
           </div>
         </div>
       </section>
-      <section className="py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-100 to-purple-100 ">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold mb-6 sm:text-center">Discover Your Dashboard</h2>
-          <p className="text-lg text-gray-700 mb-10">
-            Dive into the Dashboard to monitor your habits and goals. Get a
-            comprehensive view of your progress with detailed statistics,
-            interactive charts, and streak tracking. Whether it&apos;s daily habits
-            or long-term objectives, the Dashboard keeps you informed and
-            motivated.
+      <section className="px-6 sm:px-10 pb-10">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-sm uppercase tracking-[0.28em] text-[var(--ink-soft)] mb-4">
+            Entry points
           </p>
-          <div className="flex justify-center">
-            <AnimatedCard
-            icon={<DashboardIcon width={48} height={48} className="text-white rotate-90" />}
-              title="Explore the Dashboard"
-              description="Visualize your progress and stay on top of your goals."
-              btnText="Go to Dashboard"
-              href="/dashboard"
+          <div className="grid gap-4 sm:grid-cols-2">
+            <StandardButton text="Open the ledger" type="pill" pushTo="/panel" />
+            <StandardButton text="View the record" type="pill" pushTo="/dashboard" />
+            <StandardButton text="Name an intention" type="pill" pushTo="/generategoals" />
+            <StandardButton
+              text="Read the business plan"
+              type="pill"
+              pushTo="https://streaker-xqt5f0f.gamma.site/"
+              newWindow
             />
           </div>
         </div>
       </section>
       <Content />
       <VideoBlock />
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-100 to-purple-100">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row justify-center gap-10">
-            <AnimatedCard
-              title="Inverstors"
-              description="Check out our business plan to learn more about our vision and goals."
-              icon={<Star size={48} className="text-white" />}
-              btnText="To Business Plan"
-              href="https://streaker-xqt5f0f.gamma.site/"
-              newWindow
-            />
-          </div>
-        </div>
-      </section>
-    </motion.div>
-
+    </div>
   );
 }

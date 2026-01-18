@@ -27,10 +27,6 @@ export function validateDayStateUpsert(input: DayStateUpsertInput): ValidationRe
     return fail("HABIT_ARCHIVED", "DayState cannot be written after habit is archived.");
   }
 
-  if (input.existing && input.existing.status !== input.status && !input.config.allowReversal) {
-    return fail("REVERSAL_FORBIDDEN", "Changing DayState status is not allowed.");
-  }
-
   return ok();
 }
 

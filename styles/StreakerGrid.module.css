@@ -8,6 +8,7 @@
     place-content: center;
     position: relative;
     background-color: var(--grid-bg);
+    font-family: var(--font-data);
 }
 .dayNumber {
     grid-column: 1 / 2; /* This ensures the day number is always in the first column */

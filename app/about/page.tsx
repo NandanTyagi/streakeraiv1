@@ -3,10 +3,14 @@ import About from '@/components/about'
 
 export const metadata: Metadata = {
   title: 'About Us | Streaker.ai',
-  description: 'Track the things that matter to you.',
+  description: 'A discipline ledger and continuity mirror.',
 }
 
 export default function AboutPage() {
-  return <About />
+  return (
+    <main data-scroll-root className="about-root">
+      <About />
+    </main>
+  )
 }
 

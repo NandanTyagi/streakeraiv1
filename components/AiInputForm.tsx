@@ -2,15 +2,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import { Button } from "@/components/ui/button/Button"
 import { Input } from "@/components/ui/input/Input"
-import Loading from "@/components/Loading"
 import { useRouter } from "next/navigation"
 
 import { AppContext } from "@/context/appContext";
-import { useEffect, useState, useContext, use } from "react";
-import { set } from "mongoose"
-import createCompleation from "@/utils/openai/createCompleation"
+import { useState, useContext } from "react";
 import createCompleationV1 from "@/utils/openai/createCompleationV1"
 import handelBoards from "@/utils/handelBoards";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
@@ -48,7 +44,7 @@ function AiInputForm() {
     setGoalToAchieve,
     goalToAchieve } =
     useContext(AppContext);
-  const { isAuthenticated, user, isLoading } = useKindeBrowserClient();
+  const { user } = useKindeBrowserClient();
   const [input, setInput] = useState("");
 
   const handelHabits = async (habitKeys: any, habitValues: any) => {
@@ -141,24 +137,24 @@ function AiInputForm() {
 
   return (
     <Form {...form} >
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 border border-[#330594] rounded bg-slate-100 p-2 mt-1  w-[95%] sm:max-w-[500px] h-[300px] flex flex-col justify-center items-center">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 border border-[var(--surface-border)] rounded bg-[var(--paper-veil)] p-4 mt-1 w-[95%] sm:max-w-[500px] h-[320px] flex flex-col justify-center items-center">
         <FormField
           control={form.control}
           name="goal"
           render={({ field }) => (
             <FormItem className="w-full text-center tracking-wide">
-              <FormLabel className="font-semibold">What&apos;s your dream?</FormLabel>
+              <FormLabel className="font-semibold text-[var(--ink)]">What intention are you holding?</FormLabel>
               <FormControl>
-                <Input type="textarea" className="bg-white p-1 text-left" placeholder="I want to live a healthy life." {...field} />
+                <Input type="textarea" className="bg-[var(--paper)] border border-[var(--surface-border)] p-2 text-left" placeholder="I want a steady morning practice." {...field} />
               </FormControl>
               <FormMessage />
-              <FormDescription className="text-[1.4rem] font-semibold tracking-wide">
-              We&apos;ll help you achieve this by recommending 5 daily habits tailored to your dream.
+              <FormDescription className="text-base font-medium tracking-wide text-[var(--ink-soft)]">
+              We will draft five daily practices so the intention can be observed.
               </FormDescription>
             </FormItem>
           )}
         />
-        <StandardButton action="submit" type="pill" text="Generate streak items" />
+        <StandardButton action="submit" type="pill" text="Draft practices" />
         {/* <Button type="submit" className="bg-[#330594] text-white cursor-pointer w-[stretch]">Generate streak items</Button> */}
       </form>
     </Form>

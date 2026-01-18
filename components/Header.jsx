@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import HamburgerButton from "@/components/HamburgerButton";
 import Menu from "@/components/Menu";
-import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 
 const Header = () => {
   const { isAuthenticated, user } = useKindeBrowserClient();
@@ -22,33 +21,36 @@ const Header = () => {
   return (
     // Header with a blurred background
 
-    <header className="flex items-center justify-between px-3 bg-[#330594] relative">
+    <header
+      className="flex items-center justify-between px-4 bg-[var(--paper-veil)] border-b border-[var(--surface-border)] relative py-2"
+      style={{ height: "var(--header-height)" }}
+    >
       <a href="/">
         <div className="flex items-center gap-1">
-          <div className="relative rounded-full overflow-hidden shadow-xl">
+          <div className="relative rounded-full overflow-hidden border border-[var(--surface-border)] bg-[var(--surface)] cursor-pointer hover:opacity-80">
             <Image
               src="/streaker-logo.png"
               alt="logo"
               unoptimized
               priority
-              width={60}
-              height={60}
+              width={42}
+              height={42}
             />
           </div>
-          <div className="text-[1.4rem] sm:text-[1.6rem] flex font-bold text-white">
+          <div className="text-[1.4rem] sm:text-[1.6rem] flex font-semibold text-[var(--ink)]">
             Streaker
             <div className="flex gap-2">
-              <span className="text-[0.7rem]">Beta</span>
+              <span className="text-[0.7rem] text-[var(--ink-soft)]">Beta</span>
             </div>
           </div>
         </div>
       </a>
-      <div className="absolute top-0 right-0 flex z-2 gap-5 pr-3 text-white text-[0.8rem] h-full pt-1">
+      <div className="absolute top-0 right-0 flex z-2 gap-5 pr-3 text-[var(--ink)] text-[0.8rem] h-full pt-1 cursor-pointer">
         <div className="flex items-center">
           {isAuthenticated ? (
             <>
               <div className="flex items-center gap-2 sm:mr-6">
-                <span className="hidden sm:block mb-[-2px]">
+                <span className="hidden sm:block mb-[-2px] text-[var(--ink-soft)]">
                   {user?.given_name} {user?.family_name}
                 </span>
                 {user?.picture ? (
@@ -62,7 +64,7 @@ const Header = () => {
                     height={30}
                   />
                 ) : (
-                  <div className="rounded-full w-8 h-8 bg-black text-white text-xs font-semibold flex justify-center items-center">
+                  <div className="rounded-full w-8 h-8 bg-[var(--ink)] text-[var(--paper-veil)] text-xs font-semibold flex justify-center items-center">
                     {user?.given_name?.[0]}
                     {user?.family_name?.[0]}
                   </div>
@@ -80,9 +82,13 @@ const Header = () => {
       </div>
       {isMenuOpen && (
         <div
-          className={`absolute inset-0 z-50 flex justify-center items-center bg-gradient-to-r from-blue-100 to-purple-100 h-[calc(100vh-80px)] top-[80px] ${
+          className={`absolute inset-0 z-50 flex justify-center items-center bg-[var(--paper)] ${
             isAnimating ? "animate-fadeOut" : "animate-fadeIn"
           }`}
+          style={{
+            top: "var(--header-height)",
+            height: "calc(100vh - var(--header-height))",
+          }}
           onAnimationEnd={() => {
             if (isAnimating) {
               setIsMenuOpen(false);

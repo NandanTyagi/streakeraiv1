@@ -26,20 +26,20 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
 
   return (
     <>
-      <nav className="absolute top-[10px] right-[10px] max-w-[1480px] z-[1]">
+      <nav className="absolute top-[10px] right-[10px] max-w-[1480px] z-[1] text-[var(--ink)] pointer-events-auto">
         {!user ? (
           <ul className="flex flex-row gap-6">
             <li>
-              <LoginLink className="flex gap-2"><span><LogInIcon /></span>Login </LoginLink>
+              <LoginLink className="flex gap-2 text-[var(--ink)] cursor-pointer"><span><LogInIcon /></span>Log in</LoginLink>
             </li>
             <li>
-              <RegisterLink className="flex gap-2"><span><PenBoxIcon /></span>Sign up </RegisterLink>
+              <RegisterLink className="flex gap-2 text-[var(--ink)] cursor-pointer"><span><PenBoxIcon /></span>Sign up</RegisterLink>
             </li>
             {/* <li>
               <Link href="/install" onClick={handleMenuClick}>Install</Link>
             </li> */}
           </ul>
-        ) : (
+          ) : (
           <ul>
             {/* <li>
               <AddToHomeScreen>Android</AddToHomeScreen>
@@ -48,7 +48,7 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
               <Link href="/install" onClick={handleMenuClick}>Install</Link>
             </li> */}
             <li>
-              <LogoutLink className="flex gap-2"><span><LogOutIcon /></span>Logout </LogoutLink>
+              <LogoutLink className="flex gap-2 text-[var(--ink)] cursor-pointer"><span><LogOutIcon /></span>Log out</LogoutLink>
             </li>
           </ul>
         )}
@@ -56,27 +56,27 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
       <nav className="relative max-w-[600px] w-full h-full flex justify-center items-center">
         <ul className="flex flex-col gap-6 w-full p-4">
           <li>
-            <Link href="/about" onClick={handleMenuClick} className={pathname === "/about" ? "opacity-50" : ""}>
+            <Link href="/about" onClick={handleMenuClick} className={`${pathname === "/about" ? "opacity-50" : ""} cursor-pointer`}>
               <StandardButton text="About" type="pill" />
             </Link>
           </li>
           <li>
-            <Link href="/generategoals" onClick={handleMenuClick} className={pathname === "/generategoals" ? "opacity-50" : ""}>
+            <Link href="/generategoals" onClick={handleMenuClick} className={`${pathname === "/generategoals" ? "opacity-50" : ""} cursor-pointer`}>
               <StandardButton text="Identify" type="pill" />
             </Link>
           </li>
           <li>
-            <Link href="/panel" onClick={handleMenuClick} className={pathname === "/panel" ? "opacity-50" : ""}>
+            <Link href="/panel" onClick={handleMenuClick} className={`${pathname === "/panel" ? "opacity-50" : ""} cursor-pointer`}>
               <StandardButton text="Track" type="pill" />
             </Link>
           </li>
           <li>
-            <Link href="/dashboard/" onClick={handleMenuClick} className={`${pathname === "/dashboard" ? "opacity-50" : ""} ${user ? "" : "hidden"}`}>
+            <Link href="/dashboard/" onClick={handleMenuClick} className={`${pathname === "/dashboard" ? "opacity-50" : ""} ${user ? "" : "hidden"} cursor-pointer`}>
               <StandardButton text="Dashboard" type="pill" />
             </Link>
           </li>
           <li>
-            <Link href="/history/" onClick={handleMenuClick} className={`${pathname === "/history" ? "opacity-50" : ""} ${user ? "" : "hidden"}`}>
+            <Link href="/history/" onClick={handleMenuClick} className={`${pathname === "/history" ? "opacity-50" : ""} ${user ? "" : "hidden"} cursor-pointer`}>
               <StandardButton text="My History" type="pill" />
             </Link>
           </li>

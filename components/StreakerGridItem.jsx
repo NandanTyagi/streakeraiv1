@@ -210,8 +210,8 @@ const StreakerGridItem = ({
     if (currentDay < rowNr) {
       // Use toast instead of alert for "future day" check
       toast({
-        title: "Heads up!",
-        description: "This cell is in the future. You can't mark it as done yet.",
+        title: "Ahead of today",
+        description: "This day has not arrived yet.",
       });
       return true;
     }
@@ -356,13 +356,14 @@ const StreakerGridItem = ({
           ref={isTodayLocal ? todayRef : isTwoDaysFromTodayLocal ? twoDaysFromTodayRef : null}
           className={`${styles.streakerGridItem} ${styles.streakerGridItemNoBg} flex flex-col`}
           onClick={handleClick}
+          data-today-row={isTodayLocal ? "true" : "false"}
         >
           <div className="font-bold text-[0.8rem]">{rowNr}</div>
           <div className="font-semibold mt-[-4px] text-[0.6rem]">{day}</div>
         </div>
       ) : isClearLocal ? (
         <button
-        title="Click to mark as done/missed, hold for 3 seconds to add a note"
+          title="Click to mark as done/missed, hold for 3 seconds to add a note"
           className={`${styles.streakerGridItem} ${
             (isTodayLocal && ! isHistory ? styles.streakerGridItemToday : "")
           }`}
@@ -375,6 +376,7 @@ const StreakerGridItem = ({
           id={`${rowNr}-${colNr}`}
           data-is-clear={isClearLocal ? "true" : "false"}
           data-is-done={isDoneLocal ? "true" : "false"}
+          data-today-row={isTodayLocal ? "true" : "false"}
         ></button>
       ) : (
         <button
@@ -393,6 +395,7 @@ const StreakerGridItem = ({
           id={`${rowNr}-${colNr}`}
           data-is-clear={isClearLocal ? "true" : "false"}
           data-is-done={isDoneLocal ? "true" : "false"}
+          data-today-row={isTodayLocal ? "true" : "false"}
         >
           {message || messageLocal ? (
             <Image
@@ -426,8 +429,8 @@ const StreakerGridItem = ({
                 src={"/icon-cross.svg"}
                 alt="crossmark"
                 priority
-                width={20}
-                height={20}
+                width={22}
+                height={22}
                 unselectable="on"
                 style={{
                   userSelect: "none",
@@ -439,8 +442,8 @@ const StreakerGridItem = ({
                 src={"/icon-check.svg"}
                 alt="checkmark"
                 priority
-                width={20}
-                height={20}
+                width={22}
+                height={22}
                 unselectable="on"
                 style={{
                   userSelect: "none",
@@ -466,8 +469,8 @@ const StreakerGridItem = ({
               src={"/icon-cross.svg"}
               alt="crossmark"
               priority
-              width={20}
-              height={20}
+              width={22}
+              height={22}
               unselectable="on"
               style={{
                 userSelect: "none",
@@ -484,7 +487,7 @@ const StreakerGridItem = ({
               d="M4 12.5l5 5L20 6.5"
               fill="none"
               stroke="currentColor"
-              strokeWidth="3.2"
+              strokeWidth="4"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
@@ -498,7 +501,7 @@ const StreakerGridItem = ({
               d="M6 6l12 12M18 6L6 18"
               fill="none"
               stroke="currentColor"
-              strokeWidth="3.2"
+              strokeWidth="4"
               strokeLinecap="round"
             />
           </svg>
@@ -507,13 +510,13 @@ const StreakerGridItem = ({
 
       {/* 6. Dialog for "prompt" replacement */}
       <Dialog open={showNoteDialog} onOpenChange={setShowNoteDialog}>
-        <DialogContent className="bg-white">
+      <DialogContent className="bg-[var(--paper-veil)] border border-[var(--surface-border)]">
           <DialogHeader>
-            <DialogTitle>{messageLocal ? "Update Note" : "New Note"}</DialogTitle>
+            <DialogTitle>{messageLocal ? "Edit note" : "Add note"}</DialogTitle>
             <DialogDescription>
               {messageLocal
-                ? "Update your existing note below."
-                : "Enter a new note below."}
+                ? "Revise the note below."
+                : "Record a note for this day."}
             </DialogDescription>
           </DialogHeader>
           <div className="mt-4">

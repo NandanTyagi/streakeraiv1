@@ -1,20 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import html2canvas from "html2canvas";
-import ThreeDButton from "../ui/button/3DButton";
+import { AppContext } from "@/context/appContext";
+import { useToast } from "@/hooks/use-toast";
 
 const ScreenshotButton = () => {
   const [screenshotUrl, setScreenshotUrl] = useState("");
-
-  /**
-   * @typedef {"interactive-color" | "snapshot-eink"} RenderMode
-   */
-  const setRenderMode = (mode) => {
-    const next =
-      mode === "snapshot-eink" ? "eink" : "interactive";
-    document.documentElement.dataset.renderMode = next;
-  };
+  const { isSaved } = useContext(AppContext);
+  const { toast } = useToast();
+  const [lastSentAt, setLastSentAt] = useState(0);
+  const [lastSaveAt, setLastSaveAt] = useState(0);
+  const [lastChangeAt, setLastChangeAt] = useState(0);
+  const prevIsSaved = useRef(isSaved);
 
   const waitForFontsAndLayout = async () => {
     if (document.fonts && document.fonts.ready) {
@@ -24,15 +22,25 @@ const ScreenshotButton = () => {
     await new Promise((resolve) => requestAnimationFrame(resolve));
   };
 
+
   useEffect(() => {
-    setRenderMode("interactive-color");
-  }, []);
+    if (prevIsSaved.current && !isSaved) {
+      setLastChangeAt(Date.now());
+    }
+    if (!prevIsSaved.current && isSaved) {
+      setLastSaveAt(Date.now());
+    }
+    prevIsSaved.current = isSaved;
+  }, [isSaved]);
 
   // 1. Capture the entire document body, scaled for higher resolution
   const captureViewport = async () => {
     const canvas = await html2canvas(document.body, {
       scale: window.devicePixelRatio || 1,
       useCORS: true,
+      onclone: (clonedDocument) => {
+        clonedDocument.documentElement.dataset.renderMode = "snapshot-eink";
+      },
     });
     return canvas;
   };
@@ -83,7 +91,6 @@ const ScreenshotButton = () => {
 
   const handleSaveScreenshot = async () => {
     try {
-      setRenderMode("snapshot-eink");
       await waitForFontsAndLayout();
 
       // A) Capture the full page
@@ -117,8 +124,6 @@ const ScreenshotButton = () => {
       // E) Convert the final canvas to a data URL
       const imageData = finalCanvas.toDataURL("image/png");
 
-      setRenderMode("interactive-color");
-
       // F) Upload the screenshot to your API route
       const res = await fetch("/api/v2/upload-screenshot", {
         method: "POST",
@@ -131,16 +136,35 @@ const ScreenshotButton = () => {
       const data = await res.json();
       setScreenshotUrl(data.url);
       console.log("Screenshot URL:", data.url);
+      setLastSentAt(Date.now());
+      toast({ title: "Sent to display" });
     } catch (error) {
       console.error("Error capturing or uploading screenshot:", error);
-    } finally {
-      setRenderMode("interactive-color");
     }
   };
 
+  const hasSaved = lastSaveAt > 0;
+  const hasUnsentChanges = !isSaved && lastChangeAt > lastSentAt;
+  const canSend = hasUnsentChanges || lastSaveAt > lastSentAt;
+  const isVisible = !isSaved || hasSaved;
+
   return (
-    <div>
-      <ThreeDButton onClick={handleSaveScreenshot}>Send to display</ThreeDButton>
+    <div className="w-full flex justify-center">
+      {isVisible && (
+        <button
+          type="button"
+          onClick={handleSaveScreenshot}
+          disabled={!canSend}
+          className={`w-full max-w-[280px] rounded-md border px-4 py-2 text-sm font-semibold transition-colors ${
+            canSend
+              ? "border-[var(--ink)] text-[var(--ink)] hover:bg-[var(--surface)]"
+              : "border-[var(--surface-border)] text-[var(--ink-soft)] cursor-not-allowed"
+          }`}
+          title="Send to display"
+        >
+          Send to display
+        </button>
+      )}
     </div>
   );
 };

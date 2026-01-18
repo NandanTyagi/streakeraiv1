@@ -16,13 +16,13 @@ const PanelPage = async () => {
   const user = await session.getUser();
   console.log("user in panel page", user);
   return (
-    <>
+    <div className="panel-shell">
       <Nav isNav={false} />
-      <main className="overflowY-scroll relative z-1">
+      <main className="panel-scroll relative z-1">
         {!user && <StreakerEmptyGrid />}
         {user && <StreakerGrid />}
       </main>
-    </>
+    </div>
   );
 };
 

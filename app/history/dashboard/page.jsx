@@ -319,7 +319,7 @@ const Dashboard = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="h-[calc(100vh-78px)] sm:h-[calc(100vh-82px)] bg-gradient-to-r from-blue-100 to-purple-100 p-8 overflow-auto"
+      className="h-[calc(100vh-78px)] sm:h-[calc(100vh-82px)] bg-[var(--paper)] p-8 overflow-auto"
     >
       <motion.div
         initial={{ opacity: 0 }}
@@ -364,7 +364,7 @@ const Dashboard = () => {
         {columnStats.map((col, i) => (
           <motion.div
             key={col.colNr}
-            className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transform transition-transform duration-300 flex flex-col justify-center items-center"
+            className="p-6 bg-[var(--paper-veil)] border border-[var(--surface-border)] rounded-lg flex flex-col justify-center items-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: col.colNr * 0.1 }}
@@ -439,7 +439,7 @@ const Dashboard = () => {
             {/* Accordion */}
             <Accordion type="single" collapsible className="w-full mt-4">
               <AccordionItem value="comments">
-                <AccordionTrigger className="bg-gradient-to-br from-primary to-[#330594] text-white py-2 px-4 rounded-lg focus:outline-none">
+                <AccordionTrigger className="bg-[var(--paper-veil)] border border-[var(--surface-border)] text-[var(--ink)] py-2 px-4 rounded-lg focus:outline-none">
                   Notes
                 </AccordionTrigger>
                 <AccordionContent className="mt-4 bg-gray-100 rounded-lg p-4">

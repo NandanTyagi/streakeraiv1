@@ -21,7 +21,7 @@ export default async function Auth() {
 
   return (
     <>
-      <div className="absolute top-0 right-0 flex justify-between gap-5 pr-5 pt-1 text-white text-[0.8rem]">
+      <div className="absolute top-0 right-0 flex justify-between gap-5 pr-5 pt-1 text-[var(--ink)] text-[0.8rem]">
      {await isAuthenticated() && <div className="text-[1.2rem]">{await getUser().name}</div>}
           <LoginLink>Sign in</LoginLink>
         {await isAuthenticated() ? (

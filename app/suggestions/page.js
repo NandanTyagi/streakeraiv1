@@ -37,7 +37,7 @@ export default function Home() {
       {isAppLoading ? (
         <Loading />
       ) : (
-        <main className="scroller m-[auto] min-w-full  min-h-[calc(100vh-80px)] flex flex-col justify-center items-center bg-gradient-to-r from-blue-100 to-purple-100">
+        <main className="scroller m-[auto] min-w-full min-h-[calc(100vh-80px)] flex flex-col justify-center items-center bg-[var(--paper)]">
           {openAIResponse ? (
             <GenerateStreakerBoardButton
               openAIResponse={openAIResponse}

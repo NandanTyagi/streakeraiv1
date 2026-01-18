@@ -11,11 +11,7 @@ import Dialog from "@/components/ui/Dialog";
 import { useRouter, useSearchParams } from "next/navigation";
 import { set } from "mongoose";
 import getCurrentUserBoardFromDb from "@/utils/getCurrentUserBoardFromDb";
-import {
-  RegisterLink,
-  LoginLink,
-  LogoutLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
+import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
 
 export default function Home() {
   const params = useSearchParams();
@@ -86,12 +82,12 @@ export default function Home() {
   return (
     <>
       <div
-        className="flex justify-center items-center bg-[#EBEBEB] text-md font-semibold cursor-pointer"
+        className="flex justify-center items-center bg-[var(--paper-veil)] text-md font-semibold cursor-pointer border-b border-[var(--surface-border)] text-[var(--ink)]"
         // onClick={handelClick}
       >
         {!user ? (
           <RegisterLink>
-          Sign up free to save your board
+          Sign up to preserve the ledger
           </RegisterLink>
         ) : (
           <Dialog
