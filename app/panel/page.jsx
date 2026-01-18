@@ -18,7 +18,7 @@ const PanelPage = async () => {
   return (
     <div className="panel-shell">
       <Nav isNav={false} />
-      <main className="panel-scroll relative z-1">
+      <main className="panel-scroll relative z-1 ">
         {!user && <StreakerEmptyGrid />}
         {user && <StreakerGrid />}
       </main>
