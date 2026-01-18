@@ -8,6 +8,7 @@ import generateEmptyBoardCells from "@/utils/generateEmptyBoardCells";
 import getDaysInMonth from "@/utils/getDaysInMonth";
 import createPanelInDb from "@/utils/v2/createPanelInDb";
 import { number } from "zod";
+import useV3Engine from "@/utils/useV3Engine";
 
 export const AppContext = createContext({
   users: [],
@@ -115,11 +116,14 @@ export function AppContextProvider({ children }) {
             "fetchedCurrentUserBoard ********FAIL***********",
             fetchedCurrentUserBoard
           );
-          const newEmptyPanel = await createPanelInDb(
-            await generateEmptyBoard(),
-            user.email
-          );
-          setBoard(newEmptyPanel);
+          const emptyBoard = await generateEmptyBoard();
+          if (useV3Engine()) {
+            await createPanelInDb(emptyBoard, user.email);
+            setBoard(emptyBoard);
+            return;
+          }
+          const newEmptyPanel = await createPanelInDb(emptyBoard, user.email);
+          setBoard(newEmptyPanel || emptyBoard);
           return;
         }
 

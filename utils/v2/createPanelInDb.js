@@ -1,4 +1,12 @@
+import useV3Engine from "@/utils/useV3Engine";
+import { ensureGoalAndHabits } from "@/utils/v3/saveBoardToV3";
+
 async function createPanelInDb(panel, userEmail) {
+  if (useV3Engine()) {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    await ensureGoalAndHabits({ board: panel, userId: userEmail, tz });
+    return true;
+  }
   console.log("in createPanelInDb panel",
     //  panel, userEmail
     );

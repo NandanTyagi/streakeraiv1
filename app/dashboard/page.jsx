@@ -1,9 +1,12 @@
 "use client";
 
-import React, { useContext, useMemo, Suspense, useEffect } from "react";
+import React, { useContext, useMemo, Suspense, useEffect, useState } from "react";
 import { ArrowLeftIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { AppContext } from "@/context/appContext";
+import useV3Engine from "@/utils/useV3Engine";
+import { fetchV3Streaks } from "@/utils/v3/api";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import dayjs from "dayjs";
 import Loading from "@/components/Loading";
 import { Bar, Line } from "react-chartjs-2";
@@ -45,6 +48,23 @@ const DashboardLoading = () => (
 
 const Dashboard = () => {
   const { board } = useContext(AppContext);
+  const { user } = useKindeBrowserClient();
+  const [v3Streaks, setV3Streaks] = useState([]);
+  const isV3 = useV3Engine();
+
+  useEffect(() => {
+    const loadStreaks = async () => {
+      if (!isV3 || !user?.email) return;
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+      try {
+        const streaks = await fetchV3Streaks({ userId: user.email, tz });
+        setV3Streaks(streaks || []);
+      } catch (error) {
+        console.error("Failed to fetch v3 streaks", error);
+      }
+    };
+    loadStreaks();
+  }, [isV3, user]);
 
   // =================== Compute Column Statistics ===================
   const columnStats = useMemo(() => {
@@ -52,6 +72,9 @@ const Dashboard = () => {
 
     const currentDay = dayjs().date();
     const numberOfHabits = board.habitsNames.length;
+    const streakByHabit = new Map(
+      (v3Streaks || []).map((streak) => [streak.habitId, streak])
+    );
 
     const columnTotals = {};
     const columnStreaks = {};
@@ -91,13 +114,15 @@ const Dashboard = () => {
 
           if (cell && cell.isDone) {
             columnTotals[colNr].isDone++;
-            columnStreaks[colNr].currentStreak++;
-            if (
-              columnStreaks[colNr].currentStreak >
-              columnStreaks[colNr].longestStreak
-            ) {
-              columnStreaks[colNr].longestStreak =
-                columnStreaks[colNr].currentStreak;
+            if (!isV3) {
+              columnStreaks[colNr].currentStreak++;
+              if (
+                columnStreaks[colNr].currentStreak >
+                columnStreaks[colNr].longestStreak
+              ) {
+                columnStreaks[colNr].longestStreak =
+                  columnStreaks[colNr].currentStreak;
+              }
             }
           } else {
             if (cell && cell.isClear) {
@@ -105,7 +130,9 @@ const Dashboard = () => {
             } else if (cell && !cell.isClear) {
               columnTotals[colNr].missed++;
             }
-            columnStreaks[colNr].currentStreak = 0;
+            if (!isV3) {
+              columnStreaks[colNr].currentStreak = 0;
+            }
           }
 
           if (cell && cell.comment) {
@@ -126,15 +153,18 @@ const Dashboard = () => {
           ? ((stats.isDone / totalAttempts) * 100).toFixed(0)
           : "0";
 
+      const habitMeta = board?.v3?.habits?.[colNr - 1];
+      const v3Streak = habitMeta ? streakByHabit.get(habitMeta.id) : null;
+      const longestStreak = isV3 ? v3Streak?.longest || 0 : columnStreaks[colNr].longestStreak;
       return {
         colNr,
         headerName: board.habitsNames[colNr - 1] || `Column ${colNr}`,
         ...stats,
-        longestStreak: columnStreaks[colNr].longestStreak,
+        longestStreak,
         hitRate: `${hitRate}%`,
       };
     });
-  }, [board]);
+  }, [board, isV3, v3Streaks]);
 
   // =================== Prepare Per-Column Bar Chart Data ===================
   const barchartDataAndOptionsArray = useMemo(() => {

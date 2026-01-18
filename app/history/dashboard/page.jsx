@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useContext, useMemo, Suspense, useEffect, use } from "react";
+import React, { useContext, useMemo, Suspense, useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { AppContext } from "@/context/appContext";
 import dayjs from "dayjs";
 import { ArrowLeftIcon } from "lucide-react";
 import Loading from "@/components/Loading";
+import useV3Engine from "@/utils/useV3Engine";
+import { fetchV3Streaks } from "@/utils/v3/api";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { Bar, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -47,12 +50,29 @@ const DashboardLoading = () => (
 const Dashboard = () => {
   const router = useRouter();
   const { currentHistoryPanel } = useContext(AppContext);
+  const { user } = useKindeBrowserClient();
+  const [v3Streaks, setV3Streaks] = useState([]);
+  const isV3 = useV3Engine();
 
   useEffect(() => {
-    if(!currentHistoryPanel) {
+    if (!currentHistoryPanel) {
       router.push("/history");
     }
-  }, [currentHistoryPanel]);
+  }, [currentHistoryPanel, router]);
+
+  useEffect(() => {
+    const loadStreaks = async () => {
+      if (!isV3 || !user?.email) return;
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+      try {
+        const streaks = await fetchV3Streaks({ userId: user.email, tz });
+        setV3Streaks(streaks || []);
+      } catch (error) {
+        console.error("Failed to fetch v3 streaks", error);
+      }
+    };
+    loadStreaks();
+  }, [isV3, user]);
 
   // ========== UPDATED columnStats logic ==========
   const columnStats = useMemo(() => {
@@ -64,6 +84,9 @@ const Dashboard = () => {
     const currentDay = currentHistoryPanel.days;
     // Number of habits (columns)
     const numberOfHabits = currentHistoryPanel.habitsNames.length;
+    const streakByHabit = new Map(
+      (v3Streaks || []).map((streak) => [streak.habitId, streak])
+    );
 
     // Prepare structures to hold totals/streaks for each column
     const columnTotals = {};
@@ -105,14 +128,16 @@ const Dashboard = () => {
 
           if (cell && cell.isDone) {
             columnTotals[colNr].isDone++;
-            columnStreaks[colNr].currentStreak++;
-            // Update longest streak if needed
-            if (
-              columnStreaks[colNr].currentStreak >
-              columnStreaks[colNr].longestStreak
-            ) {
-              columnStreaks[colNr].longestStreak =
-                columnStreaks[colNr].currentStreak;
+            if (!isV3) {
+              columnStreaks[colNr].currentStreak++;
+              // Update longest streak if needed
+              if (
+                columnStreaks[colNr].currentStreak >
+                columnStreaks[colNr].longestStreak
+              ) {
+                columnStreaks[colNr].longestStreak =
+                  columnStreaks[colNr].currentStreak;
+              }
             }
           } else {
             // If cell is explicitly cleared, increment isClear
@@ -123,7 +148,9 @@ const Dashboard = () => {
               columnTotals[colNr].missed++;
             }
             // Missed or isClear => reset current streak
-            columnStreaks[colNr].currentStreak = 0;
+            if (!isV3) {
+              columnStreaks[colNr].currentStreak = 0;
+            }
           }
 
           // Push comments if any
@@ -148,16 +175,19 @@ const Dashboard = () => {
           ? ((stats.isDone / totalAttempts) * 100).toFixed(0)
           : "0";
 
+      const habitMeta = currentHistoryPanel?.v3?.habits?.[colNr - 1];
+      const v3Streak = habitMeta ? streakByHabit.get(habitMeta.id) : null;
+      const longestStreak = isV3 ? v3Streak?.longest || 0 : columnStreaks[colNr].longestStreak;
       return {
         colNr,
         headerName:
           currentHistoryPanel.habitsNames[colNr - 1] || `Column ${colNr}`,
         ...stats,
-        longestStreak: columnStreaks[colNr].longestStreak,
+        longestStreak,
         hitRate: `${hitRate}%`,
       };
     });
-  }, [currentHistoryPanel]);
+  }, [currentHistoryPanel, isV3, v3Streaks]);
 
   // ====== Prepare Data for each column's Bar Chart ======
   const barchartDataAndOptionsArray = useMemo(() => {

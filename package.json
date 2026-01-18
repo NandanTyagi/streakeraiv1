@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:v3": "ts-node -P tsconfig.v3-test.json src-v3/tests/domain.test.ts"
   },
   "dependencies": {
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -65,6 +66,8 @@
     "eslint-config-next": "14.0.2",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
+    "tsx": "^4.15.5",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }

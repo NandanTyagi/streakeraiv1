@@ -61,35 +61,27 @@ export default function Home() {
   useEffect(() => {
     setisAppLoading(true);
     const gta = params.get("goalToAchieve");
-    if (gta) {
-      setGoalToAchieveLocal(gta);
-    } else {
-      if (board?.goalToAchieve) {
-        setGoalToAchieveLocal(board?.goalToAchieve);
-      } else {
-        setGoalToAchieveLocal(board?.goalToAchieve);
-      }
+    const nextGoal = gta || board?.goalToAchieve;
+    if (nextGoal && nextGoal !== goalToAchieveLocal) {
+      setGoalToAchieveLocal(nextGoal);
     }
-
-    setBoard((prevBoard) => {
-      {
-        if(!prevBoard) return;
-        if(prevBoard.goalToAchieve === goalToAchieveLocal){
-          prevBoard, (prevBoard.goalToAchieve = goalToAchieveLocal);
-        } else {
-          return {
-            ...prevBoard,
-          };
-        }
-      }
-      return {
-        ...prevBoard,
-      };
-    });
-
-    handelBoards(board, user?.email);
     setisAppLoading(false);
-  }, [goalToAchieveLocal]);
+  }, [board, goalToAchieveLocal, params, setisAppLoading]);
+
+  useEffect(() => {
+    if (!board || !goalToAchieveLocal) return;
+    setBoard((prevBoard) => {
+      if (!prevBoard) return prevBoard;
+      if (prevBoard.goalToAchieve !== goalToAchieveLocal) {
+        return {
+          ...prevBoard,
+          goalToAchieve: goalToAchieveLocal,
+        };
+      }
+      return prevBoard;
+    });
+    handelBoards(board, user?.email);
+  }, [board, goalToAchieveLocal, setBoard, user?.email]);
 
   return (
     <>
