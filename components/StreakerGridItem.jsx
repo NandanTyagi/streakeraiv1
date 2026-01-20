@@ -45,7 +45,7 @@ const StreakerGridItem = ({
     isAppLoading,
     isSaved,
     setIsSaved,
-    currentHistoryPanel
+    currentHistoryPanel,
   } = useContext(AppContext);
 
   // 2. Destructure the toast function
@@ -57,7 +57,9 @@ const StreakerGridItem = ({
   const [todaysDate, settodaysDate] = useState(dayjs().format("D"));
   const [isTodayLocal, setIsTodayLocal] = useState(isToday);
   // const [twoDaysFromTodayLocal, setTwoDaysFromTodayLocal] = useState(todaysDate + 2);
-  const [isTwoDaysFromTodayLocal, setIsTwoDaysFromTodayLocal] = useState(parseInt(todaysDate) + 2 === parseInt(rowNr));
+  const [isTwoDaysFromTodayLocal, setIsTwoDaysFromTodayLocal] = useState(
+    parseInt(todaysDate) + 2 === parseInt(rowNr),
+  );
   const [labelLocal, setLabelLocal] = useState(label);
   const [timer, setTimer] = useState(null);
 
@@ -66,11 +68,11 @@ const StreakerGridItem = ({
   const [noteValue, setNoteValue] = useState("");
 
   // Find the current cell index from the board
-  const currentCellIndexLocal =isHistory ? currentHistoryPanel?.cells?.findIndex(
-    (cell) => cell.id === `${rowNr}-${colNr}`
-  ) : board?.cells?.findIndex(
-    (cell) => cell.id === `${rowNr}-${colNr}`
-  );
+  const currentCellIndexLocal = isHistory
+    ? currentHistoryPanel?.cells?.findIndex(
+        (cell) => cell.id === `${rowNr}-${colNr}`,
+      )
+    : board?.cells?.findIndex((cell) => cell.id === `${rowNr}-${colNr}`);
 
   const todayRef = useRef(null);
   const twoDaysFromTodayRef = useRef(null);
@@ -121,13 +123,13 @@ const StreakerGridItem = ({
         prevBoard.boardUser = user?.email;
       }
       const cellIndex = prevBoard?.cells?.findIndex(
-        (cell) => cell.id === cellId
+        (cell) => cell.id === cellId,
       );
       if (cellIndex !== -1) {
         return {
           ...prevBoard,
           cells: prevBoard?.cells?.map((cell, index) =>
-            index === cellIndex ? updatedCell : cell
+            index === cellIndex ? updatedCell : cell,
           ),
         };
       }
@@ -339,7 +341,13 @@ const StreakerGridItem = ({
     <>
       {type === "nr" ? (
         <div
-          ref={isTodayLocal ? todayRef : isTwoDaysFromTodayLocal ? twoDaysFromTodayRef : null}
+          ref={
+            isTodayLocal
+              ? todayRef
+              : isTwoDaysFromTodayLocal
+                ? twoDaysFromTodayRef
+                : null
+          }
           className={`${styles.streakerGridItem} ${styles.streakerGridItemNoBg} flex flex-col`}
           onClick={handleClick}
           data-today-row={isTodayLocal ? "true" : "false"}
@@ -351,7 +359,7 @@ const StreakerGridItem = ({
         <button
           title="Click to mark as done/missed, hold for 3 seconds to add a note"
           className={`${styles.streakerGridItem} ${
-            (isTodayLocal && ! isHistory ? styles.streakerGridItemToday : "")
+            isTodayLocal && !isHistory ? styles.streakerGridItemToday : ""
           }`}
           onClick={handleClick}
           onDoubleClick={handleDoubleClick}
@@ -366,12 +374,12 @@ const StreakerGridItem = ({
         ></button>
       ) : (
         <button
-        title="Click to mark as done/missed, double-click to clear, hold for 3 seconds to add a note"
+          title="Click to mark as done/missed, double-click to clear, hold for 3 seconds to add a note"
           className={`${styles.streakerGridItem} ${
             isDoneLocal
               ? styles.streakerGridItemDoneTrue
               : styles.streakerGridItemDoneFalse
-          } ${(isTodayLocal && ! isHistory ? styles.streakerGridItemToday : "")}`}
+          } ${isTodayLocal && !isHistory ? styles.streakerGridItemToday : ""}`}
           onClick={handleClick}
           onDoubleClick={handleDoubleClick}
           onMouseDown={handleMouseDown}
@@ -411,31 +419,39 @@ const StreakerGridItem = ({
                 }}
               />
             ) : !isDoneLocal ? (
-              <Image
-                src={"/icon-cross.svg"}
-                alt="crossmark"
-                priority
-                width={22}
-                height={22}
-                unselectable="on"
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--grid-cell-missed-icon)"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 style={{
                   userSelect: "none",
                   pointerEvents: "none",
                 }}
-              />
+              >
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
             ) : (
-              <Image
-                src={"/icon-check.svg"}
-                alt="checkmark"
-                priority
-                width={22}
-                height={22}
-                unselectable="on"
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--grid-cell-done-icon)"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 style={{
                   userSelect: "none",
                   pointerEvents: "none",
                 }}
-              />
+              >
+                <path d="M4 12.5l5 5L20 6.5" />
+              </svg>
             )
           ) : isCellLoading || isAppLoading || isLoading ? (
             <Image
@@ -451,18 +467,22 @@ const StreakerGridItem = ({
               }}
             />
           ) : (
-            <Image
-              src={"/icon-cross.svg"}
-              alt="crossmark"
-              priority
-              width={22}
-              height={22}
-              unselectable="on"
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--grid-cell-missed-icon)"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               style={{
                 userSelect: "none",
                 pointerEvents: "none",
               }}
-            />
+            >
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
           )}
           <svg
             className={styles.einkCheck}
@@ -496,7 +516,7 @@ const StreakerGridItem = ({
 
       {/* 6. Dialog for "prompt" replacement */}
       <Dialog open={showNoteDialog} onOpenChange={setShowNoteDialog}>
-      <DialogContent className="bg-[var(--paper-veil)] border border-[var(--surface-border)]">
+        <DialogContent className="bg-[var(--paper-veil)] border border-[var(--surface-border)]">
           <DialogHeader>
             <DialogTitle>{messageLocal ? "Edit note" : "Add note"}</DialogTitle>
             <DialogDescription>

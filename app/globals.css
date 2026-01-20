@@ -36,8 +36,12 @@ html[data-render-mode="interactive"] {
   --grid-bg: var(--surface);
   --grid-cell-bg: #e5ded3;
   --grid-cell-empty-bg: #f3eee6;
-  --grid-cell-done-bg: #2a2622;
-  --grid-cell-missed-bg: #e7dfd4;
+  --grid-cell-done-bg: #1f8a70;
+  --grid-cell-missed-bg: #c44536;
+  --grid-cell-done-icon: #f7faf9;
+  --grid-cell-missed-icon: #fff5f3;
+  --grid-cell-done-bg-hover: #176652;
+  --grid-cell-missed-bg-hover: #9c362a;
   --grid-cell-border: 1px solid var(--surface-border);
   --grid-cell-hover-border: var(--ink);
   --grid-cell-today-border: 2px solid var(--accent-color);
@@ -54,8 +58,12 @@ html[data-render-mode="spatial-reflection"] {
   --grid-bg: var(--surface);
   --grid-cell-bg: #e1dad0;
   --grid-cell-empty-bg: #f4efe7;
-  --grid-cell-done-bg: #25221f;
-  --grid-cell-missed-bg: #e7dfd4;
+  --grid-cell-done-bg: #1f8a70;
+  --grid-cell-missed-bg: #c44536;
+  --grid-cell-done-icon: #f7faf9;
+  --grid-cell-missed-icon: #fff5f3;
+  --grid-cell-done-bg-hover: #176652;
+  --grid-cell-missed-bg-hover: #9c362a;
   --grid-cell-border: 1px solid var(--surface-border);
   --grid-cell-hover-border: var(--ink);
   --grid-cell-today-border: 2px solid var(--accent-color);
@@ -90,7 +98,8 @@ html[data-render-mode="snapshot-eink"] {
   --eink-rail-bg: #eeeeea;
   --eink-done-fill: #2b2b2b;
   --eink-button-bg: #f0f0ed;
-  --eink-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --eink-serif:
+    "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
   --eink-sans: "Trebuchet MS", "Gill Sans", Verdana, sans-serif;
 }
 
@@ -202,7 +211,18 @@ textarea {
   font-family: var(--font-sans);
 }
 
-:where(button, a, [role="button"], [onclick], .clickable, .grid-cell, .cell, .streakerGridItem, svg, .icon) {
+:where(
+  button,
+  a,
+  [role="button"],
+  [onclick],
+  .clickable,
+  .grid-cell,
+  .cell,
+  .streakerGridItem,
+  svg,
+  .icon
+) {
   cursor: pointer !important;
 }
 
@@ -269,14 +289,20 @@ html[data-render-mode="snapshot-eink"] [data-role="streaker-grid"] {
   font-family: var(--eink-sans);
 }
 
-html[data-render-mode="snapshot-eink"] [data-role="streaker-grid"] .Button.violet span:first-child {
+html[data-render-mode="snapshot-eink"]
+  [data-role="streaker-grid"]
+  .Button.violet
+  span:first-child {
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-family: var(--eink-sans);
   font-weight: 700;
 }
 
-html[data-render-mode="snapshot-eink"] [data-role="streaker-grid"] .Button.violet span:last-child {
+html[data-render-mode="snapshot-eink"]
+  [data-role="streaker-grid"]
+  .Button.violet
+  span:last-child {
   font-family: var(--eink-serif);
   font-weight: 700;
   letter-spacing: 0.02em;

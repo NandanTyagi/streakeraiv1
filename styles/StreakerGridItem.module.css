@@ -1,129 +1,146 @@
 .streakerGridItem {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--grid-cell-bg);
-    opacity: var(--grid-cell-opacity);
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
-    border-radius: var(--grid-cell-radius);
-    border: var(--grid-cell-border);
-    -webkit-tap-highlight-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--grid-cell-bg);
+  opacity: var(--grid-cell-opacity);
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+  border-radius: var(--grid-cell-radius);
+  border: var(--grid-cell-border);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .streakerGridItem:hover {
-    opacity: var(--grid-cell-opacity);
-    border-color: inherit;
-    background-color: inherit;
+  opacity: var(--grid-cell-opacity);
 }
 
 .streakerGridItem:focus,
 .streakerGridItem:focus-visible,
 .streakerGridItem:active {
-    outline: none;
+  outline: none;
 }
 .streakerGridItemNoBg {
-    background-color: var(--grid-cell-empty-bg);
+  background-color: var(--grid-cell-empty-bg);
 }
 
 .streakerGridItemDoneTrue {
-    opacity: 1;
-    background: var(--grid-cell-done-bg);
+  opacity: 1;
+  background: var(--grid-cell-done-bg);
+}
+
+.streakerGridItemDoneTrue:hover {
+  background: var(--grid-cell-done-bg-hover);
 }
 
 .streakerGridItemDoneFalse {
-    opacity: 1;
-    background: var(--grid-cell-missed-bg);
+  opacity: 1;
+  background: var(--grid-cell-missed-bg);
+}
+
+.streakerGridItemDoneFalse:hover {
+  background: var(--grid-cell-missed-bg-hover);
 }
 
 .streakerGridItemHasMessage {
-    color: var(--grid-cell-message);
-    position: absolute;
-    top: -8px;
-    right: 0;
+  color: var(--grid-cell-message);
+  position: absolute;
+  top: -8px;
+  right: 0;
 }
 
 .streakerGridItemToday {
-    border: var(--grid-cell-today-border);
+  border: var(--grid-cell-today-border);
 }
 
 .streakerGridItem[data-today-row="true"] {
-    border: 2px solid var(--ink);
+  border: 2px solid var(--ink);
 }
 
 .streakerGridItemNoBg[data-today-row="true"] {
-    border: 2px solid var(--ink);
+  border: 2px solid var(--ink);
 }
 
 :global([data-render-mode="snapshot-eink"]) .streakerGridItem {
-    background-color: var(--eink-cell-bg);
-    border: 2px solid var(--eink-border);
-    border-radius: 6px;
-    opacity: 1;
-    transition: none;
-    padding: 6px;
+  background-color: var(--eink-cell-bg);
+  border: 2px solid var(--eink-border);
+  border-radius: 6px;
+  opacity: 1;
+  transition: none;
+  padding: 6px;
 }
 
 :global([data-render-mode="snapshot-eink"]) .streakerGridItemNoBg {
-    background-color: var(--eink-rail-bg);
-    border: 2px solid var(--eink-border);
+  background-color: var(--eink-rail-bg);
+  border: 2px solid var(--eink-border);
 }
 
 :global([data-render-mode="snapshot-eink"]) .streakerGridItemNoBg div {
-    font-family: var(--eink-sans);
-    letter-spacing: 0.08em;
+  font-family: var(--eink-sans);
+  letter-spacing: 0.08em;
 }
 
 :global([data-render-mode="snapshot-eink"]) .streakerGridItemToday {
-    border: 3px solid var(--eink-ink);
+  border: 3px solid var(--eink-ink);
 }
 
-:global([data-render-mode="snapshot-eink"]) .streakerGridItem[data-today-row="true"],
-:global([data-render-mode="snapshot-eink"]) .streakerGridItemNoBg[data-today-row="true"] {
-    border: 3px solid var(--eink-ink);
+:global([data-render-mode="snapshot-eink"])
+  .streakerGridItem[data-today-row="true"],
+:global([data-render-mode="snapshot-eink"])
+  .streakerGridItemNoBg[data-today-row="true"] {
+  border: 3px solid var(--eink-ink);
 }
 
-:global([data-render-mode="snapshot-eink"]) .streakerGridItem[data-is-clear="true"] {
-    background-color: var(--eink-paper);
-    border-style: dashed;
+:global([data-render-mode="snapshot-eink"])
+  .streakerGridItem[data-is-clear="true"] {
+  background-color: var(--eink-paper);
+  border-style: dashed;
 }
 
-:global([data-render-mode="snapshot-eink"]) .streakerGridItem[data-is-done="true"] {
-    background-color: var(--eink-done-fill);
+:global([data-render-mode="snapshot-eink"])
+  .streakerGridItem[data-is-done="true"] {
+  background-color: var(--eink-done-fill);
 }
 
-:global([data-render-mode="snapshot-eink"]) .streakerGridItem[data-is-done="true"]::before {
-    content: "";
-    position: absolute;
-    top: 6px;
-    bottom: 6px;
-    width: 3px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--eink-line);
-    opacity: 0.35;
+:global([data-render-mode="snapshot-eink"])
+  .streakerGridItem[data-is-done="true"]::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--eink-line);
+  opacity: 0.35;
 }
 
 :global([data-render-mode="snapshot-eink"]) .streakerGridItem img {
-    display: none;
+  display: none;
 }
 
 .einkCheck,
 .einkCross {
-    display: none;
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    color: var(--eink-ink);
+  display: none;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  color: var(--eink-ink);
 }
 
-:global([data-render-mode="snapshot-eink"]) .streakerGridItem[data-is-done="true"] .einkCheck {
-    display: block;
-    color: var(--eink-paper);
+:global([data-render-mode="snapshot-eink"])
+  .streakerGridItem[data-is-done="true"]
+  .einkCheck {
+  display: block;
+  color: var(--eink-paper);
 }
 
-:global([data-render-mode="snapshot-eink"]) .streakerGridItem[data-is-done="false"][data-is-clear="false"] .einkCross {
-    display: block;
+:global([data-render-mode="snapshot-eink"])
+  .streakerGridItem[data-is-done="false"][data-is-clear="false"]
+  .einkCross {
+  display: block;
 }
