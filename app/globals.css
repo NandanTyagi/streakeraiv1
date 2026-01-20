@@ -281,7 +281,7 @@ html[data-render-mode="snapshot-eink"] footer {
 
 html[data-render-mode="snapshot-eink"] .panel-header .Button.violet span {
   font-family: var(--eink-serif);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.02em;
 }
 
@@ -308,7 +308,16 @@ html[data-render-mode="snapshot-eink"]
   letter-spacing: 0.02em;
 }
 
-html[data-render-mode="snapshot-eink"] .panel-header button,
+html[data-render-mode="snapshot-eink"] .panel-header button {
+  background: transparent !important;
+  background-image: none !important;
+  border: 2px solid transparent !important;
+  box-shadow: none !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+  outline: none !important;
+}
+
 html[data-render-mode="snapshot-eink"] footer button {
   background: var(--eink-button-bg) !important;
   background-image: none !important;
@@ -317,7 +326,11 @@ html[data-render-mode="snapshot-eink"] footer button {
   color: var(--eink-ink) !important;
 }
 
-html[data-render-mode="snapshot-eink"] .panel-header button svg,
+html[data-render-mode="snapshot-eink"] .panel-header button svg {
+  fill: #000000 !important;
+  stroke: #000000 !important;
+}
+
 html[data-render-mode="snapshot-eink"] footer button svg {
   fill: var(--eink-ink) !important;
   stroke: var(--eink-ink) !important;
