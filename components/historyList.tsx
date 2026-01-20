@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useContext, useMemo } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
+import { motion, useAnimation, useInView, useReducedMotion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
@@ -29,6 +29,7 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const controls = useAnimation();
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     if (isInView) {
@@ -36,22 +37,17 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
     }
   }, [isInView, controls]);
 
-  // Optional logging for debugging
-  useEffect(() => {
-    console.log("board", board);
-    console.log("item", item);
-  }, [board, item]);
-
   return (
     <motion.div
       ref={ref}
-      initial="hidden"
+      initial={reduceMotion ? "visible" : "hidden"}
       animate={controls}
       variants={{
-        hidden: { opacity: 0 },
+        hidden: { opacity: 0, y: 6 },
         visible: {
           opacity: 1,
-          transition: { delay: index * 0.1 },
+          y: 0,
+          transition: reduceMotion ? { duration: 0 } : { delay: index * 0.1, duration: 0.25 },
         },
       }}
     >
@@ -65,7 +61,7 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="mt-2 mb-2 text-md font-bold text-muted-foreground">
+            <div className="mt-2 mb-2 text-base font-semibold text-muted-foreground">
               {item.goalToAchieve}
             </div>
             <div className="flex flex-col items-start gap-2">

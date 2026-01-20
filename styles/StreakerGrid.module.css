@@ -1,7 +1,7 @@
 .streakerGrid {
     padding: 0 var(--grid-gutter);
     display: grid;
-    grid-template-columns: auto repeat(5, 1fr);
+    grid-template-columns: auto repeat(5, minmax(0, 1fr));
     grid-auto-rows: var(--grid-row-height);
     gap: var(--grid-gap);
     overflow: hidden;
@@ -17,7 +17,7 @@
 .streakerGrid:last-of-type {
     padding: 0 var(--grid-gutter) 0 var(--grid-gutter);
     display: grid;
-    grid-template-columns: auto repeat(5, 1fr);
+    grid-template-columns: auto repeat(5, minmax(0, 1fr));
     grid-auto-rows: var(--grid-row-height);
     gap: var(--grid-gap);
     overflow: hidden;

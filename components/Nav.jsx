@@ -127,46 +127,52 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
     e.preventDefault();
 
     if (!user) {
-      alert("Please log in to clear and preserve this ledger.");
+      toast({
+        title: "Sign in required",
+        description: "Sign in to clear and preserve the ledger.",
+        variant: "destructive",
+      });
       return;
     }
 
-    const clear = window.confirm(
-      "Clear the ledger for this panel? This cannot be undone."
-    );
-    if (clear) {
-      // Create the updated board with cells cleared
-      const updatedBoard = {
-        ...board,
-        cells: [],
-      };
+    openConfirmDialog({
+      title: "Clear this ledger?",
+      description: "This removes all marks in the current panel. This cannot be undone.",
+      onConfirm: async () => {
+        const updatedBoard = {
+          ...board,
+          cells: [],
+        };
 
-      // Update the state
-      setBoard(updatedBoard);
+        setBoard(updatedBoard);
 
-      try {
-        // Save the updated board to the database
-        const panelSaved = await savePanelToDb(updatedBoard, user?.email);
-        debugger;
+        try {
+          const panelSaved = await savePanelToDb(updatedBoard, user?.email);
 
-        if (panelSaved && !panelSaved.saved) {
-          console.error("Error saving panel:", panelSaved.saved);
-          alert(`${panelSaved.message}`);
-          return;
+          if (panelSaved && !panelSaved.saved) {
+            console.error("Error saving panel:", panelSaved.saved);
+            toast({
+              title: "Clear failed",
+              description: panelSaved.message || "Unable to clear the ledger.",
+              variant: "destructive",
+            });
+            return;
+          }
+
+          setIsSaved(true);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        } catch (error) {
+          console.error("Error saving panel:", error);
+          toast({
+            title: "Clear failed",
+            description: "An error occurred while saving. Please try again.",
+            variant: "destructive",
+          });
         }
-
-        console.log("NOT Error saving panel:", panelSaved.message);
-        setIsSaved(true);
-
-        // Optionally, refresh the page or update the UI accordingly
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      } catch (error) {
-        console.error("Error saving panel:", error);
-        alert("An error occurred while saving. Please try again.");
-      }
-    }
+      },
+    });
   };
 
   useEffect(() => {
@@ -209,7 +215,7 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
     );
   } else {
     return (
-      <div className="panel-header grid grid-cols-[auto,1fr,auto] items-center gap-3 bg-[var(--paper-veil)] text-md font-semibold cursor-pointer border-b border-[var(--surface-border)] px-4 h-10">
+      <div className="panel-header grid grid-cols-[auto,1fr,auto] items-center gap-4 bg-[var(--paper-veil)] text-sm font-semibold cursor-pointer border-b border-[var(--surface-border)] px-4 py-2 min-h-[48px]">
         <div className="flex items-center gap-3">
           {isHistory && (
             <Link href="/history" className="flex items-center justify-center gap-1">
@@ -219,7 +225,7 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
           )}
           {user && !isHistory && (
             <button
-              className="inline-flex items-center gap-2 border border-[var(--ink)] text-[var(--ink)] px-3 py-1 rounded-md text-xs sm:text-sm font-semibold cursor-pointer hover:opacity-80"
+              className="inline-flex min-h-[44px] items-center gap-2 border border-[var(--ink)] text-[var(--ink)] px-3 py-2 rounded-md text-xs sm:text-sm font-semibold cursor-pointer hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] focus-visible:outline-offset-2"
               onClick={(e) => handleClearPanel(e)}
               title="Reset panel"
             >
@@ -248,11 +254,11 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
           )}
           {!isHistory && (
             <button
-              className={`inline-flex items-center gap-2 border px-3 py-1 rounded-md text-xs sm:text-sm font-semibold ${
+              className={`inline-flex min-h-[44px] items-center gap-2 border px-3 py-2 rounded-md text-xs sm:text-sm font-semibold ${
                 !isSaved
                   ? "border-[hsl(var(--destructive))] text-[hsl(var(--destructive))]"
                   : "border-[var(--ink)] text-[var(--ink)]"
-              } cursor-pointer hover:opacity-80`}
+              } cursor-pointer hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] focus-visible:outline-offset-2`}
               onClick={handelCtxMenu}
               title="Save"
             >
@@ -269,13 +275,13 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
               </DialogHeader>
               <DialogFooter className="gap-2">
                 <button
-                  className="border border-[var(--surface-border)] px-4 py-2 rounded-md"
+                  className="min-h-[40px] border border-[var(--surface-border)] px-4 py-2 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] focus-visible:outline-offset-2"
                   onClick={() => setConfirmOpen(false)}
                 >
                   Cancel
                 </button>
                 <button
-                  className="bg-[var(--accent-color)] text-[var(--paper-veil)] px-4 py-2 rounded-md"
+                  className="min-h-[40px] bg-[var(--accent-color)] text-[var(--paper-veil)] px-4 py-2 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] focus-visible:outline-offset-2"
                   onClick={onConfirmCallback}
                 >
                   Confirm

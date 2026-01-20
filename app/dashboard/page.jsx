@@ -296,23 +296,23 @@ const Dashboard = () => {
       <h3 className="font-bold text-base text-center mb-2">{col.headerName}</h3>
       {/* Stat Display */}
       <div className="grid grid-cols-2 gap-1 w-full relative">
-        <div className="text-sm border bg-green-50 p-2 rounded-lg flex flex-col justify-center items-center font-bold">
-          <p className="text-lg">{col.isDone}</p>
-          <p>Done</p>
+        <div className="text-sm border border-[var(--surface-border)] bg-[var(--success-veil)] p-2 rounded-lg flex flex-col justify-center items-center font-semibold">
+          <p className="text-lg text-[var(--success)]">{col.isDone}</p>
+          <p className="text-[var(--ink)]">Done</p>
         </div>
-        <div className="text-sm border bg-red-50 p-2 rounded-lg flex flex-col justify-center items-center font-bold">
-          <p className="text-lg">{col.missed}</p>
-          <p>Missed</p>
+        <div className="text-sm border border-[var(--surface-border)] bg-[var(--danger-veil)] p-2 rounded-lg flex flex-col justify-center items-center font-semibold">
+          <p className="text-lg text-[var(--danger)]">{col.missed}</p>
+          <p className="text-[var(--ink)]">Missed</p>
         </div>
-        <div className="text-sm border bg-green-50 p-2 rounded-lg flex flex-col justify-center items-center font-bold">
-          <p className="text-lg">{col.longestStreak}</p>
-          <p>Top Streak</p>
+        <div className="text-sm border border-[var(--surface-border)] bg-[var(--success-veil)] p-2 rounded-lg flex flex-col justify-center items-center font-semibold">
+          <p className="text-lg text-[var(--success)]">{col.longestStreak}</p>
+          <p className="text-[var(--ink)]">Top Streak</p>
         </div>
-        <div className="text-sm border bg-gray-50 p-2 rounded-lg flex flex-col justify-center items-center font-bold">
+        <div className="text-sm border border-[var(--surface-border)] bg-[var(--paper-veil)] p-2 rounded-lg flex flex-col justify-center items-center font-semibold text-[var(--ink)]">
           <p className="text-lg">{col.unreviewed}</p>
           <p>Unreviewed</p>
         </div>
-        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs border bg-yellow-50 p-2 rounded-full w-16 h-16 flex flex-col justify-center items-center font-bold">
+        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs border border-[var(--surface-border)] bg-[var(--paper-veil)] p-2 rounded-full w-16 h-16 flex flex-col justify-center items-center font-semibold text-[var(--ink)]">
           <p>{col.hitRate}</p>
           <p>Hit Rate</p>
         </div>
@@ -324,7 +324,7 @@ const Dashboard = () => {
             <AccordionTrigger className="bg-[var(--paper-veil)] border border-[var(--surface-border)] text-[var(--ink)] py-2 px-4 rounded-lg focus:outline-none">
               Charts
             </AccordionTrigger>
-            <AccordionContent className="mt-4 bg-gray-100 rounded-lg p-4">
+            <AccordionContent className="mt-4 bg-[var(--paper-veil)] rounded-lg p-4 border border-[var(--surface-border)]">
               {barchartDataAndOptionsArray[chartIndex] && (
                 <Bar
                   data={barchartDataAndOptionsArray[chartIndex].barChartData}
@@ -354,16 +354,16 @@ const Dashboard = () => {
             <AccordionTrigger className="bg-[var(--paper-veil)] border border-[var(--surface-border)] text-[var(--ink)] py-2 px-4 rounded-lg focus:outline-none">
               Notes
             </AccordionTrigger>
-            <AccordionContent className="mt-4 bg-gray-100 rounded-lg p-4">
+            <AccordionContent className="mt-4 bg-[var(--paper-veil)] rounded-lg p-4 border border-[var(--surface-border)]">
               {col.comments.length > 0 ? (
                 col.comments.map((commentObj, index) => (
-                  <p key={index} className="text-xs text-gray-700 border-b py-1">
+                  <p key={index} className="text-xs text-[var(--ink)] border-b border-[var(--surface-border)] py-1">
                     <span className="font-semibold mr-1">{commentObj.date}:</span>
                     {commentObj.text}
                   </p>
                 ))
               ) : (
-                <p className="text-xs text-gray-500">No notes available.</p>
+                <p className="text-xs text-[var(--ink-soft)]">No notes available.</p>
               )}
             </AccordionContent>
           </AccordionItem>

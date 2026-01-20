@@ -14,6 +14,7 @@ import { late } from "zod";
 import fetchPanels from "@/utils/v2/fetchPanels.js";
 import fetchUser from "@/utils/v2/fetchUser";
 import StreakerGrid from "@/components/v1/StreakerGrid";
+import useMobileGridFit from "@/hooks/useMobileGridFit";
 
 const StreakerEmptyGrid = () => {
   const { cells, board, isAppLoading } = useContext(AppContext);
@@ -22,6 +23,8 @@ const StreakerEmptyGrid = () => {
   const habits = board?.habitsNames || [];
   const days = getDaysInMonth(new Date());
   const tagArr = getDayTagArray(new Date(), days);
+
+  useMobileGridFit();
 
   // useEffect(() => {
   //   const fetchUsersFromDb = async () => {
@@ -50,6 +53,9 @@ const StreakerEmptyGrid = () => {
 
     return (
       <>
+        <div className="px-4 py-3 text-center text-sm text-[var(--ink-soft)] border-b border-[var(--surface-border)] bg-[var(--paper-veil)]">
+          Sign in to preserve the ledger. You can still rehearse the grid below.
+        </div>
         <section className={styles.streakerGrid} data-role="streaker-grid">
           <StreakerGridHeaders />
         </section>

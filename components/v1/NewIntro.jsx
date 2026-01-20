@@ -10,20 +10,18 @@ import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 const NewIntro = () => {
   const { user } = useKindeBrowserClient();
   return (
-    <div className="min-h-screen flex flex-col relative">
-      <div
-        className="absolute inset-0 pointer-events-none"
-        aria-hidden="true"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.62) 45%, rgba(0,0,0,0.58) 100%)",
-        }}
-      />
+    <div
+      className="min-h-screen flex flex-col relative bg-[var(--paper)]"
+      style={{
+        backgroundImage:
+          "radial-gradient(circle at top left, rgba(109,103,95,0.08), transparent 40%), radial-gradient(circle at 20% 60%, rgba(109,103,95,0.05), transparent 45%)",
+      }}
+    >
       <section className="relative z-10">
         <Hero />
       </section>
       <section className="relative z-10 flex flex-1 items-start justify-center px-6 sm:px-0 py-0">
-        <div className="w-full max-w-2xl text-[#f7f4ee]">
+        <div className="w-full max-w-2xl text-[var(--ink)]">
           <div className="mt-6 flex flex-col gap-3">
             {user && (
               <StandardButton

@@ -79,6 +79,8 @@ const DialogButton = ({ habit = null, value, onChange, isHistory }) => {
             fitEnabled ? " intention-title" : ""
           }`}
           ref={fitEnabled ? containerRef : null}
+          type="button"
+          aria-label={habit ? `Edit ${habit}` : "Edit intention"}
         >
           {habit && (
             <span className="text-[0.8rem] text-center sm:text-[0.9rem] sm:font-semibold">

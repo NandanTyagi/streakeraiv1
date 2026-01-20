@@ -164,10 +164,10 @@ const StandardButton = ({
         title={text}
         type={action}
         id={text}
-        className={`inline-flex cursor-pointer w-[100%] items-center justify-center overflow-hidden rounded-full border border-[var(--ink)] bg-[var(--paper-veil)] py-2 px-4 text-[var(--ink)] transition-colors duration-150 ease-in-out hover:bg-[var(--surface)] text-center font-[var(--font-sans)] ${pathname === text.toLowerCase().trim() ? "hidden" : ""}`}
+        className={`inline-flex min-h-[44px] cursor-pointer w-[100%] items-center justify-center overflow-hidden rounded-full border border-[var(--ink)] bg-[var(--paper-veil)] py-2 px-4 text-[var(--ink)] transition-colors duration-150 ease-in-out hover:bg-[var(--surface)] text-center font-[var(--font-sans)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] focus-visible:outline-offset-2 ${pathname === text.toLowerCase().trim() ? "hidden" : ""}`}
         ref={buttonRef}
       >
-        <span className="relative text-md font-semibold flex w-[100%] sm:w-[100%] text-center justify-center items-center">
+        <span className="relative text-sm sm:text-base font-semibold flex w-[100%] sm:w-[100%] text-center justify-center items-center">
           {text}
         </span>
       </button>
@@ -181,7 +181,7 @@ const StandardButton = ({
         title={text}
         className={`group relative m-1 inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full border ${
           isSpalshScreen ? "border-[var(--ink)]" : "border-[var(--ink)]"
-        } bg-[var(--paper-veil)] py-6 px-[10px] text-[var(--ink)] transition-colors duration-150 ease-in-out hover:bg-[var(--surface)] text-center max-h-[130px] sm:max-h-[200px] font-[var(--font-sans)]`}
+        } bg-[var(--paper-veil)] py-6 px-[10px] text-[var(--ink)] transition-colors duration-150 ease-in-out hover:bg-[var(--surface)] text-center max-h-[130px] sm:max-h-[200px] font-[var(--font-sans)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] focus-visible:outline-offset-2`}
         ref={buttonRef}
         id={text}
       >
@@ -193,7 +193,7 @@ const StandardButton = ({
           <div
             className={`${
               isSpalshScreen ? "text-[var(--ink)]" : "text-[var(--ink)]"
-            } font-semibold text-sm sm:text-md tracking-[1px]`}
+            } font-semibold text-sm sm:text-base tracking-[1px]`}
           >
             {text}
           </div>

@@ -2,7 +2,7 @@ export default function Hero() {
   return (
     <section className="relative py-20 px-6 sm:px-10 border-b border-[var(--surface-border)]">
       <div className="max-w-3xl mx-auto">
-        <p className="text-xs uppercase tracking-[0.28em] text-[var(--ink-soft)] mb-4 font-[var(--font-sans)]">
+        <p className="text-xs uppercase tracking-[0.32em] text-[var(--ink-soft)] mb-4 font-[var(--font-sans)]">
           Streaker.ai
         </p>
         <h1 className="text-4xl sm:text-5xl font-semibold text-[var(--ink)]">

@@ -15,7 +15,7 @@ const PanelFooterControls = ({ showSend }) => {
       <button
         type="button"
         onClick={handleScrollToToday}
-        className="rounded-md border border-[var(--ink)] px-4 py-2 text-sm font-semibold cursor-pointer hover:opacity-80"
+        className="min-h-[44px] rounded-md border border-[var(--ink)] px-4 py-2 text-sm font-semibold cursor-pointer hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] focus-visible:outline-offset-2"
         title="Scroll to today"
       >
         Today

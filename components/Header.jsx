@@ -22,7 +22,7 @@ const Header = () => {
     // Header with a blurred background
 
     <header
-      className="flex items-center justify-between px-4 bg-[var(--paper-veil)] border-b border-[var(--surface-border)] relative py-3"
+      className="flex items-center gap-4 px-4 sm:px-6 bg-[var(--paper-veil)] border-b border-[var(--surface-border)] relative py-3"
       style={{ minHeight: "var(--header-height)" }}
     >
       <a href="/">
@@ -37,25 +37,27 @@ const Header = () => {
               height={30}
             />
           </div>
-          <div className="text-[1.4rem] sm:text-[1.6rem] flex font-semibold text-[var(--ink)]">
+          <div className="text-[1.3rem] sm:text-[1.5rem] flex font-semibold text-[var(--ink)] tracking-[0.02em]">
             Streaker
-            <div className="flex gap-2">
-              <span className="text-[0.7rem] text-[var(--ink-soft)]">Beta</span>
+            <div className="flex gap-2 items-center">
+              <span className="text-[0.65rem] uppercase tracking-[0.24em] text-[var(--ink-soft)]">
+                Beta
+              </span>
             </div>
           </div>
         </div>
       </a>
-      <div className="absolute top-0 right-0 flex z-2 gap-5 pr-3 text-[var(--ink)] text-[0.8rem] h-full pt-1 cursor-pointer">
-        <div className="flex items-center">
+      <div className="ml-auto flex items-center gap-4 text-[var(--ink)] text-[0.85rem] cursor-pointer z-[2]">
+        <div className="flex items-center gap-4 sm:gap-5">
           {isAuthenticated ? (
             <>
-              <div className="flex items-center gap-2 sm:mr-6">
-                <span className="hidden sm:block mb-[-2px] text-[var(--ink-soft)]">
+              <div className="flex items-center gap-3 sm:mr-4">
+                <span className="hidden sm:block text-[var(--ink-soft)]">
                   {user?.given_name} {user?.family_name}
                 </span>
                 {user?.picture ? (
                   <Image
-                    className="rounded-full w-8 h-8 mr-[32px]"
+                    className="rounded-full w-8 h-8"
                     src={user.picture}
                     alt="profile-pic"
                     unoptimized
@@ -82,7 +84,7 @@ const Header = () => {
       </div>
       {isMenuOpen && (
         <div
-          className={`fixed left-0 right-0 z-50 flex justify-center items-center bg-[var(--paper)] ${
+          className={`fixed left-0 right-0 z-50 flex justify-center items-center bg-[var(--paper)] border-t border-[var(--surface-border)] ${
             isAnimating ? "animate-fadeOut" : "animate-fadeIn"
           }`}
           style={{

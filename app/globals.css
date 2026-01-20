@@ -2,24 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=Source+Serif+4:wght@300;400;500;600&family=Work+Sans:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Newsreader:wght@300;400;500;600&display=swap");
 
 :root {
   --gutter: 20px;
-  --paper: #f6f2eb;
-  --paper-veil: #fbf9f4;
-  --ink: #1c1a17;
-  --ink-soft: #4a433c;
-  --accent-color: #6a6b5f;
-  --surface: #fdfbf7;
-  --surface-border: #d8d0c4;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 28px;
+  --space-7: 36px;
+  --space-8: 48px;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --duration-fast: 160ms;
+  --duration-base: 220ms;
+  --ease-standard: cubic-bezier(0.2, 0.6, 0.2, 1);
+  --paper: #f5f1ea;
+  --paper-veil: #fbf8f2;
+  --ink: #1b1814;
+  --ink-soft: #5c554c;
+  --accent-color: #6d675f;
+  --accent-soft: #b9b1a6;
+  --surface: #fffcf7;
+  --surface-border: #d8d1c7;
+  --success: #2c6d5e;
+  --success-veil: #e8f0ec;
+  --danger: #9c4b3f;
+  --danger-veil: #f2e7e4;
+  --focus-ring: #1b1814;
   --primary-color: var(--accent-color);
-  --secondary-color: #ece6dd;
-  --tertiary-color: #d6cfc5;
+  --secondary-color: #ece5db;
+  --tertiary-color: #d8d0c5;
   --quaternary-color: var(--accent-color);
   --font-color: var(--ink);
-  --font-body: "Source Serif 4", serif;
-  --font-sans: "Work Sans", sans-serif;
+  --font-body: "Newsreader", serif;
+  --font-sans: "IBM Plex Sans", sans-serif;
   --font-data: "IBM Plex Mono", monospace;
   --m-main-header-height: 106px;
   --m-second-header-height: 40px;
@@ -31,51 +52,51 @@
 
 html[data-render-mode="interactive"] {
   --grid-gutter: 20px;
-  --grid-gap: 10px;
-  --grid-row-height: 42px;
+  --grid-gap: 8px;
+  --grid-row-height: 44px;
   --grid-bg: var(--surface);
-  --grid-cell-bg: #e5ded3;
-  --grid-cell-empty-bg: #f3eee6;
-  --grid-cell-done-bg: #1f8a70;
-  --grid-cell-missed-bg: #c44536;
-  --grid-cell-done-icon: #f7faf9;
-  --grid-cell-missed-icon: #fff5f3;
-  --grid-cell-done-bg-hover: #176652;
-  --grid-cell-missed-bg-hover: #9c362a;
+  --grid-cell-bg: #e6dfd4;
+  --grid-cell-empty-bg: #f4efe7;
+  --grid-cell-done-bg: var(--success);
+  --grid-cell-missed-bg: var(--danger);
+  --grid-cell-done-icon: #f4fbf8;
+  --grid-cell-missed-icon: #fff8f6;
+  --grid-cell-done-bg-hover: #245a4e;
+  --grid-cell-missed-bg-hover: #7f3c33;
   --grid-cell-border: 1px solid var(--surface-border);
-  --grid-cell-hover-border: var(--ink);
-  --grid-cell-today-border: 2px solid var(--accent-color);
+  --grid-cell-hover-border: var(--accent-color);
+  --grid-cell-today-border: 2px solid var(--ink);
   --grid-cell-message: var(--accent-color);
-  --grid-cell-radius: 3px;
+  --grid-cell-radius: var(--radius-xs);
   --grid-cell-opacity: 1;
   --panel-bg: var(--paper-veil);
 }
 
 html[data-render-mode="spatial-reflection"] {
   --grid-gutter: 22px;
-  --grid-gap: 10px;
-  --grid-row-height: 44px;
+  --grid-gap: 8px;
+  --grid-row-height: 46px;
   --grid-bg: var(--surface);
-  --grid-cell-bg: #e1dad0;
-  --grid-cell-empty-bg: #f4efe7;
-  --grid-cell-done-bg: #1f8a70;
-  --grid-cell-missed-bg: #c44536;
-  --grid-cell-done-icon: #f7faf9;
-  --grid-cell-missed-icon: #fff5f3;
-  --grid-cell-done-bg-hover: #176652;
-  --grid-cell-missed-bg-hover: #9c362a;
+  --grid-cell-bg: #e2dbd0;
+  --grid-cell-empty-bg: #f5efe7;
+  --grid-cell-done-bg: var(--success);
+  --grid-cell-missed-bg: var(--danger);
+  --grid-cell-done-icon: #f4fbf8;
+  --grid-cell-missed-icon: #fff8f6;
+  --grid-cell-done-bg-hover: #245a4e;
+  --grid-cell-missed-bg-hover: #7f3c33;
   --grid-cell-border: 1px solid var(--surface-border);
-  --grid-cell-hover-border: var(--ink);
-  --grid-cell-today-border: 2px solid var(--accent-color);
+  --grid-cell-hover-border: var(--accent-color);
+  --grid-cell-today-border: 2px solid var(--ink);
   --grid-cell-message: var(--accent-color);
-  --grid-cell-radius: 3px;
+  --grid-cell-radius: var(--radius-xs);
   --grid-cell-opacity: 0.9;
   --panel-bg: var(--paper-veil);
 }
 
 html[data-render-mode="snapshot-eink"] {
   --grid-gutter: 20px;
-  --grid-gap: 10px;
+  --grid-gap: 8px;
   --grid-row-height: 46px;
   --grid-bg: #f5f5f2;
   --grid-cell-bg: #f1f1ef;
@@ -105,11 +126,17 @@ html[data-render-mode="snapshot-eink"] {
 
 body {
   background-color: var(--paper);
+  background-image: linear-gradient(
+    180deg,
+    #faf7f1 0%,
+    var(--paper) 30%,
+    #f2ede4 100%
+  );
   min-height: 100dvh;
   max-height: 100dvh;
   font-family: var(--font-body);
   color: var(--ink);
-  line-height: 1.65;
+  line-height: 1.7;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -143,7 +170,7 @@ main:not(.zero-m) {
 .main-layout {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: [primary-header] 80px [secondary-header] 40px [main] auto [footer] 36px;
+  grid-template-rows: [primary-header] var(--header-height) [secondary-header] var(--m-second-header-height) [main] auto [footer] var(--footer-height);
   height: 100svh;
   max-height: 100svh;
   width: 100%;
@@ -227,7 +254,20 @@ textarea {
 }
 
 :where(button, a, [role="button"], [onclick], .clickable, svg, .icon):hover {
-  opacity: 0.85;
+  opacity: 0.92;
+}
+
+:where(
+  button,
+  a,
+  [role="button"],
+  input,
+  textarea,
+  select,
+  .streakerGridItem
+):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .scroll-container {
@@ -250,7 +290,7 @@ textarea {
 }
 
 footer {
-  min-height: 36px;
+  min-height: var(--footer-height);
   display: flex;
   justify-content: start;
   align-items: center;
@@ -379,6 +419,14 @@ html[data-render-mode="snapshot-eink"] img[src*="spinner"] {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* @media (prefers-color-scheme: dark) {
     :root {
       --foreground-rgb: 255, 255, 255;
@@ -390,25 +438,25 @@ html[data-render-mode="snapshot-eink"] img[src*="spinner"] {
 @layer base {
   :root {
     --background: 40 26% 95%;
-    --foreground: 24 18% 12%;
+    --foreground: 24 18% 10%;
     --card: 40 30% 98%;
-    --card-foreground: 24 18% 12%;
+    --card-foreground: 24 18% 10%;
     --popover: 40 30% 98%;
-    --popover-foreground: 24 18% 12%;
-    --primary: 62 7% 40%;
+    --popover-foreground: 24 18% 10%;
+    --primary: 30 8% 38%;
     --primary-foreground: 40 30% 98%;
     --secondary: 36 19% 90%;
-    --secondary-foreground: 24 18% 12%;
+    --secondary-foreground: 24 18% 10%;
     --quaternary: var(--quaternary-color);
     --muted: 36 19% 92%;
-    --muted-foreground: 25 10% 42%;
+    --muted-foreground: 25 10% 38%;
     --accent: 36 19% 92%;
-    --accent-foreground: 24 18% 12%;
-    --destructive: 0 56% 42%;
+    --accent-foreground: 24 18% 10%;
+    --destructive: 6 45% 40%;
     --destructive-foreground: 40 30% 98%;
     --border: 34 15% 82%;
     --input: 34 15% 82%;
-    --ring: 24 18% 12%;
+    --ring: 24 18% 10%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -471,9 +519,12 @@ html[data-render-mode="snapshot-eink"] img[src*="spinner"] {
     --m-chrome-height: 176px;
     --m-available-height: calc(100svh - var(--m-chrome-height));
     /* Row height = (available + gap) / rows - gap */
-    --grid-row-height: calc(
-      (var(--m-available-height) + var(--m-gap)) / var(--m-visible-rows) -
-        var(--m-gap)
+    --grid-row-height: max(
+      44px,
+      calc(
+        (var(--m-available-height) + var(--m-gap)) / var(--m-visible-rows) -
+          var(--m-gap)
+      )
     );
     --grid-gap: var(--m-gap);
   }

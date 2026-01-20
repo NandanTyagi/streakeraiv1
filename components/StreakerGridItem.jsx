@@ -63,6 +63,14 @@ const StreakerGridItem = ({
   const [labelLocal, setLabelLocal] = useState(label);
   const [timer, setTimer] = useState(null);
 
+  const habitName = labelLocal || label || `Habit ${colNr}`;
+  const statusLabel = isClearLocal
+    ? "Unmarked"
+    : isDoneLocal
+      ? "Done"
+      : "Missed";
+  const cellAriaLabel = `Day ${rowNr}, ${habitName}. Status: ${statusLabel}.`;
+
   // 3. State for the Dialog ("prompt" replacement)
   const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [noteValue, setNoteValue] = useState("");
@@ -357,7 +365,7 @@ const StreakerGridItem = ({
         </div>
       ) : isClearLocal ? (
         <button
-          title="Click to mark as done/missed, hold for 3 seconds to add a note"
+          title="Click to mark as done/missed, hold for 2 seconds to add a note"
           className={`${styles.streakerGridItem} ${
             isTodayLocal && !isHistory ? styles.streakerGridItemToday : ""
           }`}
@@ -368,13 +376,15 @@ const StreakerGridItem = ({
           onTouchStart={handleMouseDown}
           onTouchEnd={handleMouseUp}
           id={`${rowNr}-${colNr}`}
+          aria-label={cellAriaLabel}
+          aria-pressed={false}
           data-is-clear={isClearLocal ? "true" : "false"}
           data-is-done={isDoneLocal ? "true" : "false"}
           data-today-row={isTodayLocal ? "true" : "false"}
         ></button>
       ) : (
         <button
-          title="Click to mark as done/missed, double-click to clear, hold for 3 seconds to add a note"
+          title="Click to mark as done/missed, double-click to clear, hold for 2 seconds to add a note"
           className={`${styles.streakerGridItem} ${
             isDoneLocal
               ? styles.streakerGridItemDoneTrue
@@ -387,6 +397,8 @@ const StreakerGridItem = ({
           onTouchStart={handleMouseDown}
           onTouchEnd={handleMouseUp}
           id={`${rowNr}-${colNr}`}
+          aria-label={cellAriaLabel}
+          aria-pressed={isDoneLocal && !isClearLocal}
           data-is-clear={isClearLocal ? "true" : "false"}
           data-is-done={isDoneLocal ? "true" : "false"}
           data-today-row={isTodayLocal ? "true" : "false"}

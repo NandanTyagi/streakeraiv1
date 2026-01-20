@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   Card,
   CardContent,
@@ -31,11 +31,12 @@ export default function AnimatedCard({
   newWindow,
   tag,
 }: AnimatedCardProps) {
+  const reduceMotion = useReducedMotion();
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
+      initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 8 }}
+      whileInView={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+      transition={reduceMotion ? { duration: 0 } : { duration: 0.3, ease: "easeOut" }}
       viewport={{ once: true, margin: "-100px" }}
     >
       <Card

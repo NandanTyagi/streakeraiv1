@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 
 import { AppContext } from "@/context/appContext";
@@ -14,6 +14,7 @@ import Loading from "@/components/Loading";
 
 import getDaysInMonth from "@/utils/getDaysInMonth";
 import getDayTagArray from "@/utils/getDayTagArray";
+import useMobileGridFit from "@/hooks/useMobileGridFit";
 
 interface Cell {
   id: string;
@@ -47,6 +48,8 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
 }) => {
   const { isAppLoading, currentHistoryPanel } = useContext(AppContext);
   const { isLoading, user } = useKindeBrowserClient();
+  const containerRef = useRef<HTMLDivElement>(null);
+  useMobileGridFit({ containerRef });
 
   // Local state for cells (optional if you need to modify them)
   const [cellsArray, setCellsArray] = useState<Cell[]>(cells || []);
@@ -70,7 +73,10 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
   }
 
   return (
-    <div className={'relative max-h-[calc(100vh-180px)] overflow-auto'}>
+    <div
+      ref={containerRef}
+      className="relative max-h-[calc(100vh-180px)] overflow-auto"
+    >
       <section className={styles.streakerGrid} data-role="streaker-grid">
         <StreakerGridHeaders isHistory />
       </section>

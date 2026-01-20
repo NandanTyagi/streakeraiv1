@@ -12,6 +12,7 @@ import getDaysInMonth from "@/utils/getDaysInMonth";
 import getDayTagArray from "@/utils/getDayTagArray";
 import fetchUser from "@/utils/v2/fetchUser";
 import getCurrentUserBoardFromDb from "@/utils/getCurrentUserBoardFromDb";
+import useMobileGridFit from "@/hooks/useMobileGridFit";
 
 const StreakerGrid = () => {
   const { cells, board, isAppLoading } = useContext(AppContext);
@@ -21,6 +22,8 @@ const StreakerGrid = () => {
   const habits = board?.habitsNames || Array.from({ length: 5 });
   const days = getDaysInMonth(new Date());
   const tagArr = getDayTagArray(new Date(), days);
+
+  useMobileGridFit();
 
   useEffect(() => {
     const fetchUsersFromDb = async () => {

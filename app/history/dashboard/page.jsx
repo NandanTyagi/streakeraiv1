@@ -376,23 +376,23 @@ const Dashboard = () => {
             <div className="flex flex-col gap-4">
               <div className="flex flex-col lg:flex-row gap-4 relative">
                 <div className="grid grid-cols-2 gap-1 w-full h-full">
-                  <div className="text-sm border bg-green-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-bold">
-                    <p className="text-xl">{col.isDone}</p>
-                    <p>Done</p>
+                  <div className="text-sm border border-[var(--surface-border)] bg-[var(--success-veil)] p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-semibold">
+                    <p className="text-xl text-[var(--success)]">{col.isDone}</p>
+                    <p className="text-[var(--ink)]">Done</p>
                   </div>
-                  <div className="text-sm border bg-red-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-bold">
-                    <p className="text-xl">{col.missed}</p>
-                    <p>Missed</p>
+                  <div className="text-sm border border-[var(--surface-border)] bg-[var(--danger-veil)] p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-semibold">
+                    <p className="text-xl text-[var(--danger)]">{col.missed}</p>
+                    <p className="text-[var(--ink)]">Missed</p>
                   </div>
-                  <div className="text-sm border bg-green-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-bold">
-                    <p className="text-xl">{col.longestStreak}</p>
-                    <p>Top Streak</p>
+                  <div className="text-sm border border-[var(--surface-border)] bg-[var(--success-veil)] p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-semibold">
+                    <p className="text-xl text-[var(--success)]">{col.longestStreak}</p>
+                    <p className="text-[var(--ink)]">Top Streak</p>
                   </div>
-                  <div className="text-sm border bg-gray-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-bold">
+                  <div className="text-sm border border-[var(--surface-border)] bg-[var(--paper-veil)] p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-semibold text-[var(--ink)]">
                     <p className="text-xl">{col.unreviewed}</p>
                     <p>Unreviewed</p>
                   </div>
-                  <div className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] text-[0.8rem] border bg-yellow-50 p-2 rounded-full w-20 h-20 flex flex-col justify-center items-center font-bold">
+                  <div className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] text-[0.8rem] border border-[var(--surface-border)] bg-[var(--paper-veil)] p-2 rounded-full w-20 h-20 flex flex-col justify-center items-center font-semibold text-[var(--ink)]">
                     <p>{col.hitRate}</p>
                     <p>Hit Rate</p>
                   </div>
@@ -442,12 +442,12 @@ const Dashboard = () => {
                 <AccordionTrigger className="bg-[var(--paper-veil)] border border-[var(--surface-border)] text-[var(--ink)] py-2 px-4 rounded-lg focus:outline-none">
                   Notes
                 </AccordionTrigger>
-                <AccordionContent className="mt-4 bg-gray-100 rounded-lg p-4">
+                <AccordionContent className="mt-4 bg-[var(--paper-veil)] rounded-lg p-4 border border-[var(--surface-border)]">
                   {col.comments.length > 0 ? (
                     col.comments.map((commentObj, index) => (
                       <p
                         key={index}
-                        className="text-sm text-gray-700 border-b py-2"
+                        className="text-sm text-[var(--ink)] border-b border-[var(--surface-border)] py-2"
                       >
                         <span className="font-semibold mr-2">
                           {commentObj.date}:
@@ -456,7 +456,7 @@ const Dashboard = () => {
                       </p>
                     ))
                   ) : (
-                    <p className="text-sm text-gray-500">No notes available.</p>
+                    <p className="text-sm text-[var(--ink-soft)]">No notes available.</p>
                   )}
                 </AccordionContent>
               </AccordionItem>

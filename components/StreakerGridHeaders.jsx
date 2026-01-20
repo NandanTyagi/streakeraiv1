@@ -117,8 +117,8 @@ const StreakerGridHeaders = ({ isHistory }) => {
     return (
       <>
         {/* Month Header */}
-        <div className="flex flex-col justify-center items-center text-[0.65rem] sm:text-[0.8rem] sm:font-semibold">
-          <strong className="text-[0.7rem]">{monthToDisplay}</strong>
+        <div className="flex flex-col justify-center items-center text-[0.7rem] sm:text-[0.85rem] sm:font-semibold">
+          <strong className="text-[0.75rem] uppercase tracking-[0.22em]">{monthToDisplay}</strong>
         </div>
 
         {/* Render each header item */}
@@ -140,8 +140,8 @@ const StreakerGridHeaders = ({ isHistory }) => {
    */
   return (
     <>
-      <div className="flex flex-col justify-center items-center text-[0.65rem] sm:text-[0.8rem] sm:font-semibold">
-        {dayjs().format("MMM")}
+      <div className="flex flex-col justify-center items-center text-[0.7rem] sm:text-[0.85rem] sm:font-semibold">
+        <strong className="text-[0.75rem] uppercase tracking-[0.22em]">{dayjs().format("MMM")}</strong>
       </div>
       <HeaderItem key={1} column={1} description="Sleep" value="8 hrs" />
       <HeaderItem key={2} column={2} description="Meditate" value="20 min" />
