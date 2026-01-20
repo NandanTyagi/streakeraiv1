@@ -68,6 +68,29 @@ input {
   color: var(--ink);
   /* box-shadow: 0 2px 10px var(--black-a7); */
 }
+.Button.violet.intention-title {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  --intention-max-size: 22px;
+  --intention-min-size: 16px;
+}
+.intention-text {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  font-size: var(--intention-max-size);
+  line-height: 1.15;
+}
+@media (max-width: 640px) {
+  .Button.violet.intention-title {
+    --intention-max-size: 19px;
+    --intention-min-size: 13px;
+  }
+}
 /* .Button.violet:hover {
   border-bottom: 1px solid var(--violet-11);
 }

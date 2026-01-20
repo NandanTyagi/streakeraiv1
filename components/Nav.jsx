@@ -228,7 +228,7 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
             </button>
           )}
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center min-w-0">
           {!user ? (
             <RegisterLink>Sign up to preserve the ledger</RegisterLink>
           ) : (
