@@ -452,3 +452,39 @@ html[data-render-mode="snapshot-eink"] img[src*="spinner"] {
     @apply text-foreground;
   }
 }
+
+/* ============================================
+   Mobile Grid: Fixed 12 visible day rows
+   ============================================
+   On mobile (<768px), dynamically calculate row height
+   so exactly 12 full days fit without cropping.
+   ============================================ */
+@media (max-width: 767px) {
+  /* Target render-mode selectors for proper specificity */
+  html[data-render-mode="interactive"],
+  html[data-render-mode="spatial-reflection"],
+  html[data-render-mode="snapshot-eink"] {
+    /* 13 rows = 1 header + 12 data rows */
+    --m-visible-rows: 13;
+    --m-gap: 4px;
+    /* Chrome: top (~112px) + bottom (~64px) = ~176px */
+    --m-chrome-height: 176px;
+    --m-available-height: calc(100svh - var(--m-chrome-height));
+    /* Row height = (available + gap) / rows - gap */
+    --grid-row-height: calc(
+      (var(--m-available-height) + var(--m-gap)) / var(--m-visible-rows) -
+        var(--m-gap)
+    );
+    --grid-gap: var(--m-gap);
+  }
+
+  .panel-scroll {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Ensure consistent gap in grid sections */
+  [data-role="streaker-grid"] {
+    gap: var(--m-gap, 4px);
+  }
+}
