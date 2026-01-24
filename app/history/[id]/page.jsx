@@ -34,13 +34,6 @@ const PanelPage = () => {
   );
   const [historyItem, setHistoryItem] = useState(null);
 
-  // Redirect back to "/history" if there's no currentHistoryPanel.
-  useEffect(() => {
-    if (!currentHistoryPanel) {
-      router.push("/history");
-    }
-  }, [currentHistoryPanel, router]);
-
   // Fetch the panel whenever the id (or history index) changes.
   useEffect(() => {
     if (!id) {

@@ -377,8 +377,7 @@ const Dashboard = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="min-h-screen bg-[var(--paper)] p-8 pb-20 relative"
-      data-scroll-root
+      className="min-h-full bg-[var(--paper)] p-8 pb-20 relative"
     >
       <ArrowLeftIcon
         size={24}
@@ -466,7 +465,7 @@ const Dashboard = () => {
 export default function DashboardWrapper() {
   return (
     <Suspense fallback={<DashboardLoading />}>
-      <div className="min-h-[calc(100vh-80px)] overflow-x-hidden overflow-y-auto">
+      <div className="h-full min-h-0 overflow-x-hidden overflow-y-auto" data-scroll-root>
         <Dashboard />
       </div>
     </Suspense>

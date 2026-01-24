@@ -371,6 +371,15 @@ html[data-render-mode="snapshot-eink"] .panel-header button {
   outline: none !important;
 }
 
+html[data-render-mode="snapshot-eink"] .panel-header .Button.violet.intention-title {
+  min-height: 52px;
+  padding: 2px 0;
+}
+
+html[data-render-mode="snapshot-eink"] .panel-header .Button.violet.intention-title .intention-text {
+  line-height: 1.35;
+}
+
 html[data-render-mode="snapshot-eink"] footer button {
   background: var(--eink-button-bg) !important;
   background-image: none !important;
