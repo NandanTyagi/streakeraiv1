@@ -326,6 +326,11 @@ html[data-render-mode="snapshot-eink"] .main-layout {
   background-color: var(--eink-paper);
 }
 
+html[data-render-mode="snapshot-eink"] .panel-layout {
+  box-sizing: border-box;
+  padding-top: 12px;
+}
+
 html[data-render-mode="snapshot-eink"] .panel-header,
 html[data-render-mode="snapshot-eink"] footer {
   background-color: var(--panel-bg) !important;
@@ -430,6 +435,33 @@ html[data-render-mode="snapshot-eink"] img[src*="spinner"] {
 }
 
 .spatial-reflection-layer canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.hero-three-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.9;
+  width: 100vw;
+  height: 100vh;
+  left: 50%;
+  transform: translateX(-50%);
+  background-image: radial-gradient(
+      circle at 18% 22%,
+      rgba(109, 103, 95, 0.12),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 80% 55%,
+      rgba(109, 103, 95, 0.08),
+      transparent 42%
+    );
+}
+
+.hero-three-bg canvas {
   width: 100%;
   height: 100%;
 }

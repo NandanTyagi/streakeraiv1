@@ -34,7 +34,6 @@ export default function MainLayout({ children }) {
   if (pathname === "/") {
     return (
       <div className="main-layout-container main-layout-landing">
-        {showSpatial && <SpatialReflectionLayer />}
         <div className="main-layout-shell">
           {children}
           <Footer />

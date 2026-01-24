@@ -1,6 +1,7 @@
 import StandardButton from "@/components/v1/StandardButton";
 import DownloadApp from "@/components/v1/DownloadApp";
 import Hero from "@/components/v1/Hero";
+import HeroThreeBackground from "@/components/HeroThreeBackground";
 import {
   RegisterLink,
   LoginLink,
@@ -10,13 +11,8 @@ import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 const NewIntro = () => {
   const { user } = useKindeBrowserClient();
   return (
-    <div
-      className="min-h-screen flex flex-col relative bg-[var(--paper)]"
-      style={{
-        backgroundImage:
-          "radial-gradient(circle at top left, rgba(109,103,95,0.08), transparent 40%), radial-gradient(circle at 20% 60%, rgba(109,103,95,0.05), transparent 45%)",
-      }}
-    >
+    <div className="min-h-screen flex flex-col relative bg-[var(--paper)]">
+      <HeroThreeBackground />
       <section className="relative z-10">
         <Hero />
       </section>
