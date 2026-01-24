@@ -314,7 +314,7 @@ const Dashboard = () => {
         </div>
         <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs border border-[var(--surface-border)] bg-[var(--paper-veil)] p-2 rounded-full w-16 h-16 flex flex-col justify-center items-center font-semibold text-[var(--ink)]">
           <p>{col.hitRate}</p>
-          <p>Hit Rate</p>
+          <p className="text-[11px]">Hit Rate</p>
         </div>
       </div>
       {/* Accordions */}
