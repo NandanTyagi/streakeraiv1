@@ -371,6 +371,12 @@ html[data-render-mode="snapshot-eink"] .panel-header button {
   outline: none !important;
 }
 
+html[data-render-mode="snapshot-eink"] .panel-header button:focus,
+html[data-render-mode="snapshot-eink"] .panel-header button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 html[data-render-mode="snapshot-eink"] .panel-header .Button.violet.intention-title {
   min-height: 52px;
   padding: 2px 0;
