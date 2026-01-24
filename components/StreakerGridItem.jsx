@@ -245,30 +245,33 @@ const StreakerGridItem = ({
       onCellClick(currentCellIndexLocal);
     }
 
-    setIsDoneLocal(!isDoneLocal);
+    const nextState = isClearLocal
+      ? { isDone: true, isClear: false }
+      : isDoneLocal
+        ? { isDone: false, isClear: false }
+        : { isDone: false, isClear: true };
+    setIsDoneLocal(nextState.isDone);
+    setIsClearLocal(nextState.isClear);
     const cellExists = board?.cells?.[currentCellIndexLocal];
     if (
       cellExists &&
       board.cells[currentCellIndexLocal].id === `${rowNr}-${colNr}`
     ) {
-      setIsClearLocal(false);
       const updatedCell = {
         ...board.cells[currentCellIndexLocal],
-        isDone: !isDoneLocal,
-        isClear: false,
+        isDone: nextState.isDone,
+        isClear: nextState.isClear,
         label: labelLocal,
       };
       handelCells(updatedCell);
     } else {
-      setIsClearLocal(false);
-
       const newCell = {
         id: `${rowNr}-${colNr}`,
         boardId: board?.boardId,
         rowNr: rowNr,
         colNr: colNr,
-        isDone: !isDoneLocal,
-        isClear: false,
+        isDone: nextState.isDone,
+        isClear: nextState.isClear,
         label: labelLocal,
       };
       handelCells(newCell);
@@ -365,7 +368,7 @@ const StreakerGridItem = ({
         </div>
       ) : isClearLocal ? (
         <button
-          title="Click to mark as done/missed, hold for 2 seconds to add a note"
+          title="Click to cycle: done, missed, unreviewed. Hold for 2 seconds to add a note."
           className={`${styles.streakerGridItem} ${
             isTodayLocal && !isHistory ? styles.streakerGridItemToday : ""
           }`}
@@ -384,7 +387,7 @@ const StreakerGridItem = ({
         ></button>
       ) : (
         <button
-          title="Click to mark as done/missed, double-click to clear, hold for 2 seconds to add a note"
+          title="Click to cycle: done, missed, unreviewed. Hold for 2 seconds to add a note."
           className={`${styles.streakerGridItem} ${
             isDoneLocal
               ? styles.streakerGridItemDoneTrue
