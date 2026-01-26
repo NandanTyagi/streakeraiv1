@@ -1,9 +1,5 @@
 import { Configuration, OpenAIApi } from "openai-edge";
-import { OpenAIStream, StreamingTextResponse } from "ai";
-
-import { NextResponse } from "next/server";
-import createCompleation from "@/utils/openai/createCompleation";
-import {systemPrompt} from "@/utils/openai/prompt";
+import { systemPrompt } from "@/utils/openai/prompt";
 
 export const runtime = "edge";
 export const maxDuration = 300;
@@ -37,11 +33,12 @@ export async function POST(request: Request) {
     stream: true,
   });
 
-  const stream = OpenAIStream(response);
-
-  const streamResponse = new StreamingTextResponse(stream);
-
-  // console.log("streamResponse", streamResponse);
-
-  return streamResponse;
+  // Pass through the OpenAI SSE stream directly so EventSource can consume it.
+  return new Response(response.body, {
+    headers: {
+      "Content-Type": "text/event-stream; charset=utf-8",
+      "Cache-Control": "no-cache, no-transform",
+      Connection: "keep-alive",
+    },
+  });
 }
