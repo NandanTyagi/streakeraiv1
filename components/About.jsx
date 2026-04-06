@@ -85,7 +85,7 @@ const Intro = () => {
           your
         </h1>
         <h1 className={`font-bold text-4xl sm:text-6xl opacity-0`} id="achieve2">
-        progress.
+        progress
         </h1>
       </div>
       </div>
