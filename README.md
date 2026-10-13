@@ -137,3 +137,19 @@ and legacy modes. Signed-out user and v3 APIs should reject access.
 For `streaker-v1.vercel.app`, set `NEXT_PUBLIC_CLERK_PROXY_URL=https://streaker-v1.vercel.app/__clerk` in Vercel Production alongside the matching live Clerk keys. The `/__clerk` route forwards only to Clerk's Frontend API, keeps the secret server-side, and disables session caching. Leave the proxy variable unset for local development keys.
 
 After deployment, verify the proxy under Clerk > Domains. Google production sign-in also requires custom Google OAuth credentials in Clerk, with `https://streaker-v1.vercel.app/__clerk/v1/oauth_callback` registered as an authorized redirect URI in Google Cloud. Development's shared Google credentials do not work in production.
+
+### E-ink display
+
+After signing in, use **Send to display** on the panel. The image is rendered at
+480 × 800 in black and white, with 14 days around today. It captures the current
+panel, including unsaved marks; use **Save** separately to persist panel edits.
+
+The **Display image** link under the send button is a stable, account-specific
+image URL. Configure the frame to fetch that URL on its normal refresh schedule.
+Anyone with this unguessable URL can view the image, so treat it as a private link.
+Uploads require a verified signed-in account and are stored in MongoDB's
+`display_images` collection using the existing v3 database configuration. Responses
+are not cached. Sending confirms image storage, not a hardware refresh acknowledgment.
+
+The old `/screenshots/currentScreenshot.png` is a bundled historical image and is
+not an upload destination on Vercel. Devices using it must switch to the new link.
