@@ -206,7 +206,10 @@ main:not(.zero-m) {
 }
 
 .panel-action-bar {
-  height: var(--footer-height);
+  min-height: var(--footer-height);
+  height: auto;
+  flex-shrink: 0;
+  padding-block: 6px;
   display: flex;
   align-items: center;
 }

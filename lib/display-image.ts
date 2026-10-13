@@ -14,7 +14,7 @@ export function decodeDisplayImage(image: unknown): Buffer {
 }
 
 export async function displayImages() {
-  return (await getMongoDb()).collection<{ _id: string; token: string; image: string; updatedAt: Date }>("display_images");
+  return (await getMongoDb()).collection<{ _id: string; token: string; image?: string; updatedAt?: Date; sourcePanelId?: string }>("display_images");
 }
 export function newDisplayToken() { return randomBytes(24).toString("hex"); }
 export function displayImageUrl(token: string) { return `/api/display/${token}`; }

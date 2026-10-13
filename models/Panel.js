@@ -64,6 +64,7 @@ const HistorySchema = new Schema({
 
 const PanelSchema = new Schema(
   {
+    boardId: { type: String },
     goalToAchieve: {
       type: String,
       required: true,

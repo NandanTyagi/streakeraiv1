@@ -50,7 +50,7 @@ test("v3 autosave skips unchanged old marks, writes sequentially and persists cl
   active++; assert.equal(active,1); writes.push(JSON.parse(options.body)); await pause(); active--; return Response.json({});
  };
  try {
-  await saveBoardToV3({board:{goalToAchieve:'Goal',habitsNames:['A','B'],habitsValues:['',''],cells:[cell(1,true),{rowNr:today,colNr:2,isDone:true,isClear:false}]},userId:'test',tz:'UTC'});
+  await saveBoardToV3({board:{_id:'g',goalToAchieve:'Goal',habitsNames:['A','B'],habitsValues:['',''],cells:[cell(1,true),{rowNr:today,colNr:2,isDone:true,isClear:false}]},userId:'test',tz:'UTC'});
   assert.equal(writes.length,2); assert.equal(writes[0].status,'unreviewed'); assert.equal(writes[1].status,'done');
  } finally {globalThis.fetch=originalFetch;delete globalThis.window;}
 });
