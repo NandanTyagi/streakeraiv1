@@ -10,6 +10,7 @@ const withPWA = require('next-pwa')({
       // Auth, API and rendered page responses must never survive sign-out.
       urlPattern: ({ request, url }) => request.mode === 'navigate' ||
         url.pathname.startsWith('/api/') || url.pathname.startsWith('/sign-') ||
+        url.pathname.startsWith('/__clerk') ||
         url.pathname.startsWith('/_next/data/') ||
         request.headers.get('RSC') === '1' ||
         url.hostname.includes('clerk'),
