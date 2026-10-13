@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 
 import { AppContext } from "@/context/appContext";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 
 import styles from "../../styles/StreakerGrid.module.css";
 
@@ -47,7 +47,7 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
   cells,
 }) => {
   const { isAppLoading, currentHistoryPanel } = useContext(AppContext);
-  const { isLoading, user } = useKindeBrowserClient();
+  const { isLoading, user } = useAppAuth();
   const containerRef = useRef<HTMLDivElement>(null);
   useMobileGridFit({ containerRef });
 

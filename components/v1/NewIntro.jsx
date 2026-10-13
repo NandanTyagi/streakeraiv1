@@ -5,11 +5,11 @@ import HeroThreeBackground from "@/components/HeroThreeBackground";
 import {
   RegisterLink,
   LoginLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+} from "@/components/auth/AuthLinks";
+import { useAppAuth } from "@/hooks/useAppAuth";
 
 const NewIntro = () => {
-  const { user } = useKindeBrowserClient();
+  const { user } = useAppAuth();
   return (
     <div className="min-h-screen flex flex-col relative bg-[var(--paper)]">
       <HeroThreeBackground />

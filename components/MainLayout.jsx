@@ -3,18 +3,17 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { usePathname } from "next/navigation";
 import { Toaster } from "./ui/toaster";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import { useEffect } from "react";
 import SpatialReflectionLayer from "./SpatialReflectionLayer";
 import PanelFooterControls from "./v1/PanelFooterControls";
 
 export default function MainLayout({ children }) {
   const pathname = usePathname();
-  const { user } = useKindeBrowserClient();
+  const { user } = useAppAuth();
 
-  const allowedUsers = process.env.NEXT_PUBLIC_ALLOWED_USERS;
+  const allowedUsers = process.env.NEXT_PUBLIC_ALLOWED_USERS || "";
   const allowedUsersArray = allowedUsers.split(",");
-  console.log("allowed users", allowedUsersArray);
 
   const isAllowedUser = allowedUsersArray.includes(user?.email);
   const spatialPaths = new Set(["/", "/about", "/dashboard"]);

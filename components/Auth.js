@@ -1,38 +1,11 @@
-import {
-  RegisterLink,
-  LoginLink,
-  LogoutLink,
-  getKindeServerSession,
-} from "@kinde-oss/kinde-auth-nextjs/server";
+import { getAppUser } from "@/lib/auth";
+import { LoginLink, RegisterLink, LogoutLink } from "@/components/auth/AuthLinks";
 export default async function Auth() {
-  const {
-    getAccessToken,
-    getBooleanFlag,
-    getFlag,
-    getIntegerFlag,
-    getOrganization,
-    getPermission,
-    getPermissions,
-    getStringFlag,
-    getUser,
-    getUserOrganizations,
-    isAuthenticated,
-  } = getKindeServerSession();
-
+  const user = await getAppUser();
   return (
-    <>
-      <div className="absolute top-0 right-0 flex justify-between gap-5 pr-5 pt-1 text-[var(--ink)] text-[0.8rem]">
-     {await isAuthenticated() && <div className="text-[1.2rem]">{await getUser().name}</div>}
-          <LoginLink>Sign in</LoginLink>
-        {await isAuthenticated() ? (
-          <LogoutLink>Log Out</LogoutLink>
-        ) : (
-          <LoginLink>Sign in</LoginLink>
-        )}
-        {await !isAuthenticated() && <RegisterLink>Sign up</RegisterLink>}
-      </div>
-    </>
+    <div className="absolute top-0 right-0 flex justify-between gap-5 pr-5 pt-1 text-white text-[0.8rem]">
+      {user ? <><span>{user.given_name}</span><LogoutLink>Log out</LogoutLink></> :
+        <><LoginLink>Sign in</LoginLink><RegisterLink>Sign up</RegisterLink></>}
+    </div>
   );
-};
-
-// export default Auth;
+}

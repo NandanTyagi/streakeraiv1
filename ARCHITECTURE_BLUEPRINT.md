@@ -141,7 +141,7 @@ src/
 ## 4.4 Responsibility Map
 - Domain: DayState transitions, streak math, invariants.
 - Application: Authorization, validation, orchestration.
-- Infrastructure: Mongo adapter, OpenAI adapter, Kinde adapter.
+- Infrastructure: Mongo adapter, OpenAI adapter, Clerk adapter.
 - Interface: Next.js routes, UI rendering.
 
 ## 4.5 Data Flow (Target)
@@ -268,17 +268,17 @@ flowchart LR
 
 # 12. Refactor Milestones
 
-## P0 (2–3 weeks)
+## P0 (2ï¿½3 weeks)
 - Remove client-side OpenAI key usage.
 - Fix panel save flow and history consistency.
 - Add v3 domain read endpoints.
 
-## P1 (3–5 weeks)
+## P1 (3ï¿½5 weeks)
 - Add v3 write endpoints.
 - Migrate UI to v3 endpoints.
 - Introduce append-only history events.
 
-## P2 (4–6 weeks)
+## P2 (4ï¿½6 weeks)
 - AI orchestration boundary.
 - Deterministic streak engine.
 - Full migration + delete legacy.

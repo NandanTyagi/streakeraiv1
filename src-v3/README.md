@@ -6,7 +6,7 @@ This directory is a parallel rebuild of Streaker AI following the V3 constitutio
 
 - **Domain (`src-v3/domain`)**: Pure deterministic logic, types, invariants, DayState rules, streak engine, event replay.
 - **Application (`src-v3/application`)**: Use cases implement `Command -> Events -> State -> Projections`, with projections for dashboard, monthly grid, history, and AI grounding.
-- **Infrastructure (`src-v3/infrastructure`)**: Adapters for Mongo event store, projection repository, OpenAI, Kinde auth, clock, timezone, and legacy migration bridge.
+- **Infrastructure (`src-v3/infrastructure`)**: Adapters for Mongo event store, projection repository, OpenAI, Clerk auth, clock, timezone, and legacy migration bridge.
 - **Interface (`src-v3/interface`)**: V3 API handlers mapping endpoints to use cases. No business logic in routes.
 
 ## Event Model

@@ -6,7 +6,7 @@ import StreakerGridHeaders from "../../components/StreakerGridHeaders";
 import StreakerGridRow from "../StreakerGridRow";
 import Loading from "@/components/Loading";
 import { AppContext } from "@/context/appContext";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import dayjs from "dayjs";
 import getDaysInMonth from "@/utils/getDaysInMonth";
 import getDayTagArray from "@/utils/getDayTagArray";
@@ -18,7 +18,7 @@ import useMobileGridFit from "@/hooks/useMobileGridFit";
 
 const StreakerEmptyGrid = () => {
   const { cells, board, isAppLoading } = useContext(AppContext);
-  const { isLoading, user } = useKindeBrowserClient();
+  const { isLoading, user } = useAppAuth();
   const [cellsArray, setCellsArray] = useState([]);
   const habits = board?.habitsNames || [];
   const days = getDaysInMonth(new Date());

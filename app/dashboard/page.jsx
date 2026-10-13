@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { AppContext } from "@/context/appContext";
 import useV3Engine from "@/utils/useV3Engine";
 import { fetchV3Streaks } from "@/utils/v3/api";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import dayjs from "dayjs";
 import Loading from "@/components/Loading";
 import { Bar, Line } from "react-chartjs-2";
@@ -48,7 +48,7 @@ const DashboardLoading = () => (
 
 const Dashboard = () => {
   const { board } = useContext(AppContext);
-  const { user } = useKindeBrowserClient();
+  const { user } = useAppAuth();
   const [v3Streaks, setV3Streaks] = useState([]);
   const isV3 = useV3Engine();
 

@@ -1,3 +1,5 @@
+> Historical architecture snapshot: the authentication sections below predate the Clerk migration. See README.md (Authentication) and lib/auth.js for the current implementation.
+
 # 1. Repository Map
 
 ## 1.1 Top-Level Structure

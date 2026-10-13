@@ -3,7 +3,7 @@
 import { useEffect, useState, useContext } from "react";
 import { AppContext } from "@/context/appContext";
 import handleBoards from "@/utils/handelBoards"; // Renamed for clarity
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import { useSearchParams } from "next/navigation";
 import HeaderItem from "./HeaderItem";
 import dayjs from "dayjs";
@@ -16,7 +16,7 @@ const StreakerGridHeaders = ({ isHistory }) => {
   const [isAiGenerated, setIsAiGenerated] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(null);
 
-  const { user } = useKindeBrowserClient();
+  const { user } = useAppAuth();
   const params = useSearchParams();
 
   /**

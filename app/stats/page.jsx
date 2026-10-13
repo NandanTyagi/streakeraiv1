@@ -5,11 +5,11 @@ import dayjs from "dayjs";
 import styles from "@/styles/ColumnStats.module.css";
 import useV3Engine from "@/utils/useV3Engine";
 import { fetchV3Streaks } from "@/utils/v3/api";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 
 const ColumnStatsPage = () => {
   const { board } = useContext(AppContext); // Assuming `board` is available here
-  const { user } = useKindeBrowserClient();
+  const { user } = useAppAuth();
   const isV3 = useV3Engine();
   const [v3Streaks, setV3Streaks] = useState([]);
 

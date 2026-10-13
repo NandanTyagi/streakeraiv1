@@ -1,7 +1,7 @@
+import { getDatabaseUser } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import Panel from "@/models/Panel";
-import connectDB from "@/utils/db";
 
 export const POST = async (req, res) => {
   const {
@@ -11,15 +11,14 @@ export const POST = async (req, res) => {
     habitsValues,
     days,
     history,
-    user,
     _id,
   } = await req.json();
 
-  await connectDB();
-debugger
   try {
-    const existingPanel = await Panel.findByIdAndUpdate(
-      _id,
+    const owner = await getDatabaseUser();
+    if (!owner) return Response.json({ message: "Unauthorized" }, { status: 401 });
+    const existingPanel = await Panel.findOneAndUpdate(
+      { _id, user: owner._id },
       {
         cells: cells,
         goalToAchieve: goalToAchieve,
@@ -27,12 +26,12 @@ debugger
         habitsValues: habitsValues,
         days: days,
         history: history,
-        user: user,
+        user: owner._id,
         _id: _id,
       },
-      { new: true, upsert: true }
+      { new: true }
     );
-    // console.log("Existing panel in update panel", existingPanel);
+    if (!existingPanel) return Response.json({ message: "Panel not found" }, { status: 404 });
     return new NextResponse(JSON.stringify(existingPanel), {
       status: 201,
       headers: {

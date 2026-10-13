@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
-import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { RegisterLink } from "@/components/auth/AuthLinks";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import DialogButton from "@/components/ui/Dialog";
 import { useState, useContext, useEffect, use } from "react";
 import { AppContext } from "@/context/appContext";
@@ -24,7 +24,7 @@ import {
 
 const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
   const { toast } = useToast();
-  const { user } = useKindeBrowserClient();
+  const { user } = useAppAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isAppLoading, setisAppLoading] = useState(false);

@@ -1,10 +1,11 @@
+import { getDatabaseUser } from "@/lib/auth";
 import Panel from "@/models/Panel";
-import connectDB from "@/utils/db";
 
 export const GET = async (request) => {
   try {
-    await connectDB();
-    const panels = await Panel.find({});
+    const user = await getDatabaseUser();
+    if (!user) return Response.json({ message: "Unauthorized" }, { status: 401 });
+    const panels = await Panel.find({ user: user._id });
     return new Response(JSON.stringify(panels), {
       status: 200,
     });

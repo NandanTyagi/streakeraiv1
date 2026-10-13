@@ -9,7 +9,7 @@ import { AppContext } from "@/context/appContext";
 import { useState, useContext } from "react";
 import createCompleationV1 from "@/utils/openai/createCompleationV1"
 import handelBoards from "@/utils/handelBoards";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import {
   Form,
   FormControl,
@@ -44,7 +44,7 @@ function AiInputForm() {
     setGoalToAchieve,
     goalToAchieve } =
     useContext(AppContext);
-  const { user } = useKindeBrowserClient();
+  const { user } = useAppAuth();
   const [input, setInput] = useState("");
 
   const handelHabits = async (habitKeys: any, habitValues: any) => {

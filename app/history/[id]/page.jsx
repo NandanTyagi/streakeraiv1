@@ -7,7 +7,7 @@ import fetchPanelById from "@/utils/v2/fetchPanelById";
 import useV3Engine from "@/utils/useV3Engine";
 import { loadBoardForMonth } from "@/utils/v3/loadBoardForMonth";
 import dayjs from "dayjs";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import StreakerHistoryGrid from "@/components/v1/StreakerHistoryGrid";
 import Nav from "@/components/Nav";
 import Loading from "@/components/Loading";
@@ -23,7 +23,7 @@ const PanelPage = () => {
   const historyIndex = indexParam ? parseInt(indexParam, 10) : 0;
 
   const { currentHistoryPanel, setCurrentHistoryPanel } = useContext(AppContext);
-  const { user } = useKindeBrowserClient();
+  const { user } = useAppAuth();
   const isV3 = useV3Engine();
 
   // Initialize state with context value (if available)

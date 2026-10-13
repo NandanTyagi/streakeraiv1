@@ -2,11 +2,11 @@ export const dynamic = "force-dynamic";
 import Board from "../../../../models/StreakerBoard";
 import connectDB from "../../../../utils/db";
 
-// Connect to the database once for all routes
-connectDB();
+// Connect inside handlers so module loading does not require a live database.
 
 export const GET = async () => {
   try {
+    await connectDB();
     const boards = await Board.find({});
     return new Response(JSON.stringify(boards), {
       status: 200,
@@ -29,6 +29,7 @@ export const POST = async (req) => {
   const { boardUser, ...boardDetails } = await req.json();
   
   try {
+    await connectDB();
     const existingBoard = await Board.findOne({ boardUser }).exec();
     
     if (existingBoard) {
