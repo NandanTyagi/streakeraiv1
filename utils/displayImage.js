@@ -4,7 +4,7 @@ export const DISPLAY_HEIGHT = 800;
 
 export function displayDays(date = new Date()) {
   const start = Math.max(1, date.getDate() - 13);
-  return Array.from({ length: Math.min(14, date.getDate()) }, (_, i) => start + i);
+  return Array.from({ length: 14 }, (_, i) => start + i);
 }
 
 export function drawDisplay(canvas, board, date = new Date()) {
@@ -51,7 +51,7 @@ export function drawDisplay(canvas, board, date = new Date()) {
   });
   const days = displayDays(date);
   days.forEach((day, row) => {
-    const y = 169 + (14 - days.length + row) * 42;
+    const y = 169 + row * 42;
     const today = day === date.getDate();
     ctx.fillStyle = today ? "black" : "white";
     ctx.fillRect(12, y, 38, 37);
