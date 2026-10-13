@@ -58,7 +58,7 @@ export type UpsertDayStateRequest = {
   userId: string;
   tz: string;
   habitId: string;
-  status: "done" | "not_done";
+  status: "done" | "not_done" | "unreviewed";
   note?: string;
   date?: string;
   timestamp?: string;

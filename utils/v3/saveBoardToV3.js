@@ -3,6 +3,7 @@ import {
   createV3Goal,
   createV3Habit,
   fetchV3Goals,
+  fetchV3DayStates,
   fetchV3Habits,
   updateV3Goal,
   updateV3Habit,
@@ -86,24 +87,20 @@ export async function saveBoardToV3({ board, userId, tz }) {
   const orderedHabits = habits.sort((a, b) => a.order - b.order);
   const month = dayjs().format("YYYY-MM");
 
-  const upserts = (board.cells || [])
-    .filter((cell) => cell && cell.isClear === false)
-    .map((cell) => {
-      const habit = orderedHabits[cell.colNr - 1];
-      if (!habit) return null;
-      const date = `${month}-${String(cell.rowNr).padStart(2, "0")}`;
-      return upsertV3DayState({
-        userId,
-        tz,
-        habitId: habit.id,
-        status: cell.isDone ? "done" : "not_done",
-        note: cell.comment || "",
-        date,
-      });
-    })
-    .filter(Boolean);
-
-  await Promise.all(upserts);
-
+  const grid = await fetchV3DayStates({ userId, tz, month });
+  // Serialize writes: each event updates the shared monthly projection.
+  for (let day = 1; day <= dayjs().date(); day++) {
+    for (let col = 0; col < orderedHabits.length; col++) {
+      const habit = orderedHabits[col];
+      const date = `${month}-${String(day).padStart(2, "0")}`;
+      const cell = board.cells?.find(c => c.rowNr === day && c.colNr === col + 1);
+      const status = cell?.isClear === false ? (cell.isDone ? "done" : "not_done") : "unreviewed";
+      const note = cell?.comment || "";
+      const existing = grid.cells?.find(c => c.habitId === habit.id && c.date === date);
+      const previousStatus = existing?.status === "missed" ? "not_done" : existing?.status || "unreviewed";
+      if (status === previousStatus && note === (existing?.note || "")) continue;
+      await upsertV3DayState({ userId, tz, habitId: habit.id, status, note, date });
+    }
+  }
   return { saved: true, message: "V3 board saved" };
 }

@@ -84,12 +84,12 @@ const Header = () => {
       </div>
       {isMenuOpen && (
         <div
-          className={`fixed left-0 right-0 z-50 flex justify-center items-center bg-[var(--paper)] border-t border-[var(--surface-border)] ${
+          className={`fixed left-0 right-0 z-50 flex flex-col justify-center items-center bg-[var(--paper)] border-t border-[var(--surface-border)] ${
             isAnimating ? "animate-fadeOut" : "animate-fadeIn"
           }`}
           style={{
             top: "var(--header-height)",
-            height: "calc(100vh - var(--header-height))",
+            height: "calc(100dvh - var(--header-height))",
           }}
           onAnimationEnd={() => {
             if (isAnimating) {

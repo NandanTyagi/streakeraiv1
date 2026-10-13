@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     userId?: string;
     tz?: string;
     habitId?: string;
-    status?: "done" | "not_done";
+    status?: "done" | "not_done" | "unreviewed";
     note?: string;
     date?: string;
     timestamp?: string;
@@ -24,13 +24,14 @@ export async function POST(req: NextRequest) {
   const requiredStatus = requireParam(status, "status");
   if (requiredStatus instanceof NextResponse) return requiredStatus;
 
+  if (!["done", "not_done", "unreviewed"].includes(requiredStatus)) return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   const deps = await buildHandlerDeps();
   const result = await upsertDayStateHandler(
     {
       userId: requiredUserId,
       tz,
       habitId: requiredHabitId,
-      status: requiredStatus as "done" | "not_done",
+      status: requiredStatus as "done" | "not_done" | "unreviewed",
       note: body.note,
       date: body.date,
       timestamp: body.timestamp,

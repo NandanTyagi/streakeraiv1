@@ -29,7 +29,7 @@ export interface Habit {
   archivedAt?: ISODateTime;
 }
 
-export type DayStateStatus = "done" | "not_done";
+export type DayStateStatus = "done" | "not_done" | "unreviewed";
 
 export interface DayState {
   habitId: ID;
