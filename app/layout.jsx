@@ -1,4 +1,5 @@
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 import { AppContextProvider } from "@/context/appContext";
 import MainLayout from "@/components/MainLayout";
 import { CSPostHogProvider } from "@/app/providers";
@@ -48,11 +49,18 @@ export default function RootLayout({ children }) {
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body>
-        <CSPostHogProvider>
-          <AppContextProvider>
-            <MainLayout>{children}</MainLayout>
-          </AppContextProvider>
-        </CSPostHogProvider>
+        <ClerkProvider
+          signInUrl="/sign-in"
+          signUpUrl="/sign-up"
+          signInFallbackRedirectUrl="/panel"
+          signUpFallbackRedirectUrl="/panel"
+        >
+          <CSPostHogProvider>
+            <AppContextProvider>
+              <MainLayout>{children}</MainLayout>
+            </AppContextProvider>
+          </CSPostHogProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

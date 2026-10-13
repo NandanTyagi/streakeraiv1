@@ -6,12 +6,12 @@ import StreakerGridHeaders from "../components/StreakerGridHeaders";
 import StreakerGridItem from "./StreakerGridItem";
 import Loading from "@/components/Loading";
 import { AppContext } from "@/context/appContext";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import { get } from "http";
 
 const StreakerGrid = () => {
   const { board, isAppLoading } = useContext(AppContext);
-  const { isLoading } = useKindeBrowserClient();
+  const { isLoading } = useAppAuth();
   const days = getDaysInMonth(new Date());
   const habits = board?.habitsNames || [];
 
@@ -59,12 +59,12 @@ export default StreakerGrid;
 // import StreakerGridItem from "./StreakerGridItem";
 // import generateEmptyBoard from "@/utils/generateEmptyBoard";
 // import Loading from "@/components/Loading";
-// import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+// import { useAppAuth } from "@/hooks/useAppAuth";
 
 // const StreakerGrid = () => {
 //   const { cells, board, setBoard, setCells, isAppLoading } =
 //   useContext(AppContext);
-//   const { isAuthenticated, isLoading, user } = useKindeBrowserClient();
+//   const { isAuthenticated, isLoading, user } = useAppAuth();
 //   const days = (board && board.days) || 31;
 //   let habits = (board && board.habitsNames) ;
 

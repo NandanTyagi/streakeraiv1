@@ -5,13 +5,13 @@ import { AppContext } from "@/context/appContext";
 import Loading from "@/components/Loading";
 import handelBoards from "@/utils/handelBoards";
 import StreakerGrid from "@/components/v1/StreakerGrid";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import handelMouseDown from "@/utils/handelMouseDown";
 import Dialog from "@/components/ui/Dialog";
 import { useRouter, useSearchParams } from "next/navigation";
 import { set } from "mongoose";
 import getCurrentUserBoardFromDb from "@/utils/getCurrentUserBoardFromDb";
-import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { RegisterLink } from "@/components/auth/AuthLinks";
 
 export default function Home() {
   const params = useSearchParams();
@@ -26,7 +26,7 @@ export default function Home() {
     setIsCellLoading,
   } = useContext(AppContext);
 
-  const { isAuthenticated, user, isLoading } = useKindeBrowserClient();
+  const { isAuthenticated, user, isLoading } = useAppAuth();
 
   const [timer, setTimer] = useState(null);
   const [goalToAchieveLocal, setGoalToAchieveLocal] = useState(

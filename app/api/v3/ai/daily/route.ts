@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildHandlerDeps } from "@/src-v3/interface/api/v3/deps";
 import { generateDailyReflectionHandler } from "@/src-v3/interface/api/v3/handlers";
-import { okJson, readJson, requireParam } from "../../_shared";
+import { requireUserEmail, okJson, readJson, requireParam } from "../../_shared";
 
 export async function POST(req: NextRequest) {
   const body = await readJson<{ userId?: string; tz?: string; date?: string }>(req);
-  const userId = body.userId;
   const tz = body.tz || "UTC";
   const date = body.date;
 
-  const requiredUserId = requireParam(userId, "userId");
+  const requiredUserId = await requireUserEmail();
   if (requiredUserId instanceof NextResponse) return requiredUserId;
   const requiredDate = requireParam(date, "date");
   if (requiredDate instanceof NextResponse) return requiredDate;

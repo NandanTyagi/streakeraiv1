@@ -2,7 +2,7 @@
 
 import { createContext, useState, useEffect } from "react";
 import generateEmptyBoard from "../utils/generateEmptyBoard";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import getCurrentUserBoardFromDb from "@/utils/getCurrentUserBoardFromDb";
 import generateEmptyBoardCells from "@/utils/generateEmptyBoardCells";
 import getDaysInMonth from "@/utils/getDaysInMonth";
@@ -61,7 +61,7 @@ export const AppContext = createContext({
 });
 
 export function AppContextProvider({ children }) {
-  const { isAuthenticated, user, isLoading } = useKindeBrowserClient();
+  const { isAuthenticated, user, isLoading } = useAppAuth();
   const [users, setUsers] = useState();
   const [boardUser, setBoardUser] = useState(user?.email || {});
   const [boards, setBoards] = useState([]);
@@ -102,7 +102,7 @@ export function AppContextProvider({ children }) {
       setisAppLoading(true);
 
       if (!isLoading) {
-        if (!user) {
+        if (!user?.email) {
           setBoard(await generateEmptyBoard());
           return;
         }

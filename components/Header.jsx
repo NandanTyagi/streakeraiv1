@@ -1,12 +1,12 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import HamburgerButton from "@/components/HamburgerButton";
 import Menu from "@/components/Menu";
 
 const Header = () => {
-  const { isAuthenticated, user } = useKindeBrowserClient();
+  const { isAuthenticated, user } = useAppAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 

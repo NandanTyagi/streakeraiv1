@@ -1,3 +1,4 @@
+import { getAppUser } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function readJson<T>(req: NextRequest): Promise<T> {
@@ -22,4 +23,12 @@ export function requireParam(value: string | undefined, name: string): string | 
 
 export function okJson<T>(data: T, status = 200): NextResponse {
   return NextResponse.json(data, { status });
+}
+
+// Resolve the existing email-based identity from the session, never the client.
+export async function requireUserEmail(): Promise<string | NextResponse> {
+  const user = await getAppUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!user.email) return NextResponse.json({ error: "A verified email is required" }, { status: 403 });
+  return user.email;
 }

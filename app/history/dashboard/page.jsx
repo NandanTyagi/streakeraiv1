@@ -9,7 +9,7 @@ import { ArrowLeftIcon } from "lucide-react";
 import Loading from "@/components/Loading";
 import useV3Engine from "@/utils/useV3Engine";
 import { fetchV3Streaks } from "@/utils/v3/api";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import { Bar, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -50,7 +50,7 @@ const DashboardLoading = () => (
 const Dashboard = () => {
   const router = useRouter();
   const { currentHistoryPanel } = useContext(AppContext);
-  const { user } = useKindeBrowserClient();
+  const { user } = useAppAuth();
   const [v3Streaks, setV3Streaks] = useState([]);
   const isV3 = useV3Engine();
 

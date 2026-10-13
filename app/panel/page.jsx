@@ -2,7 +2,7 @@ import Loading from "@/components/Loading";
 import Nav from "@/components/Nav";
 import StreakerEmptyGrid from "@/components/v1/StreakerEmptyGrid";
 import StreakerGrid from "@/components/v1/StreakerGrid";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { getAppUser } from "@/lib/auth";
 
 export const viewport = {
   width: 'device-width',
@@ -12,9 +12,7 @@ export const viewport = {
 };
 
 const PanelPage = async () => {
-  const session = getKindeServerSession();
-  const user = await session.getUser();
-  console.log("user in panel page", user);
+  const user = await getAppUser();
   return (
     <div className="panel-shell">
       <Nav isNav={false} />

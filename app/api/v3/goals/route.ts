@@ -5,12 +5,11 @@ import {
   getGoalsHandler,
   updateGoalHandler,
 } from "@/src-v3/interface/api/v3/handlers";
-import { getQueryParam, okJson, readJson, requireParam } from "../_shared";
+import { requireUserEmail, getQueryParam, okJson, readJson, requireParam } from "../_shared";
 
 export async function GET(req: NextRequest) {
-  const userId = getQueryParam(req, "userId");
   const tz = getQueryParam(req, "tz") || "UTC";
-  const required = requireParam(userId, "userId");
+  const required = await requireUserEmail();
   if (required instanceof NextResponse) return required;
 
   const deps = await buildHandlerDeps();
@@ -20,10 +19,9 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const body = await readJson<{ userId?: string; tz?: string; title?: string }>(req);
-  const userId = body.userId;
   const tz = body.tz || "UTC";
   const title = body.title;
-  const requiredUserId = requireParam(userId, "userId");
+  const requiredUserId = await requireUserEmail();
   if (requiredUserId instanceof NextResponse) return requiredUserId;
   const requiredTitle = requireParam(title, "title");
   if (requiredTitle instanceof NextResponse) return requiredTitle;
@@ -35,12 +33,11 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   const body = await readJson<{ userId?: string; tz?: string; goalId?: string; title?: string }>(req);
-  const userId = body.userId;
   const tz = body.tz || "UTC";
   const goalId = body.goalId;
   const title = body.title;
 
-  const requiredUserId = requireParam(userId, "userId");
+  const requiredUserId = await requireUserEmail();
   if (requiredUserId instanceof NextResponse) return requiredUserId;
   const requiredGoalId = requireParam(goalId, "goalId");
   if (requiredGoalId instanceof NextResponse) return requiredGoalId;

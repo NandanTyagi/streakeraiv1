@@ -6,7 +6,7 @@ import {
   RegisterLink,
   LoginLink,
   LogoutLink
-} from "@kinde-oss/kinde-auth-nextjs/components";
+} from "@/components/auth/AuthLinks";
 import Footer from "@/components/Footer";
 import StandardButton from "./v1/StandardButton";
 import AddToHomeScreen from "./AddToHomeScreen";

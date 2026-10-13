@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildHandlerDeps } from "@/src-v3/interface/api/v3/deps";
 import { generateWeeklyReflectionHandler } from "@/src-v3/interface/api/v3/handlers";
-import { okJson, readJson, requireParam } from "../../_shared";
+import { requireUserEmail, okJson, readJson, requireParam } from "../../_shared";
 
 export async function POST(req: NextRequest) {
   const body = await readJson<{ userId?: string; tz?: string; weekEnding?: string }>(req);
-  const userId = body.userId;
   const tz = body.tz || "UTC";
   const weekEnding = body.weekEnding;
 
-  const requiredUserId = requireParam(userId, "userId");
+  const requiredUserId = await requireUserEmail();
   if (requiredUserId instanceof NextResponse) return requiredUserId;
   const requiredWeek = requireParam(weekEnding, "weekEnding");
   if (requiredWeek instanceof NextResponse) return requiredWeek;
