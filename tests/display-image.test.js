@@ -3,13 +3,13 @@ import { test } from "node:test";
 import { displayDays, drawDisplay } from "../utils/displayImage";
 import { decodeDisplayImage, newDisplayToken, displayImageUrl } from "../lib/display-image";
 
-test("display date window stays inside the month and includes today", () => {
-  for (const date of [new Date(2026, 9, 1), new Date(2026, 9, 13), new Date(2026, 9, 31), new Date(2028, 1, 29)]) {
+test("display rolls through the latest 14 days ending today", () => {
+  for (const date of [new Date(2026, 9, 1), new Date(2026, 9, 13), new Date(2026, 9, 17), new Date(2026, 9, 31), new Date(2028, 1, 29)]) {
     const days = displayDays(date);
-    assert.equal(days.length, 14);
-    assert.ok(days.includes(date.getDate()));
-    assert.ok(days[0] >= 1);
-    assert.ok(days[13] <= new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate());
+    assert.equal(days.length, Math.min(14, date.getDate()));
+    assert.equal(days[days.length - 1], date.getDate());
+    assert.equal(days[0], Math.max(1, date.getDate() - 13));
+    assert.ok(days.every(day => day <= date.getDate()));
   }
 });
 test("native renderer uses 480x800 and omits interactive controls", () => {
@@ -33,4 +33,15 @@ test("display URLs use unguessable independent tokens", () => {
   const a=newDisplayToken(), b=newDisplayToken();
   assert.match(a,/^[a-f0-9]{48}$/); assert.notEqual(a,b);
   assert.equal(displayImageUrl(a),`/api/display/${a}`);
+});
+test("rows keep their original size and today stays at the bottom", () => {
+  for (const day of [1, 13, 17, 31]) {
+    const rects = [];
+    const ctx = { fillRect(){}, strokeRect(x,y,w,h){rects.push({x,y,w,h});}, beginPath(){}, moveTo(){}, lineTo(){}, stroke(){}, measureText(t){return {width:t.length*7};}, fillText(){} };
+    drawDisplay({getContext(){return ctx;}}, {goalToAchieve:"Goal",habitsNames:["Sleep"],habitsValues:["8h"],cells:[]}, new Date(2026,9,day));
+    assert.equal(rects.length, Math.min(day,14));
+    assert.ok(rects.every(rect => rect.h === 37));
+    assert.equal(rects.at(-1).y, 715);
+    assert.ok(rects.every((rect,i) => i === 0 || rect.y - rects[i-1].y === 42));
+  }
 });
