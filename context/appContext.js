@@ -9,6 +9,7 @@ import getDaysInMonth from "@/utils/getDaysInMonth";
 import createPanelInDb from "@/utils/v2/createPanelInDb";
 import { number } from "zod";
 import useV3Engine from "@/utils/useV3Engine";
+import { useToast } from "@/hooks/use-toast";
 
 export const AppContext = createContext({
   users: [],
@@ -62,6 +63,7 @@ export const AppContext = createContext({
 
 export function AppContextProvider({ children }) {
   const { isAuthenticated, user, isLoading } = useAppAuth();
+  const { toast } = useToast();
   const [users, setUsers] = useState();
   const [boardUser, setBoardUser] = useState(user?.email || {});
   const [boards, setBoards] = useState([]);
@@ -131,6 +133,7 @@ export function AppContextProvider({ children }) {
       }
     } catch (error) {
       console.error("Failed to fetch board:", error);
+      toast({ title: "Panel could not be loaded", description: "The database is unavailable. Please retry when the connection is restored.", variant: "destructive" });
     } finally {
       setisAppLoading(false);
     }

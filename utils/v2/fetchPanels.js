@@ -1,11 +1,7 @@
-const apiDomain = process.env.NEXT_PUBLIC_API_DOMAIN || null;
-
 async function fetchPanels() {
   try {
-    if (!apiDomain) {
-      return [];
-    }
-    const response = await fetch(`${apiDomain}/v2/panels`);
+
+    const response = await fetch(`/api/v2/panels`);
     if (!response.ok) {
       throw new Error("Failed to fetch panels");
     }
