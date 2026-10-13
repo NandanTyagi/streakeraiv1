@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { getDatabaseUser } from "@/lib/auth";
 import Panel from "@/models/Panel";
 
