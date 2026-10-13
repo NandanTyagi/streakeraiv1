@@ -1,7 +1,5 @@
-const apiDomain = process.env.NEXT_PUBLIC_API_DOMAIN || "";
-
 function buildUrl(path, params) {
-  const url = new URL(path, apiDomain || window.location.origin);
+  const url = new URL(path, window.location.origin);
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
@@ -9,7 +7,7 @@ function buildUrl(path, params) {
       }
     });
   }
-  return apiDomain ? url.toString() : url.pathname + url.search;
+  return url.pathname + url.search;
 }
 
 export async function fetchV3Goals({ userId, tz }) {

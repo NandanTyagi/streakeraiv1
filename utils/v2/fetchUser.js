@@ -1,11 +1,7 @@
-const apiDomain = process.env.NEXT_PUBLIC_API_DOMAIN || null;
-
 async function fetchUser() {
   try {
-    if (!apiDomain) {
-      return [];
-    }
-    const response = await fetch(`${apiDomain}/v1/users/getuser`);
+
+    const response = await fetch(`/api/v1/users/getuser`);
     if (!response.ok) {
       throw new Error("Failed to fetch user");
     }
