@@ -58,6 +58,7 @@ const PanelPage = () => {
             userId: user.email,
             tz,
             month: monthKey,
+            goalId: id,
           });
           setPanel(fetchedPanel);
           if (fetchedPanel) {

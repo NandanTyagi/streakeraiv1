@@ -12,7 +12,9 @@ import {
 
 export async function ensureGoalAndHabits({ board, userId, tz }) {
   const goals = await fetchV3Goals({ userId, tz });
-  let goal = goals[0];
+  const goalId = board.v3?.goalId || board._id;
+  let goal = goalId ? goals.find(goal => goal.id === goalId) : null;
+  if (goalId && !goal) throw new Error("This panel is no longer available.");
 
   if (!goal) {
     const created = await createV3Goal({

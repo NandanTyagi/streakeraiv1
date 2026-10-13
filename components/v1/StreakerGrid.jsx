@@ -25,6 +25,8 @@ const StreakerGrid = () => {
 
   useMobileGridFit();
 
+  if (!board && !isAppLoading && !isLoading) return <p className="p-6 text-center text-sm">Choose New panel to create your first set of practices.</p>;
+
   return (
     <>
       {isAppLoading || isLoading ? (
@@ -56,7 +58,7 @@ const StreakerGrid = () => {
 
               return (
                 <StreakerGridRow
-                  key={dayIndex}
+                  key={`${board?._id || board?.draftId}-${dayIndex}`}
                   nr={dayIndex + 1}
                   cells={cellProps}
                   day={tagArr[dayIndex]}
