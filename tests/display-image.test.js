@@ -3,13 +3,13 @@ import { test } from "node:test";
 import { displayDays, drawDisplay } from "../utils/displayImage";
 import { decodeDisplayImage, newDisplayToken, displayImageUrl } from "../lib/display-image";
 
-test("display rolls through the latest 14 days ending today", () => {
-  for (const date of [new Date(2026, 9, 1), new Date(2026, 9, 13), new Date(2026, 9, 17), new Date(2026, 9, 31), new Date(2028, 1, 29)]) {
+test("display fills days 1–14 initially then rolls forward", () => {
+  for (const date of [new Date(2026, 9, 1), new Date(2026, 9, 13), new Date(2026, 9, 14), new Date(2026, 9, 15), new Date(2026, 9, 17), new Date(2026, 9, 31), new Date(2028, 1, 29)]) {
     const days = displayDays(date);
-    assert.equal(days.length, Math.min(14, date.getDate()));
-    assert.equal(days[days.length - 1], date.getDate());
+    assert.equal(days.length, 14);
+    assert.equal(days[days.length - 1], Math.max(14, date.getDate()));
     assert.equal(days[0], Math.max(1, date.getDate() - 13));
-    assert.ok(days.every(day => day <= date.getDate()));
+    assert.ok(days.every((day, i) => day === days[0] + i));
   }
 });
 test("native renderer uses 480x800 and omits interactive controls", () => {
@@ -34,13 +34,15 @@ test("display URLs use unguessable independent tokens", () => {
   assert.match(a,/^[a-f0-9]{48}$/); assert.notEqual(a,b);
   assert.equal(displayImageUrl(a),`/api/display/${a}`);
 });
-test("rows keep their original size and today stays at the bottom", () => {
-  for (const day of [1, 13, 17, 31]) {
-    const rects = [];
-    const ctx = { fillRect(){}, strokeRect(x,y,w,h){rects.push({x,y,w,h});}, beginPath(){}, moveTo(){}, lineTo(){}, stroke(){}, measureText(t){return {width:t.length*7};}, fillText(){} };
+test("rows retain size while today moves down then stays at the bottom", () => {
+  for (const day of [1, 13, 14, 15, 17, 31]) {
+    const rects = []; const highlights = [];
+    const ctx = { fillRect(x,y,w,h){if(x === 12 && this.fillStyle === "black") highlights.push(y);}, strokeRect(x,y,w,h){rects.push({x,y,w,h});}, beginPath(){}, moveTo(){}, lineTo(){}, stroke(){}, measureText(t){return {width:t.length*7};}, fillText(){} };
     drawDisplay({getContext(){return ctx;}}, {goalToAchieve:"Goal",habitsNames:["Sleep"],habitsValues:["8h"],cells:[]}, new Date(2026,9,day));
-    assert.equal(rects.length, Math.min(day,14));
+    assert.equal(rects.length, 14);
     assert.ok(rects.every(rect => rect.h === 37));
+    assert.equal(rects[0].y, 169);
+    assert.deepEqual(highlights, [169 + Math.min(day - 1, 13) * 42]);
     assert.equal(rects.at(-1).y, 715);
     assert.ok(rects.every((rect,i) => i === 0 || rect.y - rects[i-1].y === 42));
   }

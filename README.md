@@ -141,7 +141,7 @@ After deployment, verify the proxy under Clerk > Domains. Google production sign
 ### E-ink display
 
 After signing in, use **Send to display** on the panel. The image is rendered at
-480 × 800 in black and white, with a rolling view of the latest 14 days in the current month, ending with today at the bottom. Row sizes stay fixed; older days move off the top. Early in the month, unused space remains above the available days. It captures the current
+480 × 800 in black and white, showing days 1–14 initially as today moves down the grid. From day 15, the latest 14 days roll forward with today at the bottom and older days moving off the top. Row sizes stay fixed. It captures the current
 panel, including unsaved marks; use **Save** separately to persist panel edits.
 
 The **Display image** link under the send button is a stable, account-specific
