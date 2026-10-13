@@ -11,11 +11,11 @@ const PanelFooterControls = ({ showSend }) => {
   }, []);
 
   return (
-    <div className="w-full flex items-center justify-center gap-3">
+    <div className="w-full flex items-center justify-center gap-2 sm:gap-3">
       <button
         type="button"
         onClick={handleScrollToToday}
-        className="min-h-[44px] rounded-md border border-[var(--ink)] px-4 py-2 text-sm font-semibold cursor-pointer hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] focus-visible:outline-offset-2"
+        className="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-md border border-[var(--ink)] px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold leading-none cursor-pointer hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] focus-visible:outline-offset-2"
         title="Scroll to today"
       >
         Today
