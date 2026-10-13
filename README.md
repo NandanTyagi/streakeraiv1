@@ -34,9 +34,9 @@ To get started with StreakerAi, follow these steps:
     ```
 
 4. **Set up environment variables:**
-    - Create a `.env` file in the root directory and add your environment variables (e.g., OpenAI API key).
+    - Copy `.env.example` to `.env.local`, fill in your existing database and API settings, and follow the Clerk setup below.
     ```env
-    NEXT_PUBLIC_OPENAI_API_KEY=your_openai_api_key
+    OPENAI_API_KEY=your_openai_api_key
     ```
 
 5. **Run the development server:**
@@ -101,3 +101,33 @@ For questions or feedback, please contact us at support@streakerai.com.
 ---
 
 Thank you for using StreakerAi! Let's embark on this journey of personal transformation together.
+
+## Authentication (Clerk)
+
+Authentication uses Clerk's Next.js SDK, with `/sign-in` and `/sign-up` pages.
+Successful authentication defaults to `/panel`; signing out returns to `/`.
+The public landing pages and anonymous ledger remain available without login.
+
+1. Copy `.env.example` to `.env.local` if you do not already have a local env file.
+2. Set `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` using keys from
+   the same Clerk application. Keep the secret key server-side only.
+3. In Clerk, enable email sign-up/sign-in and require email verification. Configure
+   any desired social providers in Clerk (including their production credentials).
+4. Set the same environment variables in your deployment and configure Clerk's
+   production domains before deploying. The old `KINDE_*` variables are unused.
+
+Existing MongoDB users, panels, and v3 data remain keyed by email. Users must sign
+in to Clerk with the same **verified primary email** to access their existing data.
+The user API and panel creation provision MongoDB users automatically; no Clerk
+webhook is required. V3 endpoints derive the user identity from the Clerk session.
+Changing a user's primary email changes the legacy data key and requires a separate
+account-data migration.
+
+Kinde sessions and passwords are not transferred by this code change. Existing
+users must sign in/register through Clerk, or be imported using a separately planned
+Clerk user migration. Do not remove the Kinde application until that rollout is done.
+
+Validation: `npm run test:auth`, `npm run test:v3`, `npm run lint`, and `npm run build`.
+For a manual smoke test, verify sign-up, sign-in, sign-out, a new user's first panel,
+and an existing user's panel/history with a matching verified email in both v3
+and legacy modes. Signed-out user and v3 APIs should reject access.

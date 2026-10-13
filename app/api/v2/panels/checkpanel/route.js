@@ -1,13 +1,14 @@
+import { getDatabaseUser } from "@/lib/auth";
 export const dynamic = "force-dynamic"; // defaults to force-static
 import { NextResponse } from "next/server";
 import Panel from "@/models/Panel";
-import connectDB from "@/utils/db";
 
 export const POST = async (req, res) => {
   const { panelId } = await req.json();
   try {
-    await connectDB();
-    const existingPanel = await Panel.find({ _id: `${panelId}` });
+    const user = await getDatabaseUser();
+    if (!user) return Response.json({ message: "Unauthorized" }, { status: 401 });
+    const existingPanel = await Panel.find({ _id: panelId, user: user._id });
     // console.log("existingPanel in check panel route", existingPanel);
     // console.log("panel id in check panel route", panelId);
     return new NextResponse(JSON.stringify(existingPanel), {

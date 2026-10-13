@@ -10,5 +10,5 @@
 .description b,
 .description strong,
 .description bold {
-  color: #530da2;
+  color: var(--accent-color);
 }

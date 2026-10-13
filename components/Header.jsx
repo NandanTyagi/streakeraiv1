@@ -1,13 +1,12 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import HamburgerButton from "@/components/HamburgerButton";
 import Menu from "@/components/Menu";
-import { LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 
 const Header = () => {
-  const { isAuthenticated, user } = useKindeBrowserClient();
+  const { isAuthenticated, user } = useAppAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -22,45 +21,52 @@ const Header = () => {
   return (
     // Header with a blurred background
 
-    <header className="flex items-center justify-between px-3 bg-[#330594] relative">
+    <header
+      className="flex items-center gap-4 px-4 sm:px-6 bg-[var(--paper-veil)] border-b border-[var(--surface-border)] relative py-3"
+      style={{ minHeight: "var(--header-height)" }}
+    >
       <a href="/">
         <div className="flex items-center gap-1">
-          <div className="relative rounded-full overflow-hidden shadow-xl">
+          <div className="relative rounded-full overflow-hidden border border-[var(--surface-border)] bg-[var(--surface)] cursor-pointer hover:opacity-80 w-[30px] h-[30px]">
             <Image
               src="/streaker-logo.png"
               alt="logo"
+              unoptimized
               priority
-              width={60}
-              height={60}
+              width={30}
+              height={30}
             />
           </div>
-          <div className="text-[1.4rem] sm:text-[1.6rem] flex font-bold text-white">
+          <div className="text-[1.3rem] sm:text-[1.5rem] flex font-semibold text-[var(--ink)] tracking-[0.02em]">
             Streaker
-            <div className="flex gap-2">
-              <span className="text-[0.7rem]">Beta</span>
+            <div className="flex gap-2 items-center">
+              <span className="text-[0.65rem] uppercase tracking-[0.24em] text-[var(--ink-soft)]">
+                Beta
+              </span>
             </div>
           </div>
         </div>
       </a>
-      <div className="absolute top-0 right-0 flex z-2 gap-5 pr-3 text-white text-[0.8rem] h-full pt-1">
-        <div className="flex items-center">
+      <div className="ml-auto flex items-center gap-4 text-[var(--ink)] text-[0.85rem] cursor-pointer z-[2]">
+        <div className="flex items-center gap-4 sm:gap-5">
           {isAuthenticated ? (
             <>
-              <div className="flex items-center gap-2 sm:mr-6">
-                <span className="hidden sm:block mb-[-2px]">
+              <div className="flex items-center gap-3 sm:mr-4">
+                <span className="hidden sm:block text-[var(--ink-soft)]">
                   {user?.given_name} {user?.family_name}
                 </span>
                 {user?.picture ? (
                   <Image
-                    className="rounded-full w-8 h-8 mr-[32px]"
+                    className="rounded-full w-8 h-8"
                     src={user.picture}
                     alt="profile-pic"
+                    unoptimized
                     priority
                     width={30}
                     height={30}
                   />
                 ) : (
-                  <div className="rounded-full w-8 h-8 bg-black text-white text-xs font-semibold flex justify-center items-center">
+                  <div className="rounded-full w-8 h-8 bg-[var(--ink)] text-[var(--paper-veil)] text-xs font-semibold flex justify-center items-center">
                     {user?.given_name?.[0]}
                     {user?.family_name?.[0]}
                   </div>
@@ -78,9 +84,13 @@ const Header = () => {
       </div>
       {isMenuOpen && (
         <div
-          className={`absolute inset-0 z-50 flex justify-center items-center bg-gradient-to-r from-blue-100 to-purple-100 h-[calc(100vh-80px)] top-[80px] ${
+          className={`fixed left-0 right-0 z-50 flex justify-center items-center bg-[var(--paper)] border-t border-[var(--surface-border)] ${
             isAnimating ? "animate-fadeOut" : "animate-fadeIn"
           }`}
+          style={{
+            top: "var(--header-height)",
+            height: "calc(100vh - var(--header-height))",
+          }}
           onAnimationEnd={() => {
             if (isAnimating) {
               setIsMenuOpen(false);

@@ -1,34 +1,12 @@
-import {
-    getKindeServerSession,
-  } from "@kinde-oss/kinde-auth-nextjs/server";
-  import User from "@/models/User";
-  import connectDB from "@/utils/db";
-  
-  export async function GET(request) {
-      try {
-      // console.log("in get user***********************************************", request);
-    const emailFromClient = "nandantyagi@gmail.com";
-    const session = getKindeServerSession(request);
-    const user = await session.getUser();
-    connectDB();
-    // console.log("in get user", user);
-   
-    const existingUser = await User.findOne({ email: user.email || emailFromClient })
-          if (!existingUser) {
-              return new Response(JSON.stringify({ message: "User not found" }), {
-                  status: 404,
-              });
-          }
-            return new Response(JSON.stringify(existingUser), {
-                status: 200,
-            });
-    
-
+import { getDatabaseUser } from "@/lib/auth";
+export const dynamic = "force-dynamic";
+export async function GET() {
+  try {
+    const user = await getDatabaseUser();
+    if (!user) return Response.json({ message: "Sign in with a verified email address." }, { status: 401 });
+    return Response.json(user);
   } catch (error) {
-    console.error("Get User operation failed", error);
-    return new Response(JSON.stringify({ message: "Error" }), {
-        status: 500,
-      });
+    console.error("Get user operation failed", error);
+    return Response.json({ message: "Error" }, { status: 500 });
   }
-   
-  }
+}

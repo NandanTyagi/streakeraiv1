@@ -6,7 +6,7 @@ import StreakerGridHeaders from "../../components/StreakerGridHeaders";
 import StreakerGridRow from "../StreakerGridRow";
 import Loading from "@/components/Loading";
 import { AppContext } from "@/context/appContext";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import dayjs from "dayjs";
 import getDaysInMonth from "@/utils/getDaysInMonth";
 import getDayTagArray from "@/utils/getDayTagArray";
@@ -14,14 +14,17 @@ import { late } from "zod";
 import fetchPanels from "@/utils/v2/fetchPanels.js";
 import fetchUser from "@/utils/v2/fetchUser";
 import StreakerGrid from "@/components/v1/StreakerGrid";
+import useMobileGridFit from "@/hooks/useMobileGridFit";
 
 const StreakerEmptyGrid = () => {
   const { cells, board, isAppLoading } = useContext(AppContext);
-  const { isLoading, user } = useKindeBrowserClient();
+  const { isLoading, user } = useAppAuth();
   const [cellsArray, setCellsArray] = useState([]);
   const habits = board?.habitsNames || [];
   const days = getDaysInMonth(new Date());
   const tagArr = getDayTagArray(new Date(), days);
+
+  useMobileGridFit();
 
   // useEffect(() => {
   //   const fetchUsersFromDb = async () => {
@@ -50,10 +53,13 @@ const StreakerEmptyGrid = () => {
 
     return (
       <>
-        <section className={styles.streakerGrid}>
+        <div className="px-4 py-3 text-center text-sm text-[var(--ink-soft)] border-b border-[var(--surface-border)] bg-[var(--paper-veil)]">
+          Sign in to preserve the ledger. You can still rehearse the grid below.
+        </div>
+        <section className={styles.streakerGrid} data-role="streaker-grid">
           <StreakerGridHeaders />
         </section>
-        <section className={styles.streakerGrid}>
+        <section className={styles.streakerGrid} data-role="streaker-grid">
           {Array.from({ length: days }).map((_, dayIndex) => {
             const today = dayjs().format("D");
 

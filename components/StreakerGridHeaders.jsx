@@ -3,7 +3,7 @@
 import { useEffect, useState, useContext } from "react";
 import { AppContext } from "@/context/appContext";
 import handleBoards from "@/utils/handelBoards"; // Renamed for clarity
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import { useSearchParams } from "next/navigation";
 import HeaderItem from "./HeaderItem";
 import dayjs from "dayjs";
@@ -16,7 +16,7 @@ const StreakerGridHeaders = ({ isHistory, month }) => {
   const [isAiGenerated, setIsAiGenerated] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(null);
 
-  const { user } = useKindeBrowserClient();
+  const { user } = useAppAuth();
   const params = useSearchParams();
 
   /**
@@ -111,14 +111,14 @@ const StreakerGridHeaders = ({ isHistory, month }) => {
       : board?.habitsValues || [];
 
     const monthToDisplay = isHistory
-      ? currentHistoryPanel?.month.substring(0, 3)
+      ? (month || currentHistoryPanel?.month)?.substring(0, 3)
       : dayjs().format("MMM");
 
     return (
       <>
         {/* Month Header */}
-        <div className="flex flex-col justify-center items-center text-[0.65rem] sm:text-[0.8rem] sm:font-semibold">
-          <strong className="text-[0.7rem]">{monthToDisplay}</strong>
+        <div className="flex flex-col justify-center items-center text-[0.7rem] sm:text-[0.85rem] sm:font-semibold">
+          <strong className="text-[0.75rem] uppercase tracking-[0.22em]">{monthToDisplay}</strong>
         </div>
 
         {/* Render each header item */}
@@ -140,8 +140,8 @@ const StreakerGridHeaders = ({ isHistory, month }) => {
    */
   return (
     <>
-      <div className="flex flex-col justify-center items-center text-[0.65rem] sm:text-[0.8rem] sm:font-semibold">
-        {dayjs().format("MMM")}
+      <div className="flex flex-col justify-center items-center text-[0.7rem] sm:text-[0.85rem] sm:font-semibold">
+        <strong className="text-[0.75rem] uppercase tracking-[0.22em]">{dayjs().format("MMM")}</strong>
       </div>
       <HeaderItem key={1} column={1} description="Sleep" value="8 hrs" />
       <HeaderItem key={2} column={2} description="Meditate" value="20 min" />

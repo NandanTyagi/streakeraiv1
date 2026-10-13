@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useContext, useMemo } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
+import { motion, useAnimation, useInView, useReducedMotion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
@@ -18,6 +18,13 @@ interface Item {
   goalToAchieve: string;
   habitsNames: string[];
   habitsValues: number[];
+  days?: number;
+  cells?: Array<{
+    rowNr?: number;
+    colNr?: number;
+    isDone?: boolean;
+    isClear?: boolean;
+  }>;
 }
 
 interface HistoryListProps {
@@ -29,6 +36,40 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const controls = useAnimation();
+  const reduceMotion = useReducedMotion();
+  const stats = useMemo(() => {
+    const habitsCount = item.habitsNames?.length || item.habitsValues?.length || 0;
+    const monthRef = dayjs(`${item.month} 1, ${item.year}`);
+    const daysInMonth = item.days || (monthRef.isValid() ? monthRef.daysInMonth() : 0);
+    const totalSlots = habitsCount * daysInMonth;
+    const cells = item.cells || [];
+    let done = 0;
+    let missed = 0;
+    let unreviewed = 0;
+
+    const activeCells = daysInMonth
+      ? cells.filter((cell) => (cell.rowNr ? cell.rowNr <= daysInMonth : true))
+      : cells;
+
+    activeCells.forEach((cell) => {
+      if (cell.isDone) {
+        done += 1;
+        return;
+      }
+      if (cell.isClear === false) {
+        missed += 1;
+        return;
+      }
+      unreviewed += 1;
+    });
+
+    if (totalSlots > 0) {
+      const missing = Math.max(totalSlots - (done + missed + unreviewed), 0);
+      unreviewed += missing;
+    }
+
+    return { done, missed, unreviewed, totalSlots };
+  }, [item]);
 
   useEffect(() => {
     if (isInView) {
@@ -36,23 +77,17 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
     }
   }, [isInView, controls]);
 
-  // Optional logging for debugging
-  useEffect(() => {
-    console.log("board", board);
-    console.log("item", item);
-  }, [board, item]);
-
   return (
     <motion.div
       ref={ref}
-      initial="hidden"
+      initial={reduceMotion ? "visible" : "hidden"}
       animate={controls}
       variants={{
-        hidden: { opacity: 0, y: 20 },
+        hidden: { opacity: 0, y: 6 },
         visible: {
           opacity: 1,
           y: 0,
-          transition: { delay: index * 0.1 },
+          transition: reduceMotion ? { duration: 0 } : { delay: index * 0.1, duration: 0.25 },
         },
       }}
     >
@@ -66,8 +101,19 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="mt-2 mb-2 text-md font-bold text-muted-foreground">
+            <div className="mt-2 mb-2 text-base font-semibold text-muted-foreground">
               {item.goalToAchieve}
+            </div>
+            <div className="mb-3 grid grid-cols-3 gap-2 text-xs font-semibold">
+              <div className="rounded-md border border-[var(--surface-border)] bg-[var(--success-veil)] px-2 py-1 text-center text-[var(--success)]">
+                Done {stats.done}
+              </div>
+              <div className="rounded-md border border-[var(--surface-border)] bg-[var(--danger-veil)] px-2 py-1 text-center text-[var(--danger)]">
+                Missed {stats.missed}
+              </div>
+              <div className="rounded-md border border-[var(--surface-border)] bg-[var(--paper-veil)] px-2 py-1 text-center text-[var(--ink)]">
+                Unreviewed {stats.unreviewed}
+              </div>
             </div>
             <div className="flex flex-col items-start gap-2">
               {item.habitsNames?.map((habit, i) => (

@@ -1,10 +1,12 @@
+export const dynamic = "force-dynamic";
+import { getDatabaseUser } from "@/lib/auth";
 import Panel from "@/models/Panel";
-import connectDB from "@/utils/db";
 
 export const GET = async (request, {params}) => {
   try {
-    await connectDB();
-    const panel = await Panel.findById(params.id);
+    const user = await getDatabaseUser();
+    if (!user) return Response.json({ message: "Unauthorized" }, { status: 401 });
+    const panel = await Panel.findOne({ _id: params.id, user: user._id });
     if (!panel) {
       return new Response(JSON.stringify({ message: "Panel not found" }), {
         status: 404,

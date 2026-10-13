@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 
 import { AppContext } from "@/context/appContext";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 
 import styles from "../../styles/StreakerGrid.module.css";
 
@@ -14,6 +14,7 @@ import Loading from "@/components/Loading";
 
 import getDaysInMonth from "@/utils/getDaysInMonth";
 import getDayTagArray from "@/utils/getDayTagArray";
+import useMobileGridFit from "@/hooks/useMobileGridFit";
 
 interface Cell {
   id: string;
@@ -30,7 +31,7 @@ interface Board {
   days?: number;
   history?: Array<{
     year: string;
-    month: string;
+    month?: string;
     cells: Cell[];
   }>;
   // etc...
@@ -48,7 +49,9 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
   month
 }) => {
   const { isAppLoading, currentHistoryPanel } = useContext(AppContext);
-  const { isLoading, user } = useKindeBrowserClient();
+  const { isLoading, user } = useAppAuth();
+  const containerRef = useRef<HTMLDivElement>(null);
+  useMobileGridFit({ containerRef });
 
   // Local state for cells (optional if you need to modify them)
   const [cellsArray, setCellsArray] = useState<Cell[]>(cells || []);
@@ -72,12 +75,15 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
   }
 
   return (
-    <div className={'relative max-h-[calc(100vh-180px)] overflow-auto'}>
-      <section className={styles.streakerGrid}>
-        <StreakerGridHeaders isHistory month={month?.substring(0,3)} />
+    <div
+      ref={containerRef}
+      className="relative max-h-[calc(100vh-180px)] overflow-auto"
+    >
+      <section className={styles.streakerGrid} data-role="streaker-grid">
+        <StreakerGridHeaders isHistory month={month?.substring(0, 3)} />
       </section>
 
-      <section className={`${styles.streakerGrid}`}>
+      <section className={`${styles.streakerGrid}`} data-role="streaker-grid">
         {Array.from({ length: days }).map((_, dayIndex) => {
           const today = dayjs().format("D");
 

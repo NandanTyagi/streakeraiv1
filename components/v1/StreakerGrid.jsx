@@ -6,21 +6,24 @@ import StreakerGridHeaders from "../../components/StreakerGridHeaders";
 import StreakerGridRow from "../StreakerGridRow";
 import Loading from "@/components/Loading";
 import { AppContext } from "@/context/appContext";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import dayjs from "dayjs";
 import getDaysInMonth from "@/utils/getDaysInMonth";
 import getDayTagArray from "@/utils/getDayTagArray";
 import fetchUser from "@/utils/v2/fetchUser";
 import getCurrentUserBoardFromDb from "@/utils/getCurrentUserBoardFromDb";
+import useMobileGridFit from "@/hooks/useMobileGridFit";
 
 const StreakerGrid = () => {
   const { cells, board, isAppLoading } = useContext(AppContext);
-  const { isLoading, user } = useKindeBrowserClient();
+  const { isLoading, user } = useAppAuth();
   const [cellsArray, setCellsArray] = useState(board?.cells || []);
   const [currentCellIndexLocal, setCurrentCellIndexLocal] = useState(null);
   const habits = board?.habitsNames || Array.from({ length: 5 });
   const days = getDaysInMonth(new Date());
   const tagArr = getDayTagArray(new Date(), days);
+
+  useMobileGridFit();
 
   useEffect(() => {
     const fetchUsersFromDb = async () => {
@@ -52,10 +55,10 @@ const StreakerGrid = () => {
         <Loading />
       ) : (
         <>
-          <section className={`${styles.streakerGrid}`}>
+          <section className={`${styles.streakerGrid}`} data-role="streaker-grid">
             <StreakerGridHeaders />
           </section>
-          <section className={styles.streakerGrid}>
+          <section className={styles.streakerGrid} data-role="streaker-grid">
             {Array.from({ length: days }).map((_, dayIndex) => {
               const today = dayjs().format("D");
 

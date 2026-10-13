@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button/Button";
 import { useRouter } from "next/navigation";
 import { AppContext } from "@/context/appContext";
 import { useState, useContext } from "react";
@@ -21,12 +20,12 @@ const GenerateStreakerBoardButton = ({
 
   return (
     <div className="p-6 overflow-x-hidden max-h-[80vh] max-w-[800px]">
-      <div className="text-center text-[#530DA2] font-semibold text-lg mb-1 sm:mb-6">
-        {`Five habits you should track every day to achieve:`}
+      <div className="text-center text-[var(--ink)] font-semibold text-lg mb-1 sm:mb-6">
+        {`Five daily practices for the intention:`}
         <br />
-        <div className="p-1 mt-2 italic">{`"${goalToAchieve}"`}</div>
+        <div className="p-1 mt-2 italic text-[var(--ink-soft)]">{`"${goalToAchieve}"`}</div>
       </div>
-      <div className="  mb-1 sm:mb-1 flex justify-center gap-1 text-[0.8rem] sm:text-lg italic">
+      <div className="mb-1 sm:mb-1 flex justify-center gap-1 text-[0.8rem] sm:text-lg italic text-[var(--ink-soft)]">
         {openAIResponse &&
           openAIResponse.slice(0, 5).map((response, index) => (
             <div
@@ -40,20 +39,20 @@ const GenerateStreakerBoardButton = ({
       </div>
 
       <div
-        className={`${styles.description} text-left bg-slate-100 p-2 text-[#272727] font-medium text-md mb-1 sm:mb-1`}
+        className={`${styles.description} text-left bg-[var(--paper-veil)] border border-[var(--surface-border)] p-3 text-[var(--ink)] font-medium text-md mb-1 sm:mb-1`}
         dangerouslySetInnerHTML={{
           __html: DOMPurify.sanitize(cleanText(openAIResponseDescription)),
         }}
       ></div>
 
-      <StandardButton text="Start tracking now!" type="pill" pushTo={url} />
+      <StandardButton text="Open this ledger" type="pill" pushTo={url} />
 
       <button
         type="button"
-        className="bg-[transparent] text-[#530DA2] hover:underline font-semibold cursor-pointer w-[stretch] m-[auto] mb-[8px]"
+        className="bg-[transparent] text-[var(--accent-color)] hover:underline font-semibold cursor-pointer w-[stretch] m-[auto] mb-[8px]"
         onClick={() => router.push("/generategoals")}
       >
-        Set new goal
+        Set a different intention
       </button>
     </div>
   );

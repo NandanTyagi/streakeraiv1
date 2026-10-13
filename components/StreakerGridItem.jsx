@@ -45,7 +45,7 @@ const StreakerGridItem = ({
     isAppLoading,
     isSaved,
     setIsSaved,
-    currentHistoryPanel
+    currentHistoryPanel,
   } = useContext(AppContext);
 
   // 2. Destructure the toast function
@@ -54,24 +54,36 @@ const StreakerGridItem = ({
   const [isDoneLocal, setIsDoneLocal] = useState(isDone);
   const [isClearLocal, setIsClearLocal] = useState(isClear);
   const [messageLocal, setMessageLocal] = useState(message);
-  const [clickTimeout, setClickTimeout] = useState(null);
   const [todaysDate, settodaysDate] = useState(dayjs().format("D"));
   const [isTodayLocal, setIsTodayLocal] = useState(isToday);
+  // const [twoDaysFromTodayLocal, setTwoDaysFromTodayLocal] = useState(todaysDate + 2);
+  const [isTwoDaysFromTodayLocal, setIsTwoDaysFromTodayLocal] = useState(
+    parseInt(todaysDate) + 2 === parseInt(rowNr),
+  );
   const [labelLocal, setLabelLocal] = useState(label);
   const [timer, setTimer] = useState(null);
+
+  const habitName = labelLocal || label || `Habit ${colNr}`;
+  const statusLabel = isClearLocal
+    ? "Unmarked"
+    : isDoneLocal
+      ? "Done"
+      : "Missed";
+  const cellAriaLabel = `Day ${rowNr}, ${habitName}. Status: ${statusLabel}.`;
 
   // 3. State for the Dialog ("prompt" replacement)
   const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [noteValue, setNoteValue] = useState("");
 
   // Find the current cell index from the board
-  const currentCellIndexLocal =isHistory ? currentHistoryPanel?.cells?.findIndex(
-    (cell) => cell.id === `${rowNr}-${colNr}`
-  ) : board?.cells?.findIndex(
-    (cell) => cell.id === `${rowNr}-${colNr}`
-  );
+  const currentCellIndexLocal = isHistory
+    ? currentHistoryPanel?.cells?.findIndex(
+        (cell) => cell.id === `${rowNr}-${colNr}`,
+      )
+    : board?.cells?.findIndex((cell) => cell.id === `${rowNr}-${colNr}`);
 
   const todayRef = useRef(null);
+  const twoDaysFromTodayRef = useRef(null);
 
   useEffect(() => {
     if (currentCellIndexLocal == null || currentCellIndexLocal < 0) return;
@@ -91,7 +103,15 @@ const StreakerGridItem = ({
     if (todayRef.current !== null) {
       todayRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
-  }, [isTodayLocal, rowNr, todaysDate]);
+
+    if (parseInt(todaysDate) + 2 === parseInt(rowNr)) {
+      setIsTwoDaysFromTodayLocal(true);
+    }
+
+    // if (twoDaysFromTodayRef.current !== null) {
+    //   twoDaysFromTodayRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    // }
+  }, [isTodayLocal, rowNr, todaysDate, isTwoDaysFromTodayLocal]);
 
   const handelCells = (cellProps) => {
     setIsCellLoading(true);
@@ -111,13 +131,13 @@ const StreakerGridItem = ({
         prevBoard.boardUser = user?.email;
       }
       const cellIndex = prevBoard?.cells?.findIndex(
-        (cell) => cell.id === cellId
+        (cell) => cell.id === cellId,
       );
       if (cellIndex !== -1) {
         return {
           ...prevBoard,
           cells: prevBoard?.cells?.map((cell, index) =>
-            index === cellIndex ? updatedCell : cell
+            index === cellIndex ? updatedCell : cell,
           ),
         };
       }
@@ -199,8 +219,8 @@ const StreakerGridItem = ({
     if (currentDay < rowNr) {
       // Use toast instead of alert for "future day" check
       toast({
-        title: "Heads up!",
-        description: "This cell is in the future. You can't mark it as done yet.",
+        title: "Ahead of today",
+        description: "This day has not arrived yet.",
       });
       return true;
     }
@@ -208,6 +228,7 @@ const StreakerGridItem = ({
   };
 
   const handleClick = (e) => {
+    if (e?.detail && e.detail > 1) return;
     if (checkIfCurrentRowIsAfterToday()) return;
 
     if (isHistory) return;
@@ -215,56 +236,45 @@ const StreakerGridItem = ({
       setIsSaved(false);
     }
 
-    // Handle double-click detection
-    if (clickTimeout) {
-      clearTimeout(clickTimeout);
-      setClickTimeout(null);
-      handleDoubleClick();
+    // Notify parent of current cell index
+    if (
+      onCellClick &&
+      currentCellIndexLocal != null &&
+      currentCellIndexLocal >= 0
+    ) {
+      onCellClick(currentCellIndexLocal);
+    }
+
+    const nextState = isClearLocal
+      ? { isDone: true, isClear: false }
+      : isDoneLocal
+        ? { isDone: false, isClear: false }
+        : { isDone: false, isClear: true };
+    setIsDoneLocal(nextState.isDone);
+    setIsClearLocal(nextState.isClear);
+    const cellExists = board?.cells?.[currentCellIndexLocal];
+    if (
+      cellExists &&
+      board.cells[currentCellIndexLocal].id === `${rowNr}-${colNr}`
+    ) {
+      const updatedCell = {
+        ...board.cells[currentCellIndexLocal],
+        isDone: nextState.isDone,
+        isClear: nextState.isClear,
+        label: labelLocal,
+      };
+      handelCells(updatedCell);
     } else {
-      // Start a timeout for single-click
-      const newTimeout = setTimeout(() => {
-        // Single-click logic
-
-        // Notify parent of current cell index
-        if (
-          onCellClick &&
-          currentCellIndexLocal != null &&
-          currentCellIndexLocal >= 0
-        ) {
-          onCellClick(currentCellIndexLocal);
-        }
-
-        setIsDoneLocal(!isDoneLocal);
-        const cellExists = board?.cells?.[currentCellIndexLocal];
-        if (
-          cellExists &&
-          board.cells[currentCellIndexLocal].id === `${rowNr}-${colNr}`
-        ) {
-          setIsClearLocal(false);
-          const updatedCell = {
-            ...board.cells[currentCellIndexLocal],
-            isDone: !isDoneLocal,
-            isClear: false,
-            label: labelLocal,
-          };
-          handelCells(updatedCell);
-        } else {
-          setIsClearLocal(false);
-
-          const newCell = {
-            id: `${rowNr}-${colNr}`,
-            boardId: board?.boardId,
-            rowNr: rowNr,
-            colNr: colNr,
-            isDone: !isDoneLocal,
-            isClear: false,
-            label: labelLocal,
-          };
-          handelCells(newCell);
-        }
-        setClickTimeout(null);
-      }, 400);
-      setClickTimeout(newTimeout);
+      const newCell = {
+        id: `${rowNr}-${colNr}`,
+        boardId: board?.boardId,
+        rowNr: rowNr,
+        colNr: colNr,
+        isDone: nextState.isDone,
+        isClear: nextState.isClear,
+        label: labelLocal,
+      };
+      handelCells(newCell);
     }
   };
 
@@ -342,17 +352,25 @@ const StreakerGridItem = ({
     <>
       {type === "nr" ? (
         <div
-          ref={isTodayLocal ? todayRef : null}
+          ref={
+            isTodayLocal
+              ? todayRef
+              : isTwoDaysFromTodayLocal
+                ? twoDaysFromTodayRef
+                : null
+          }
           className={`${styles.streakerGridItem} ${styles.streakerGridItemNoBg} flex flex-col`}
           onClick={handleClick}
+          data-today-row={isTodayLocal ? "true" : "false"}
         >
           <div className="font-bold text-[0.8rem]">{rowNr}</div>
           <div className="font-semibold mt-[-4px] text-[0.6rem]">{day}</div>
         </div>
       ) : isClearLocal ? (
         <button
+          title="Click to cycle: done, missed, unreviewed. Hold for 2 seconds to add a note."
           className={`${styles.streakerGridItem} ${
-            (isTodayLocal && ! isHistory ? styles.streakerGridItemToday : "")
+            isTodayLocal && !isHistory ? styles.streakerGridItemToday : ""
           }`}
           onClick={handleClick}
           onDoubleClick={handleDoubleClick}
@@ -361,16 +379,20 @@ const StreakerGridItem = ({
           onTouchStart={handleMouseDown}
           onTouchEnd={handleMouseUp}
           id={`${rowNr}-${colNr}`}
-          data-is-clear={isClear ? "true" : "false"}
-          data-is-done={isDone ? "true" : "false"}
+          aria-label={cellAriaLabel}
+          aria-pressed={false}
+          data-is-clear={isClearLocal ? "true" : "false"}
+          data-is-done={isDoneLocal ? "true" : "false"}
+          data-today-row={isTodayLocal ? "true" : "false"}
         ></button>
       ) : (
         <button
+          title="Click to cycle: done, missed, unreviewed. Hold for 2 seconds to add a note."
           className={`${styles.streakerGridItem} ${
             isDoneLocal
               ? styles.streakerGridItemDoneTrue
               : styles.streakerGridItemDoneFalse
-          } ${(isTodayLocal && ! isHistory ? styles.streakerGridItemToday : "")}`}
+          } ${isTodayLocal && !isHistory ? styles.streakerGridItemToday : ""}`}
           onClick={handleClick}
           onDoubleClick={handleDoubleClick}
           onMouseDown={handleMouseDown}
@@ -378,8 +400,11 @@ const StreakerGridItem = ({
           onTouchStart={handleMouseDown}
           onTouchEnd={handleMouseUp}
           id={`${rowNr}-${colNr}`}
-          data-is-clear={isClear ? "true" : "false"}
-          data-is-done={isDone ? "true" : "false"}
+          aria-label={cellAriaLabel}
+          aria-pressed={isDoneLocal && !isClearLocal}
+          data-is-clear={isClearLocal ? "true" : "false"}
+          data-is-done={isDoneLocal ? "true" : "false"}
+          data-today-row={isTodayLocal ? "true" : "false"}
         >
           {message || messageLocal ? (
             <Image
@@ -409,31 +434,39 @@ const StreakerGridItem = ({
                 }}
               />
             ) : !isDoneLocal ? (
-              <Image
-                src={"/icon-cross.svg"}
-                alt="crossmark"
-                priority
-                width={20}
-                height={20}
-                unselectable="on"
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--grid-cell-missed-icon)"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 style={{
                   userSelect: "none",
                   pointerEvents: "none",
                 }}
-              />
+              >
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
             ) : (
-              <Image
-                src={"/icon-check.svg"}
-                alt="checkmark"
-                priority
-                width={20}
-                height={20}
-                unselectable="on"
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--grid-cell-done-icon)"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 style={{
                   userSelect: "none",
                   pointerEvents: "none",
                 }}
-              />
+              >
+                <path d="M4 12.5l5 5L20 6.5" />
+              </svg>
             )
           ) : isCellLoading || isAppLoading || isLoading ? (
             <Image
@@ -449,31 +482,62 @@ const StreakerGridItem = ({
               }}
             />
           ) : (
-            <Image
-              src={"/icon-cross.svg"}
-              alt="crossmark"
-              priority
-              width={20}
-              height={20}
-              unselectable="on"
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--grid-cell-missed-icon)"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               style={{
                 userSelect: "none",
                 pointerEvents: "none",
               }}
-            />
+            >
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
           )}
+          <svg
+            className={styles.einkCheck}
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M4 12.5l5 5L20 6.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <svg
+            className={styles.einkCross}
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M6 6l12 12M18 6L6 18"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="4"
+              strokeLinecap="round"
+            />
+          </svg>
         </button>
       )}
 
       {/* 6. Dialog for "prompt" replacement */}
       <Dialog open={showNoteDialog} onOpenChange={setShowNoteDialog}>
-        <DialogContent className="bg-white">
+        <DialogContent className="bg-[var(--paper-veil)] border border-[var(--surface-border)]">
           <DialogHeader>
-            <DialogTitle>{messageLocal ? "Update Note" : "New Note"}</DialogTitle>
+            <DialogTitle>{messageLocal ? "Edit note" : "Add note"}</DialogTitle>
             <DialogDescription>
               {messageLocal
-                ? "Update your existing note below."
-                : "Enter a new note below."}
+                ? "Revise the note below."
+                : "Record a note for this day."}
             </DialogDescription>
           </DialogHeader>
           <div className="mt-4">

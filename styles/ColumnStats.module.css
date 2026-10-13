@@ -13,13 +13,13 @@
   
   .table th,
   .table td {
-    border: 1px solid #ddd;
+    border: 1px solid var(--surface-border);
     padding: 8px;
     text-align: center;
   }
   
   .table th {
-    background-color: #f4f4f4;
+    background-color: var(--paper-veil);
     font-weight: bold;
   }
   

@@ -2,10 +2,10 @@ import { useEffect, useState, useContext } from "react";
 import { AppContext } from "@/context/appContext";
 import Dialog from "@/components/ui/Dialog";
 import handelBoards from "@/utils/handelBoards";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 
 const HeaderItem = ({ column, description, value, isHistory }) => {
-  const { isAuthenticated, user, isLoading } = useKindeBrowserClient();
+  const { isAuthenticated, user, isLoading } = useAppAuth();
   const [activityInputLocal, setActivityInputLocal] = useState(description);
   const [valueInputLocal, setValueInputLocal] = useState(value);
   const { board, setBoard, isAppLoading, setisAppLoading, setIsCellLoading, isSaved , setIsSaved } =
@@ -52,7 +52,7 @@ const HeaderItem = ({ column, description, value, isHistory }) => {
   }, [activityInputLocal, valueInputLocal, board, user]);
 
   return (
-    <div className="flex flex-col justify-center text-[0.5rem] items-center mb-[0]">
+    <div className="flex flex-col justify-center text-[0.65rem] items-center mb-[0]">
       <Dialog
         habit={activityInputLocal || description || ' '}
         value={valueInputLocal || value || ' '}

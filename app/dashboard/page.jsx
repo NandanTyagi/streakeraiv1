@@ -1,9 +1,12 @@
 "use client";
 
-import React, { useContext, useMemo, Suspense, useEffect } from "react";
+import React, { useContext, useMemo, Suspense, useEffect, useState } from "react";
 import { ArrowLeftIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { AppContext } from "@/context/appContext";
+import useV3Engine from "@/utils/useV3Engine";
+import { fetchV3Streaks } from "@/utils/v3/api";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import dayjs from "dayjs";
 import Loading from "@/components/Loading";
 import { Bar, Line } from "react-chartjs-2";
@@ -45,6 +48,23 @@ const DashboardLoading = () => (
 
 const Dashboard = () => {
   const { board } = useContext(AppContext);
+  const { user } = useAppAuth();
+  const [v3Streaks, setV3Streaks] = useState([]);
+  const isV3 = useV3Engine();
+
+  useEffect(() => {
+    const loadStreaks = async () => {
+      if (!isV3 || !user?.email) return;
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+      try {
+        const streaks = await fetchV3Streaks({ userId: user.email, tz });
+        setV3Streaks(streaks || []);
+      } catch (error) {
+        console.error("Failed to fetch v3 streaks", error);
+      }
+    };
+    loadStreaks();
+  }, [isV3, user]);
 
   // =================== Compute Column Statistics ===================
   const columnStats = useMemo(() => {
@@ -52,6 +72,9 @@ const Dashboard = () => {
 
     const currentDay = dayjs().date();
     const numberOfHabits = board.habitsNames.length;
+    const streakByHabit = new Map(
+      (v3Streaks || []).map((streak) => [streak.habitId, streak])
+    );
 
     const columnTotals = {};
     const columnStreaks = {};
@@ -91,13 +114,15 @@ const Dashboard = () => {
 
           if (cell && cell.isDone) {
             columnTotals[colNr].isDone++;
-            columnStreaks[colNr].currentStreak++;
-            if (
-              columnStreaks[colNr].currentStreak >
-              columnStreaks[colNr].longestStreak
-            ) {
-              columnStreaks[colNr].longestStreak =
-                columnStreaks[colNr].currentStreak;
+            if (!isV3) {
+              columnStreaks[colNr].currentStreak++;
+              if (
+                columnStreaks[colNr].currentStreak >
+                columnStreaks[colNr].longestStreak
+              ) {
+                columnStreaks[colNr].longestStreak =
+                  columnStreaks[colNr].currentStreak;
+              }
             }
           } else {
             if (cell && cell.isClear) {
@@ -105,7 +130,9 @@ const Dashboard = () => {
             } else if (cell && !cell.isClear) {
               columnTotals[colNr].missed++;
             }
-            columnStreaks[colNr].currentStreak = 0;
+            if (!isV3) {
+              columnStreaks[colNr].currentStreak = 0;
+            }
           }
 
           if (cell && cell.comment) {
@@ -126,15 +153,18 @@ const Dashboard = () => {
           ? ((stats.isDone / totalAttempts) * 100).toFixed(0)
           : "0";
 
+      const habitMeta = board?.v3?.habits?.[colNr - 1];
+      const v3Streak = habitMeta ? streakByHabit.get(habitMeta.id) : null;
+      const longestStreak = isV3 ? v3Streak?.longest || 0 : columnStreaks[colNr].longestStreak;
       return {
         colNr,
         headerName: board.habitsNames[colNr - 1] || `Column ${colNr}`,
         ...stats,
-        longestStreak: columnStreaks[colNr].longestStreak,
+        longestStreak,
         hitRate: `${hitRate}%`,
       };
     });
-  }, [board]);
+  }, [board, isV3, v3Streaks]);
 
   // =================== Prepare Per-Column Bar Chart Data ===================
   const barchartDataAndOptionsArray = useMemo(() => {
@@ -258,7 +288,7 @@ const Dashboard = () => {
   }) => (
     <motion.div
       key={col.colNr}
-      className="p-4 bg-white rounded-lg shadow-md hover:shadow-lg transform transition-transform duration-300 flex flex-col justify-center items-center"
+      className="p-4 bg-[var(--paper-veil)] border border-[var(--surface-border)] rounded-lg flex flex-col justify-center items-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: col.colNr * 0.1 }}
@@ -266,35 +296,35 @@ const Dashboard = () => {
       <h3 className="font-bold text-base text-center mb-2">{col.headerName}</h3>
       {/* Stat Display */}
       <div className="grid grid-cols-2 gap-1 w-full relative">
-        <div className="text-sm border bg-green-50 p-2 rounded-lg flex flex-col justify-center items-center font-bold">
-          <p className="text-lg">{col.isDone}</p>
-          <p>Done</p>
+        <div className="text-sm border border-[var(--surface-border)] bg-[var(--success-veil)] p-2 rounded-lg flex flex-col justify-center items-center font-semibold">
+          <p className="text-lg text-[var(--success)]">{col.isDone}</p>
+          <p className="text-[var(--ink)]">Done</p>
         </div>
-        <div className="text-sm border bg-red-50 p-2 rounded-lg flex flex-col justify-center items-center font-bold">
-          <p className="text-lg">{col.missed}</p>
-          <p>Missed</p>
+        <div className="text-sm border border-[var(--surface-border)] bg-[var(--danger-veil)] p-2 rounded-lg flex flex-col justify-center items-center font-semibold">
+          <p className="text-lg text-[var(--danger)]">{col.missed}</p>
+          <p className="text-[var(--ink)]">Missed</p>
         </div>
-        <div className="text-sm border bg-green-50 p-2 rounded-lg flex flex-col justify-center items-center font-bold">
-          <p className="text-lg">{col.longestStreak}</p>
-          <p>Top Streak</p>
+        <div className="text-sm border border-[var(--surface-border)] bg-[var(--success-veil)] p-2 rounded-lg flex flex-col justify-center items-center font-semibold">
+          <p className="text-lg text-[var(--success)]">{col.longestStreak}</p>
+          <p className="text-[var(--ink)]">Top Streak</p>
         </div>
-        <div className="text-sm border bg-gray-50 p-2 rounded-lg flex flex-col justify-center items-center font-bold">
+        <div className="text-sm border border-[var(--surface-border)] bg-[var(--paper-veil)] p-2 rounded-lg flex flex-col justify-center items-center font-semibold text-[var(--ink)]">
           <p className="text-lg">{col.unreviewed}</p>
           <p>Unreviewed</p>
         </div>
-        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs border bg-yellow-50 p-2 rounded-full w-16 h-16 flex flex-col justify-center items-center font-bold">
+        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs border border-[var(--surface-border)] bg-[var(--paper-veil)] p-2 rounded-full w-16 h-16 flex flex-col justify-center items-center font-semibold text-[var(--ink)]">
           <p>{col.hitRate}</p>
-          <p>Hit Rate</p>
+          <p className="text-[11px]">Hit Rate</p>
         </div>
       </div>
       {/* Accordions */}
       <div className="w-full mt-4">
         <Accordion type="single" collapsible className="w-full mb-2">
           <AccordionItem value="charts">
-            <AccordionTrigger className="bg-gradient-to-br from-primary to-[#330594] text-white py-2 px-4 rounded-lg focus:outline-none">
+            <AccordionTrigger className="bg-[var(--paper-veil)] border border-[var(--surface-border)] text-[var(--ink)] py-2 px-4 rounded-lg focus:outline-none">
               Charts
             </AccordionTrigger>
-            <AccordionContent className="mt-4 bg-gray-100 rounded-lg p-4">
+            <AccordionContent className="mt-4 bg-[var(--paper-veil)] rounded-lg p-4 border border-[var(--surface-border)]">
               {barchartDataAndOptionsArray[chartIndex] && (
                 <Bar
                   data={barchartDataAndOptionsArray[chartIndex].barChartData}
@@ -321,19 +351,19 @@ const Dashboard = () => {
         </Accordion>
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="notes">
-            <AccordionTrigger className="bg-gradient-to-br from-primary to-[#330594] text-white py-2 px-4 rounded-lg focus:outline-none">
+            <AccordionTrigger className="bg-[var(--paper-veil)] border border-[var(--surface-border)] text-[var(--ink)] py-2 px-4 rounded-lg focus:outline-none">
               Notes
             </AccordionTrigger>
-            <AccordionContent className="mt-4 bg-gray-100 rounded-lg p-4">
+            <AccordionContent className="mt-4 bg-[var(--paper-veil)] rounded-lg p-4 border border-[var(--surface-border)]">
               {col.comments.length > 0 ? (
                 col.comments.map((commentObj, index) => (
-                  <p key={index} className="text-xs text-gray-700 border-b py-1">
+                  <p key={index} className="text-xs text-[var(--ink)] border-b border-[var(--surface-border)] py-1">
                     <span className="font-semibold mr-1">{commentObj.date}:</span>
                     {commentObj.text}
                   </p>
                 ))
               ) : (
-                <p className="text-xs text-gray-500">No notes available.</p>
+                <p className="text-xs text-[var(--ink-soft)]">No notes available.</p>
               )}
             </AccordionContent>
           </AccordionItem>
@@ -347,7 +377,7 @@ const Dashboard = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-100 p-8 pb-20 relative"
+      className="min-h-full bg-[var(--paper)] p-8 pb-20 relative"
     >
       <ArrowLeftIcon
         size={24}
@@ -435,7 +465,7 @@ const Dashboard = () => {
 export default function DashboardWrapper() {
   return (
     <Suspense fallback={<DashboardLoading />}>
-      <div className="min-h-[calc(100vh-80px)] overflow-x-hidden overflow-y-auto">
+      <div className="h-full min-h-0 overflow-x-hidden overflow-y-auto" data-scroll-root>
         <Dashboard />
       </div>
     </Suspense>

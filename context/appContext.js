@@ -2,12 +2,13 @@
 
 import { createContext, useState, useEffect } from "react";
 import generateEmptyBoard from "../utils/generateEmptyBoard";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import getCurrentUserBoardFromDb from "@/utils/getCurrentUserBoardFromDb";
 import generateEmptyBoardCells from "@/utils/generateEmptyBoardCells";
 import getDaysInMonth from "@/utils/getDaysInMonth";
 import createPanelInDb from "@/utils/v2/createPanelInDb";
 import { number } from "zod";
+import useV3Engine from "@/utils/useV3Engine";
 
 export const AppContext = createContext({
   users: [],
@@ -60,7 +61,7 @@ export const AppContext = createContext({
 });
 
 export function AppContextProvider({ children }) {
-  const { isAuthenticated, user, isLoading } = useKindeBrowserClient();
+  const { isAuthenticated, user, isLoading } = useAppAuth();
   const [users, setUsers] = useState();
   const [boardUser, setBoardUser] = useState(user?.email || {});
   const [boards, setBoards] = useState([]);
@@ -101,7 +102,7 @@ export function AppContextProvider({ children }) {
       setisAppLoading(true);
 
       if (!isLoading) {
-        if (!user) {
+        if (!user?.email) {
           setBoard(await generateEmptyBoard());
           return;
         }
@@ -115,11 +116,14 @@ export function AppContextProvider({ children }) {
             "fetchedCurrentUserBoard ********FAIL***********",
             fetchedCurrentUserBoard
           );
-          const newEmptyPanel = await createPanelInDb(
-            await generateEmptyBoard(),
-            user.email
-          );
-          setBoard(newEmptyPanel);
+          const emptyBoard = await generateEmptyBoard();
+          if (useV3Engine()) {
+            await createPanelInDb(emptyBoard, user.email);
+            setBoard(emptyBoard);
+            return;
+          }
+          const newEmptyPanel = await createPanelInDb(emptyBoard, user.email);
+          setBoard(newEmptyPanel || emptyBoard);
           return;
         }
 
@@ -176,7 +180,6 @@ export function AppContextProvider({ children }) {
         setBoards,
         setCurrentHistoryPanel,
         setBoard,
-        setCurrentHistoryPanel,
         setCells,
         setColumns,
         setColumn,

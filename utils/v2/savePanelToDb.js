@@ -1,9 +1,10 @@
 import fetch from "isomorphic-unfetch";
 import dayjs from "dayjs";
 import createPanelInDb from "@/utils/v2/createPanelInDb";
+import useV3Engine from "@/utils/useV3Engine";
+import { saveBoardToV3 } from "@/utils/v3/saveBoardToV3";
 
 export default async function savePanelToDb(panel, userEmail) {
-
   if (!userEmail) {
     console.log("in savePanelToDb no user email");
     return { saved: false, message: "Please log in to save your panel." };
@@ -15,6 +16,11 @@ export default async function savePanelToDb(panel, userEmail) {
       saved: false,
       message: "Board not saved. Please log in to save your panel.",
     };
+  }
+
+  if (useV3Engine()) {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    return saveBoardToV3({ board: panel, userId: userEmail, tz });
   }
 
   console.log("in savePanelToDb panel",

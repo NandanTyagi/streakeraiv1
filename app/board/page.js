@@ -5,17 +5,13 @@ import { AppContext } from "@/context/appContext";
 import Loading from "@/components/Loading";
 import handelBoards from "@/utils/handelBoards";
 import StreakerGrid from "@/components/v1/StreakerGrid";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useAppAuth } from "@/hooks/useAppAuth";
 import handelMouseDown from "@/utils/handelMouseDown";
 import Dialog from "@/components/ui/Dialog";
 import { useRouter, useSearchParams } from "next/navigation";
 import { set } from "mongoose";
 import getCurrentUserBoardFromDb from "@/utils/getCurrentUserBoardFromDb";
-import {
-  RegisterLink,
-  LoginLink,
-  LogoutLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
+import { RegisterLink } from "@/components/auth/AuthLinks";
 
 export default function Home() {
   const params = useSearchParams();
@@ -30,7 +26,7 @@ export default function Home() {
     setIsCellLoading,
   } = useContext(AppContext);
 
-  const { isAuthenticated, user, isLoading } = useKindeBrowserClient();
+  const { isAuthenticated, user, isLoading } = useAppAuth();
 
   const [timer, setTimer] = useState(null);
   const [goalToAchieveLocal, setGoalToAchieveLocal] = useState(
@@ -61,45 +57,37 @@ export default function Home() {
   useEffect(() => {
     setisAppLoading(true);
     const gta = params.get("goalToAchieve");
-    if (gta) {
-      setGoalToAchieveLocal(gta);
-    } else {
-      if (board?.goalToAchieve) {
-        setGoalToAchieveLocal(board?.goalToAchieve);
-      } else {
-        setGoalToAchieveLocal(board?.goalToAchieve);
-      }
+    const nextGoal = gta || board?.goalToAchieve;
+    if (nextGoal && nextGoal !== goalToAchieveLocal) {
+      setGoalToAchieveLocal(nextGoal);
     }
-
-    setBoard((prevBoard) => {
-      {
-        if(!prevBoard) return;
-        if(prevBoard.goalToAchieve === goalToAchieveLocal){
-          prevBoard, (prevBoard.goalToAchieve = goalToAchieveLocal);
-        } else {
-          return {
-            ...prevBoard,
-          };
-        }
-      }
-      return {
-        ...prevBoard,
-      };
-    });
-
-    handelBoards(board, user?.email);
     setisAppLoading(false);
-  }, [goalToAchieveLocal]);
+  }, [board, goalToAchieveLocal, params, setisAppLoading]);
+
+  useEffect(() => {
+    if (!board || !goalToAchieveLocal) return;
+    setBoard((prevBoard) => {
+      if (!prevBoard) return prevBoard;
+      if (prevBoard.goalToAchieve !== goalToAchieveLocal) {
+        return {
+          ...prevBoard,
+          goalToAchieve: goalToAchieveLocal,
+        };
+      }
+      return prevBoard;
+    });
+    handelBoards(board, user?.email);
+  }, [board, goalToAchieveLocal, setBoard, user?.email]);
 
   return (
     <>
       <div
-        className="flex justify-center items-center bg-[#EBEBEB] text-md font-semibold cursor-pointer"
+        className="flex justify-center items-center bg-[var(--paper-veil)] text-md font-semibold cursor-pointer border-b border-[var(--surface-border)] text-[var(--ink)]"
         // onClick={handelClick}
       >
         {!user ? (
           <RegisterLink>
-          Sign up free to save your board
+          Sign up to preserve the ledger
           </RegisterLink>
         ) : (
           <Dialog
