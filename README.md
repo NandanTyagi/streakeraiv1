@@ -131,3 +131,9 @@ Validation: `npm run test:auth`, `npm run test:v3`, `npm run lint`, and `npm run
 For a manual smoke test, verify sign-up, sign-in, sign-out, a new user's first panel,
 and an existing user's panel/history with a matching verified email in both v3
 and legacy modes. Signed-out user and v3 APIs should reject access.
+
+### Clerk on the Vercel production domain
+
+For `streaker-v1.vercel.app`, set `NEXT_PUBLIC_CLERK_PROXY_URL=https://streaker-v1.vercel.app/__clerk` in Vercel Production alongside the matching live Clerk keys. The `/__clerk` route forwards only to Clerk's Frontend API, keeps the secret server-side, and disables session caching. Leave the proxy variable unset for local development keys.
+
+After deployment, verify the proxy under Clerk > Domains. Google production sign-in also requires custom Google OAuth credentials in Clerk, with `https://streaker-v1.vercel.app/__clerk/v1/oauth_callback` registered as an authorized redirect URI in Google Cloud. Development's shared Google credentials do not work in production.
