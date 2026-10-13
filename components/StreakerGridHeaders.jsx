@@ -8,7 +8,7 @@ import { useSearchParams } from "next/navigation";
 import HeaderItem from "./HeaderItem";
 import dayjs from "dayjs";
 
-const StreakerGridHeaders = ({ isHistory }) => {
+const StreakerGridHeaders = ({ isHistory, month }) => {
   const { board, setBoard, currentHistoryPanel } = useContext(AppContext);
 
   const [headerNamesLocal, setHeaderNamesLocal] = useState([]);
@@ -111,7 +111,7 @@ const StreakerGridHeaders = ({ isHistory }) => {
       : board?.habitsValues || [];
 
     const monthToDisplay = isHistory
-      ? currentHistoryPanel?.month.substring(0, 3)
+      ? (month || currentHistoryPanel?.month)?.substring(0, 3)
       : dayjs().format("MMM");
 
     return (
