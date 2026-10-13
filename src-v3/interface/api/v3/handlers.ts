@@ -1,3 +1,4 @@
+import { createPanel } from "../../../application/use-cases/create-panel";
 import {
   archiveHabit,
   createGoal,
@@ -288,4 +289,13 @@ async function persistResult(
 
 function idempotencyKey(parts: Array<string | number | undefined>): string {
   return parts.filter((part) => part !== undefined).join(":");
+}
+
+export async function createPanelHandler(input: { userId: string; tz: string; draftId: string; title: string; habits: {name:string;target:string}[] }, deps: HandlerDeps) {
+  const { state, events } = await loadState(input.userId, input.tz, deps);
+  const prior = events.find(event => event.type === "GOAL_CREATED" && event.idempotencyKey === `CreatePanel:${input.userId}:${input.draftId}`);
+  if (prior?.type === "GOAL_CREATED") return { goalId: prior.payload.goalId };
+  const result = createPanel(state, input, deps.ctx);
+  await persistResult(input.userId, result.state, result.events, result.projections, deps);
+  return { goalId: result.goalId };
 }

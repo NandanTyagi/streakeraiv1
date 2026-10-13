@@ -8,12 +8,12 @@ import {
 } from "./v3/api";
 import { buildBoardFromV3, buildHistoryItemsFromEvents } from "./v3/boardAdapter";
 
-const getCurrentUserBoardFromDb = async (userEmail) => {
+const getCurrentUserBoardFromDb = async (userEmail, panelId) => {
   try {
     if (useV3Engine()) {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
       const goals = await fetchV3Goals({ userId: userEmail, tz });
-      const goal = goals?.[0];
+      const goal = panelId ? goals?.find(goal => goal.id === panelId) : goals?.[0];
       if (!goal) {
         return null;
       }
@@ -24,6 +24,12 @@ const getCurrentUserBoardFromDb = async (userEmail) => {
       const board = buildBoardFromV3({ goal, habits, grid, month, userId: userEmail });
       board.history = buildHistoryItemsFromEvents({ events: history.events || [], goal, habits });
       return board;
+    }
+
+    if (panelId) {
+      const response = await fetch(`/api/v2/panels/${encodeURIComponent(panelId)}`, { cache: "no-store" });
+      if (!response.ok) throw new Error("Panel could not be loaded.");
+      return response.json();
     }
 
     // const res = await fetch("/api/v2/panels",{

@@ -4,15 +4,17 @@ import savePanelToDb from "@/utils/v2/savePanelToDb";
 import { createAutosaveQueue } from "@/utils/autosaveQueue";
 import { drawDisplay } from "@/utils/displayImage";
 
-export default function usePanelAutosave({ board, isSaved, setIsSaved, email, loading }) {
+export default function usePanelAutosave({ board, isSaved, setIsSaved, email, loading, mainPanelId }) {
   const [status, setStatus] = useState("saved");
   const [displayUrl, setDisplayUrl] = useState("");
   const queue = useRef();
-  const canDisplay = !!email && (process.env.NEXT_PUBLIC_ALLOWED_USERS || "").split(",").includes(email);
+  const panelId = board?.v3?.goalId || board?._id;
+  const enabled = !!email && !!panelId && !board?.isDraft && board?.boardUser === email;
+  const canDisplay = enabled && panelId === mainPanelId;
   useEffect(() => {
     setDisplayUrl("");
     setStatus("saved");
-    if (!email) return;
+    if (!enabled) return;
     let active = true;
     let persisted;
     const worker = createAutosaveQueue({
@@ -26,7 +28,7 @@ export default function usePanelAutosave({ board, isSaved, setIsSaved, email, lo
           const canvas = drawDisplay(document.createElement("canvas"), snapshot);
           const response = await fetch("/api/v2/upload-screenshot", {
             method: "POST", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ image: canvas.toDataURL("image/png") }),
+            body: JSON.stringify({ panelId, image: canvas.toDataURL("image/png") }),
           });
           const data = await response.json();
           if (!response.ok || !data.url) throw new Error("Display update failed");
@@ -37,17 +39,17 @@ export default function usePanelAutosave({ board, isSaved, setIsSaved, email, lo
       onState: setStatus,
     });
     queue.current = worker;
-    if (canDisplay) fetch("/api/v2/upload-screenshot", { cache: "no-store" })
+    fetch("/api/v2/upload-screenshot", { cache: "no-store" })
       .then(res => res.ok ? res.json() : null)
       .then(data => { if (active && data?.url) setDisplayUrl(data.url); }).catch(() => {});
     return () => { active = false; worker.dispose(); queue.current = undefined; };
-  }, [email, canDisplay, setIsSaved]);
+  }, [email, panelId, enabled, canDisplay, setIsSaved]);
   useEffect(() => {
-    if (!loading && !isSaved && board?.habitsNames?.length) queue.current?.enqueue(board);
-  }, [board, isSaved, loading, email]);
+    if (enabled && !loading && !isSaved && board?.habitsNames?.length) queue.current?.enqueue(board);
+  }, [board, isSaved, loading, email, enabled, canDisplay]);
   useEffect(() => {
     const warn = (event) => {
-      if (!isSaved || ["pending", "saving", "updating", "display-error"].includes(status)) {
+      if (board?.isDraft || !isSaved || ["pending", "saving", "updating", "display-error"].includes(status)) {
         event.preventDefault(); event.returnValue = "";
       }
     };
@@ -55,6 +57,8 @@ export default function usePanelAutosave({ board, isSaved, setIsSaved, email, lo
     window.addEventListener("beforeunload", warn);
     window.addEventListener("online", retry);
     return () => { window.removeEventListener("beforeunload", warn); window.removeEventListener("online", retry); };
-  }, [isSaved, status]);
-  return { syncStatus: email ? status : "signed-out", displayUrl, retrySync: () => queue.current?.retry() };
+  }, [isSaved, status, board?.isDraft]);
+  return { syncStatus: board?.isDraft ? "draft" : email ? status : "signed-out", displayUrl, retrySync: () => queue.current?.retry(),
+    flushSync: () => queue.current?.drain(),
+    refreshDisplay: () => { if (enabled) queue.current?.enqueue(board, true); } };
 }

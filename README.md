@@ -141,7 +141,7 @@ After deployment, verify the proxy under Clerk > Domains. Google production sign
 ### E-ink display
 
 Signed-in panel edits save automatically after a short pause. Display-enabled accounts also update the display image after a successful save. The status shows progress or a **Retry** action if persistence or image generation fails. The image is rendered at
-480 × 800 in black and white, showing days 1–14 initially as today moves down the grid. From day 15, the latest 14 days roll forward with today at the bottom and older days moving off the top. Row sizes stay fixed. It captures the current
+480 Ã— 800 in black and white, showing days 1â€“14 initially as today moves down the grid. From day 15, the latest 14 days roll forward with today at the bottom and older days moving off the top. Row sizes stay fixed. It captures the current
 saved panel.
 
 The **View image** button is a stable, account-specific
@@ -155,3 +155,9 @@ The old `/screenshots/currentScreenshot.png` is a bundled historical image and i
 not an upload destination on Vercel. Devices using it must switch to the new link.
 
 Dashboard totals and Top Streak use the selected month, through today for the current month. Unreviewed days break consecutive streaks. Hit Rate is Done / (Done + Missed); no reviewed days displays a dash.
+
+### Multiple panels and Identify
+
+Identify (`/generategoals`) calls the authenticated `/api/identify` endpoint using the server-only `OPENAI_API_KEY` and optional `OPENAI_IDENTIFY_MODEL` (default `gpt-4o`). It validates structured JSON containing five habits. Missing credentials, upstream errors, and incomplete output are shown without modifying saved panels. No browser API key or Assistant/thread configuration is required.
+
+Generated panels are drafts until **Save panel** is chosen in the footer. The panel selector switches between saved panels and the current draft; pending writes finish before switching. Saved panels retain separate goal IDs, habits, cells and history. The selected panel is remembered on this browser. **Make main** selects the panel used by the stable display URL. The server rejects uploads from any other panel; switching the active panel alone does not switch the display. Reset is in the footer, with a confirmation scoped to the active panel.
