@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test:v3": "ts-node -P tsconfig.v3-test.json src-v3/tests/domain.test.ts",
-    "test:auth": "ts-node -P tsconfig.v3-test.json tests/auth.test.ts"
+    "test:auth": "ts-node -P tsconfig.v3-test.json tests/auth.test.ts && ts-node -P tsconfig.v3-test.json tests/clerk-proxy.test.ts"
   },
   "dependencies": {
     "@fortawesome/react-fontawesome": "^0.2.0",
