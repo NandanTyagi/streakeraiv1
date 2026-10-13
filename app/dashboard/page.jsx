@@ -4,9 +4,9 @@ import React, { useContext, useMemo, Suspense, useEffect, useState } from "react
 import { ArrowLeftIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { AppContext } from "@/context/appContext";
-import useV3Engine from "@/utils/useV3Engine";
-import { fetchV3Streaks } from "@/utils/v3/api";
-import { useAppAuth } from "@/hooks/useAppAuth";
+import { calculateHabitStats, statsPeriod } from "@/utils/habitStats";
+
+
 import dayjs from "dayjs";
 import Loading from "@/components/Loading";
 import { Bar, Line } from "react-chartjs-2";
@@ -48,123 +48,8 @@ const DashboardLoading = () => (
 
 const Dashboard = () => {
   const { board } = useContext(AppContext);
-  const { user } = useAppAuth();
-  const [v3Streaks, setV3Streaks] = useState([]);
-  const isV3 = useV3Engine();
-
-  useEffect(() => {
-    const loadStreaks = async () => {
-      if (!isV3 || !user?.email) return;
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
-      try {
-        const streaks = await fetchV3Streaks({ userId: user.email, tz });
-        setV3Streaks(streaks || []);
-      } catch (error) {
-        console.error("Failed to fetch v3 streaks", error);
-      }
-    };
-    loadStreaks();
-  }, [isV3, user]);
-
   // =================== Compute Column Statistics ===================
-  const columnStats = useMemo(() => {
-    if (!board?.cells || !board?.habitsNames) return [];
-
-    const currentDay = dayjs().date();
-    const numberOfHabits = board.habitsNames.length;
-    const streakByHabit = new Map(
-      (v3Streaks || []).map((streak) => [streak.habitId, streak])
-    );
-
-    const columnTotals = {};
-    const columnStreaks = {};
-
-    // Initialize totals and streaks for each column
-    for (let colNr = 1; colNr <= numberOfHabits; colNr++) {
-      columnTotals[colNr] = {
-        isDone: 0,
-        isClear: 0,
-        missed: 0,
-        unreviewed: 0,
-        comments: [],
-      };
-      columnStreaks[colNr] = { longestStreak: 0, currentStreak: 0 };
-    }
-
-    // Iterate over each day up to the current day for each habit/column
-    for (let day = 1; day <= currentDay; day++) {
-      for (let colNr = 1; colNr <= numberOfHabits; colNr++) {
-        const cell = board.cells.find(
-          (c) => c.rowNr === day && c.colNr === colNr
-        );
-
-        if (!cell) {
-          columnTotals[colNr].unreviewed++;
-        }
-
-        if (cell && cell.isDone === false && cell.isClear === true) {
-          // No user interaction yet → unreviewed
-          columnTotals[colNr].unreviewed++;
-        } else {
-          const cellDate = dayjs()
-            .year(dayjs().year())
-            .month(dayjs().month())
-            .date(day)
-            .format("MMM D, YYYY");
-
-          if (cell && cell.isDone) {
-            columnTotals[colNr].isDone++;
-            if (!isV3) {
-              columnStreaks[colNr].currentStreak++;
-              if (
-                columnStreaks[colNr].currentStreak >
-                columnStreaks[colNr].longestStreak
-              ) {
-                columnStreaks[colNr].longestStreak =
-                  columnStreaks[colNr].currentStreak;
-              }
-            }
-          } else {
-            if (cell && cell.isClear) {
-              columnTotals[colNr].isClear++;
-            } else if (cell && !cell.isClear) {
-              columnTotals[colNr].missed++;
-            }
-            if (!isV3) {
-              columnStreaks[colNr].currentStreak = 0;
-            }
-          }
-
-          if (cell && cell.comment) {
-            columnTotals[colNr].comments.push({
-              text: cell.comment,
-              date: cellDate,
-            });
-          }
-        }
-      }
-    }
-
-    return Object.entries(columnTotals).map(([col, stats]) => {
-      const colNr = Number(col);
-      const totalAttempts = stats.isDone + stats.missed;
-      const hitRate =
-        totalAttempts > 0
-          ? ((stats.isDone / totalAttempts) * 100).toFixed(0)
-          : "0";
-
-      const habitMeta = board?.v3?.habits?.[colNr - 1];
-      const v3Streak = habitMeta ? streakByHabit.get(habitMeta.id) : null;
-      const longestStreak = isV3 ? v3Streak?.longest || 0 : columnStreaks[colNr].longestStreak;
-      return {
-        colNr,
-        headerName: board.habitsNames[colNr - 1] || `Column ${colNr}`,
-        ...stats,
-        longestStreak,
-        hitRate: `${hitRate}%`,
-      };
-    });
-  }, [board, isV3, v3Streaks]);
+  const columnStats = useMemo(() => calculateHabitStats(board), [board]);
 
   // =================== Prepare Per-Column Bar Chart Data ===================
   const barchartDataAndOptionsArray = useMemo(() => {
@@ -216,7 +101,7 @@ const Dashboard = () => {
         },
         {
           label: "Hit Rate",
-          data: columnStats.map((col) => parseFloat(col.hitRate)),
+          data: columnStats.map((col) => (parseFloat(col.hitRate) || 0)),
           backgroundColor: "rgba(255, 206, 86, 0.6)",
           type: "line",
           borderColor: "rgba(255, 206, 86, 1)",
@@ -241,34 +126,14 @@ const Dashboard = () => {
   }, []);
 
   // =================== Prepare Combined Line Chart (Streak Trends) ===================
-  const lineChartData = useMemo(() => {
-    const totalDays = dayjs().daysInMonth();
-    const labels = Array.from({ length: totalDays }, (_, i) => i + 1);
-
-    const datasets = columnStats.map((col, index) => {
-      const currentDay = dayjs().date();
-      const cellsForColumn =
-        board?.cells
-          ?.filter((cell) => cell.colNr === col.colNr && cell.rowNr <= currentDay) ||
-        [];
-
-      const dataArray = [];
-      for (let d = 1; d <= totalDays; d++) {
-        const foundCell = cellsForColumn.find((cell) => cell.rowNr === d);
-        dataArray.push(foundCell?.isDone ? 1 : 0);
-      }
-
-      return {
-        label: col.headerName,
-        data: dataArray,
-        borderColor: `hsl(${(index * 360) / columnStats.length}, 70%, 50%)`,
-        backgroundColor: "transparent",
-        tension: 0.3,
-      };
-    });
-
-    return { labels, datasets };
-  }, [columnStats, board]);
+  const lineChartData = useMemo(() => ({
+    labels: Array.from({ length: statsPeriod(board).days }, (_, i) => i + 1),
+    datasets: columnStats.map((col, index) => ({
+      label: col.headerName, data: col.trend,
+      borderColor: `hsl(${(index * 360) / columnStats.length}, 70%, 50%)`,
+      backgroundColor: "transparent", tension: 0.3,
+    })),
+  }), [columnStats, board]);
 
   useEffect(() => {
     console.log("Column Stats Updated:", columnStats);
@@ -306,7 +171,7 @@ const Dashboard = () => {
         </div>
         <div className="text-sm border border-[var(--surface-border)] bg-[var(--success-veil)] p-2 rounded-lg flex flex-col justify-center items-center font-semibold">
           <p className="text-lg text-[var(--success)]">{col.longestStreak}</p>
-          <p className="text-[var(--ink)]">Top Streak</p>
+          <p className="text-[var(--ink)]" title="Longest consecutive run in this month">Top Streak</p>
         </div>
         <div className="text-sm border border-[var(--surface-border)] bg-[var(--paper-veil)] p-2 rounded-lg flex flex-col justify-center items-center font-semibold text-[var(--ink)]">
           <p className="text-lg">{col.unreviewed}</p>
@@ -314,7 +179,7 @@ const Dashboard = () => {
         </div>
         <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs border border-[var(--surface-border)] bg-[var(--paper-veil)] p-2 rounded-full w-16 h-16 flex flex-col justify-center items-center font-semibold text-[var(--ink)]">
           <p>{col.hitRate}</p>
-          <p className="text-[11px]">Hit Rate</p>
+          <p className="text-[11px]" title="Done divided by reviewed days; unreviewed days are excluded">Hit Rate</p>
         </div>
       </div>
       {/* Accordions */}
@@ -665,7 +530,7 @@ export default function DashboardWrapper() {
 //         },
 //         {
 //           label: "Hit Rate",
-//           data: columnStats.map((col) => parseFloat(col.hitRate)),
+//           data: columnStats.map((col) => (parseFloat(col.hitRate) || 0)),
 //           backgroundColor: "rgba(255, 206, 86, 0.6)",
 //           type: "line",
 //           borderColor: "rgba(255, 206, 86, 1)",
@@ -786,7 +651,7 @@ export default function DashboardWrapper() {
 //                   </div>
 //                   <div className="text-sm border bg-green-50 p-2 rounded-lg flex flex-col justify-center items-center font-bold">
 //                     <p className="text-lg">{col.longestStreak}</p>
-//                     <p>Top Streak</p>
+//                     <p title="Longest consecutive run in this month">Top Streak</p>
 //                   </div>
 //                   <div className="text-sm border bg-gray-50 p-2 rounded-lg flex flex-col justify-center items-center font-bold">
 //                     <p className="text-lg">{col.unreviewed}</p>
@@ -878,7 +743,7 @@ export default function DashboardWrapper() {
 //                   </div>
 //                   <div className="text-sm border bg-green-50 p-2 rounded-lg flex flex-col justify-center items-center font-bold">
 //                     <p className="text-lg">{col.longestStreak}</p>
-//                     <p>Top Streak</p>
+//                     <p title="Longest consecutive run in this month">Top Streak</p>
 //                   </div>
 //                   <div className="text-sm border bg-gray-50 p-2 rounded-lg flex flex-col justify-center items-center font-bold">
 //                     <p className="text-lg">{col.unreviewed}</p>
@@ -1215,7 +1080,7 @@ export default function DashboardWrapper() {
 //         },
 //         {
 //           label: "Hit Rate",
-//           data: columnStats.map((col) => parseFloat(col.hitRate)),
+//           data: columnStats.map((col) => (parseFloat(col.hitRate) || 0)),
 //           backgroundColor: "rgba(255, 206, 86, 0.6)",
 //           type: "line",
 //           borderColor: "rgba(255, 206, 86, 1)",
@@ -1343,7 +1208,7 @@ export default function DashboardWrapper() {
 //                   </div>
 //                   <div className="text-sm border bg-green-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-bold">
 //                     <p className="text-xl">{col.longestStreak}</p>
-//                     <p>Top Streak</p>
+//                     <p title="Longest consecutive run in this month">Top Streak</p>
 //                   </div>
 //                   <div className="text-sm border bg-gray-50 p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-bold">
 //                     <p className="text-xl">{col.unreviewed}</p>

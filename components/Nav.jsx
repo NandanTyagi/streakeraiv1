@@ -5,7 +5,7 @@ import { useAppAuth } from "@/hooks/useAppAuth";
 import DialogButton from "@/components/ui/Dialog";
 import { useState, useContext, useEffect, use } from "react";
 import { AppContext } from "@/context/appContext";
-import savePanelToDb from "@/utils/v2/savePanelToDb";
+import SyncStatus from "@/components/v1/SyncStatus";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
@@ -51,57 +51,6 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
     setConfirmOpen(true);
   };
 
-  const handelCtxMenu = async (e) => {
-    const hasSearchParams = searchParams.has("headerNames");
-    if (isSaved) {
-      toast({
-        title: "Nothing new to save",
-      });
-      return;
-    }
-    e.preventDefault();
-
-    openConfirmDialog({
-      title: "Save to the ledger?",
-      description: "Write the current marks to the record?",
-      onConfirm: async () => {
-
-        if (!user) {
-          // Old: alert("Not saved! Please login to save changes.");
-          toast({
-            title: "Not saved",
-            description: "Sign in to preserve the ledger.",
-            variant: "destructive",
-          });
-          setIsSaved(false);
-          return;
-        }
-
-        const panelSaved = await savePanelToDb(board, user?.email);
-
-        // If saving returns an error:
-        if (panelSaved?.saved !== true) {
-          toast({
-            title: "Saving Failed",
-            description: panelSaved?.message || "Unable to save your panel. Please try again.",
-            variant: "destructive",
-          });
-          return;
-        }
-        if (panelSaved.panel) setBoard(panelSaved.panel);
-        toast({
-          title: "Saved",
-          variant: "success",
-        });
-        setIsSaved(true);
-
-        if (hasSearchParams) {
-          router.push("/panel");
-        }
-      },
-    });
-  };
-
   const handelClick = (e) => {
     if (isSaved) {
       setIsSaved(false);
@@ -145,54 +94,16 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
 
         setBoard(updatedBoard);
 
-        try {
-          const panelSaved = await savePanelToDb(updatedBoard, user?.email);
+        setIsSaved(false);
 
-          if (panelSaved?.saved !== true) {
-            console.error("Error saving panel:", panelSaved.saved);
-            toast({
-              title: "Clear failed",
-              description: panelSaved.message || "Unable to clear the ledger.",
-              variant: "destructive",
-            });
-            return;
-          }
-
-          setIsSaved(true);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        } catch (error) {
-          console.error("Error saving panel:", error);
-          toast({
-            title: "Clear failed",
-            description: "An error occurred while saving. Please try again.",
-            variant: "destructive",
-          });
-        }
       },
     });
   };
 
   useEffect(() => {
     setDialogValue(isHistory? currentHistoryItem?.goalToAchieve : board?.goalToAchieve || "");
-  }, [board, user, currentHistoryPanel]);
+  }, [board, user, currentHistoryPanel, currentHistoryItem?.goalToAchieve, isHistory]);
 
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      if (!isSaved) {
-        const message =
-          "You have unsaved changes. Are you sure you want to leave?";
-        event.returnValue = message; // Standard for most browsers
-        return message; // For some older browsers
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [isSaved]);
 
   if (isNav) {
     return (
@@ -251,19 +162,7 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
               <p className="text-sm font-semibold hidden sm:block">Dashboard</p>
             </Link>
           )}
-          {!isHistory && (
-            <button
-              className={`inline-flex min-h-[44px] items-center gap-2 border px-3 py-2 rounded-md text-xs sm:text-sm font-semibold ${
-                !isSaved
-                  ? "border-[hsl(var(--destructive))] text-[hsl(var(--destructive))]"
-                  : "border-[var(--ink)] text-[var(--ink)]"
-              } cursor-pointer hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] focus-visible:outline-offset-2`}
-              onClick={handelCtxMenu}
-              title="Save"
-            >
-              Save
-            </button>
-          )}
+          {!isHistory && <SyncStatus />}
         </div>
         {confirmOpen && (
           <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>

@@ -72,7 +72,7 @@ export type HabitRestoredPayload = {
 export type DayStateUpsertedPayload = {
   habitId: ID;
   date: ISODate;
-  status: "done" | "not_done";
+  status: "done" | "not_done" | "unreviewed";
   note?: string;
 };
 

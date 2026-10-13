@@ -9,7 +9,7 @@ import HeaderItem from "./HeaderItem";
 import dayjs from "dayjs";
 
 const StreakerGridHeaders = ({ isHistory, month }) => {
-  const { board, setBoard, currentHistoryPanel } = useContext(AppContext);
+  const { board, setBoard, setIsSaved, currentHistoryPanel } = useContext(AppContext);
 
   const [headerNamesLocal, setHeaderNamesLocal] = useState([]);
   const [headerValuesLocal, setHeaderValuesLocal] = useState([]);
@@ -37,7 +37,8 @@ const StreakerGridHeaders = ({ isHistory, month }) => {
     setHeaderNamesLocal(namesArray);
     setHeaderValuesLocal(valuesArray);
 
-    // Update board & call `handleBoards`
+    setIsSaved(false);
+    // Queue the generated habits with the same autosave flow.
     setBoard((prevBoard) => {
       const updatedBoard = {
         ...prevBoard,
@@ -45,7 +46,7 @@ const StreakerGridHeaders = ({ isHistory, month }) => {
         habitsValues: valuesArray,
         goalToAchieve: goalTrimmed,
       };
-      handleBoards(updatedBoard, user?.email);
+
       return updatedBoard;
     });
   };

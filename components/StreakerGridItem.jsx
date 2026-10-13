@@ -113,7 +113,10 @@ const StreakerGridItem = ({
     // }
   }, [isTodayLocal, rowNr, todaysDate, isTwoDaysFromTodayLocal]);
 
+  useEffect(() => { setIsDoneLocal(isDone); setIsClearLocal(isClear); }, [isDone, isClear]);
+
   const handelCells = (cellProps) => {
+    setIsSaved(false);
     setIsCellLoading(true);
     const cellId = `${rowNr}-${colNr}`;
     const updatedCell = {
@@ -157,9 +160,6 @@ const StreakerGridItem = ({
 
   // 4. Show read-only note or open a Dialog after 2s mouse-hold
   const handleMouseDown = () => {
-    if (isSaved) {
-      setIsSaved(false);
-    }
 
     const timeoutId = window.setTimeout(() => {
       // Check if there's an existing note update time
