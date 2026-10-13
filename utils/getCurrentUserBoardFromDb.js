@@ -39,16 +39,16 @@ const getCurrentUserBoardFromDb = async (userEmail) => {
     });
     const userBoards = await res.json();
 
+    if (res.status === 404) return null;
     if (!res.ok) {
       console.error("error res in getUserBordFromDB", userBoards);
-      return null;
-      // throw new Error(`HTTP error! Status: ${userBoards.error}`);
+      throw new Error("Unable to load your saved panel. Please try again.");
     }
     const currentUserBoard = await userBoards[0];
     return currentUserBoard;
   } catch (error) {
     console.error(error.message);
-    return null;
+    throw error;
   }
 };
 

@@ -65,8 +65,6 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
       title: "Save to the ledger?",
       description: "Write the current marks to the record?",
       onConfirm: async () => {
-        // Move the "save" logic into onConfirm
-        if (!board) return;
 
         if (!user) {
           // Old: alert("Not saved! Please login to save changes.");
@@ -75,21 +73,22 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
             description: "Sign in to preserve the ledger.",
             variant: "destructive",
           });
-          setIsSaved(true);
+          setIsSaved(false);
           return;
         }
 
         const panelSaved = await savePanelToDb(board, user?.email);
 
         // If saving returns an error:
-        if (panelSaved && !panelSaved.saved) {
+        if (panelSaved?.saved !== true) {
           toast({
             title: "Saving Failed",
-            description: `Is panel saved: ${panelSaved.saved}`,
+            description: panelSaved?.message || "Unable to save your panel. Please try again.",
             variant: "destructive",
           });
           return;
         }
+        if (panelSaved.panel) setBoard(panelSaved.panel);
         toast({
           title: "Saved",
           variant: "success",
@@ -149,7 +148,7 @@ const Nav = ({ isNav = true, isHistory, currentHistoryItem }) => {
         try {
           const panelSaved = await savePanelToDb(updatedBoard, user?.email);
 
-          if (panelSaved && !panelSaved.saved) {
+          if (panelSaved?.saved !== true) {
             console.error("Error saving panel:", panelSaved.saved);
             toast({
               title: "Clear failed",
