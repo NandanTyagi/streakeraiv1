@@ -13,7 +13,7 @@ export type UpsertDayStateInput = {
   tz: string;
   habitId: string;
   date: string;
-  status: "done" | "not_done";
+  status: "done" | "not_done" | "unreviewed";
   note?: string;
   idempotencyKey: string;
 };

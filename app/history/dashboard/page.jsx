@@ -7,9 +7,9 @@ import { AppContext } from "@/context/appContext";
 import dayjs from "dayjs";
 import { ArrowLeftIcon } from "lucide-react";
 import Loading from "@/components/Loading";
-import useV3Engine from "@/utils/useV3Engine";
-import { fetchV3Streaks } from "@/utils/v3/api";
-import { useAppAuth } from "@/hooks/useAppAuth";
+import { calculateHabitStats, statsPeriod } from "@/utils/habitStats";
+
+
 import { Bar, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -50,144 +50,9 @@ const DashboardLoading = () => (
 const Dashboard = () => {
   const router = useRouter();
   const { currentHistoryPanel } = useContext(AppContext);
-  const { user } = useAppAuth();
-  const [v3Streaks, setV3Streaks] = useState([]);
-  const isV3 = useV3Engine();
-
-  useEffect(() => {
-    if (!currentHistoryPanel) {
-      router.push("/history");
-    }
-  }, [currentHistoryPanel, router]);
-
-  useEffect(() => {
-    const loadStreaks = async () => {
-      if (!isV3 || !user?.email) return;
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
-      try {
-        const streaks = await fetchV3Streaks({ userId: user.email, tz });
-        setV3Streaks(streaks || []);
-      } catch (error) {
-        console.error("Failed to fetch v3 streaks", error);
-      }
-    };
-    loadStreaks();
-  }, [isV3, user]);
-
+  useEffect(() => { if (!currentHistoryPanel) router.push("/history"); }, [currentHistoryPanel, router]);
   // ========== UPDATED columnStats logic ==========
-  const columnStats = useMemo(() => {
-    // Early return if board or habit names aren't loaded
-    if (!currentHistoryPanel?.cells || !currentHistoryPanel?.habitsNames)
-      return [];
-
-    // Number of days in current month up to today's date
-    const currentDay = currentHistoryPanel.days;
-    // Number of habits (columns)
-    const numberOfHabits = currentHistoryPanel.habitsNames.length;
-    const streakByHabit = new Map(
-      (v3Streaks || []).map((streak) => [streak.habitId, streak])
-    );
-
-    // Prepare structures to hold totals/streaks for each column
-    const columnTotals = {};
-
-    const columnStreaks = {};
-
-    // Initialize totals and streaks for each column
-    for (let colNr = 1; colNr <= numberOfHabits; colNr++) {
-      columnTotals[colNr] = {
-        isDone: 0,
-        isClear: 0,
-        missed: 0,
-        unreviewed: 0,
-        comments: [],
-      };
-      columnStreaks[colNr] = {
-        longestStreak: 0,
-        currentStreak: 0,
-      };
-    }
-
-    // Iterate over each day from 1..currentDay for each habit
-    for (let day = 1; day <= currentDay; day++) {
-      for (let colNr = 1; colNr <= numberOfHabits; colNr++) {
-        // Attempt to find a matching cell
-        const cell = currentHistoryPanel.cells.find(
-          (c) => c.rowNr === day && c.colNr === colNr
-        );
-
-        if (!cell) {
-          // If no cell is found, increment unreviewed
-          columnTotals[colNr].unreviewed++;
-        }
-
-        if (cell && cell.isDone === false && cell.isClear === true) {
-          // No cell => user hasn't interacted => unreviewed
-          columnTotals[colNr].unreviewed++;
-        } else {
-
-          if (cell && cell.isDone) {
-            columnTotals[colNr].isDone++;
-            if (!isV3) {
-              columnStreaks[colNr].currentStreak++;
-              // Update longest streak if needed
-              if (
-                columnStreaks[colNr].currentStreak >
-                columnStreaks[colNr].longestStreak
-              ) {
-                columnStreaks[colNr].longestStreak =
-                  columnStreaks[colNr].currentStreak;
-              }
-            }
-          } else {
-            // If cell is explicitly cleared, increment isClear
-            if (cell && cell.isClear) {
-              columnTotals[colNr].isClear++;
-            } else if (cell && !cell.isClear) {
-              // Otherwise, mark it as missed
-              columnTotals[colNr].missed++;
-            }
-            // Missed or isClear => reset current streak
-            if (!isV3) {
-              columnStreaks[colNr].currentStreak = 0;
-            }
-          }
-
-          // Push comments if any
-          if (cell && cell.comment) {
-            columnTotals[colNr].comments.push({
-              text: cell.comment,
-              date: currentHistoryPanel.month.substring(0,3) + " " + day + ", " + currentHistoryPanel.year,
-            });
-          }
-        }
-      }
-    }
-
-    // Convert columnTotals into an array for rendering
-    return Object.entries(columnTotals).map(([col, stats]) => {
-      const colNr = Number(col);
-
-      // "Hit Rate": ratio of isDone to (isDone + missed)
-      const totalAttempts = stats.isDone + stats.missed;
-      const hitRate =
-        totalAttempts > 0
-          ? ((stats.isDone / totalAttempts) * 100).toFixed(0)
-          : "0";
-
-      const habitMeta = currentHistoryPanel?.v3?.habits?.[colNr - 1];
-      const v3Streak = habitMeta ? streakByHabit.get(habitMeta.id) : null;
-      const longestStreak = isV3 ? v3Streak?.longest || 0 : columnStreaks[colNr].longestStreak;
-      return {
-        colNr,
-        headerName:
-          currentHistoryPanel.habitsNames[colNr - 1] || `Column ${colNr}`,
-        ...stats,
-        longestStreak,
-        hitRate: `${hitRate}%`,
-      };
-    });
-  }, [currentHistoryPanel, isV3, v3Streaks]);
+  const columnStats = useMemo(() => calculateHabitStats(currentHistoryPanel), [currentHistoryPanel]);
 
   // ====== Prepare Data for each column's Bar Chart ======
   const barchartDataAndOptionsArray = useMemo(() => {
@@ -245,7 +110,7 @@ const Dashboard = () => {
         },
         {
           label: "Hit Rate",
-          data: columnStats.map((col) => parseFloat(col.hitRate)),
+          data: columnStats.map((col) => (parseFloat(col.hitRate) || 0)),
           backgroundColor: "rgba(255, 206, 86, 0.6)",
           type: "line",
           borderColor: "rgba(255, 206, 86, 1)",
@@ -274,40 +139,14 @@ const Dashboard = () => {
   }, []);
 
   // ====== Prepare Data for the combined Line Chart (Streak Trends) ======
-  const lineChartData = useMemo(() => {
-    // Label the X axis as 1..n days in the current month
-    const totalDays = currentHistoryPanel?.days;
-    const labels = Array.from({ length: totalDays }, (_, i) => i + 1);
-
-    // Build a dataset for each column/habit
-    const datasets = columnStats.map((col, index) => {
-      const currentDay = dayjs().date();
-      // Filter the board cells for matching colNr and day <= currentDay
-      const cellsForColumn =
-        currentHistoryPanel?.cells
-          ?.filter((cell) => cell.colNr === col.colNr)
-          .filter((cell) => cell.rowNr <= currentHistoryPanel?.days) || [];
-
-      // Convert isDone into 1 or 0 for each day that has a cell
-      // If a day has no cell, you could consider it 0 or skip it
-      // (Implement as needed for your chart’s logic)
-      const dataArray = [];
-      for (let d = 1; d <= totalDays; d++) {
-        const foundCell = cellsForColumn.find((cell) => cell.rowNr === d);
-        dataArray.push(foundCell?.isDone ? 1 : 0);
-      }
-
-      return {
-        label: col.headerName,
-        data: dataArray,
-        borderColor: `hsl(${(index * 360) / columnStats.length}, 70%, 50%)`,
-        backgroundColor: "transparent",
-        tension: 0.3,
-      };
-    });
-
-    return { labels, datasets };
-  }, [columnStats, currentHistoryPanel]);
+  const lineChartData = useMemo(() => ({
+    labels: Array.from({ length: statsPeriod(currentHistoryPanel).days }, (_, i) => i + 1),
+    datasets: columnStats.map((col, index) => ({
+      label: col.headerName, data: col.trend,
+      borderColor: `hsl(${(index * 360) / columnStats.length}, 70%, 50%)`,
+      backgroundColor: "transparent", tension: 0.3,
+    })),
+  }), [columnStats, currentHistoryPanel]);
 
   useEffect(() => {
     console.log("Column Stats Updated:", columnStats);
@@ -386,7 +225,7 @@ const Dashboard = () => {
                   </div>
                   <div className="text-sm border border-[var(--surface-border)] bg-[var(--success-veil)] p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-semibold">
                     <p className="text-xl text-[var(--success)]">{col.longestStreak}</p>
-                    <p className="text-[var(--ink)]">Top Streak</p>
+                    <p className="text-[var(--ink)]" title="Longest consecutive run in this month">Top Streak</p>
                   </div>
                   <div className="text-sm border border-[var(--surface-border)] bg-[var(--paper-veil)] p-2 rounded-lg w-full h-full flex flex-col justify-center items-center font-semibold text-[var(--ink)]">
                     <p className="text-xl">{col.unreviewed}</p>

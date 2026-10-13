@@ -7,6 +7,7 @@ import getCurrentUserBoardFromDb from "@/utils/getCurrentUserBoardFromDb";
 import generateEmptyBoardCells from "@/utils/generateEmptyBoardCells";
 import getDaysInMonth from "@/utils/getDaysInMonth";
 import createPanelInDb from "@/utils/v2/createPanelInDb";
+import usePanelAutosave from "@/hooks/usePanelAutosave";
 import { number } from "zod";
 import useV3Engine from "@/utils/useV3Engine";
 import { useToast } from "@/hooks/use-toast";
@@ -64,6 +65,7 @@ export const AppContext = createContext({
 export function AppContextProvider({ children }) {
   const { isAuthenticated, user, isLoading } = useAppAuth();
   const { toast } = useToast();
+  const isV3 = useV3Engine();
   const [users, setUsers] = useState();
   const [boardUser, setBoardUser] = useState(user?.email || {});
   const [boards, setBoards] = useState([]);
@@ -86,6 +88,8 @@ export function AppContextProvider({ children }) {
     useState();
   const [goalToAchieve, setGoalToAchieve] = useState();
   const [isSaved, setIsSaved] = useState(true);
+
+  const sync = usePanelAutosave({ board, isSaved, setIsSaved, email: user?.email, loading: isLoading || isAppLoading });
 
   const getCells = (habitsNames, boardId) => {
     const days = getDaysInMonth(new Date());
@@ -119,7 +123,7 @@ export function AppContextProvider({ children }) {
             fetchedCurrentUserBoard
           );
           const emptyBoard = await generateEmptyBoard();
-          if (useV3Engine()) {
+          if (isV3) {
             await createPanelInDb(emptyBoard, user.email);
             setBoard(emptyBoard);
             return;
@@ -158,6 +162,7 @@ export function AppContextProvider({ children }) {
   return (
     <AppContext.Provider
       value={{
+        ...sync,
         users,
         boardUser,
         boards,

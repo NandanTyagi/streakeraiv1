@@ -25,30 +25,6 @@ const StreakerGrid = () => {
 
   useMobileGridFit();
 
-  useEffect(() => {
-    const fetchUsersFromDb = async () => {
-      const userFromDb = await fetchUser();
-      console.log("user from Db in NOT EMPTY streaker grid", userFromDb);
-      console.log("board from Db in NOT EMPTY streaker grid", board);
-      setCellsArray(await getCurrentUserBoardFromDb(userFromDb.email).cells);
-      return userFromDb;
-    };
-    if (board) {
-      fetchUsersFromDb();
-    }
-  }, [board]);
-
-  useEffect(() => {
-    const date = dayjs();
-    // console.log("Board date:", date);
-    // console.log("Board Days Tag arr:", tagArr);
-    // console.log("Board", board);
-  }, [board]);
-
-  useEffect(() => {
-    console.log("Board####################### in GRID:", board);
-  }, [board]);
-
   return (
     <>
       {isAppLoading || isLoading ? (

@@ -140,16 +140,18 @@ After deployment, verify the proxy under Clerk > Domains. Google production sign
 
 ### E-ink display
 
-After signing in, use **Send to display** on the panel. The image is rendered at
+Signed-in panel edits save automatically after a short pause. Display-enabled accounts also update the display image after a successful save. The status shows progress or a **Retry** action if persistence or image generation fails. The image is rendered at
 480 × 800 in black and white, showing days 1–14 initially as today moves down the grid. From day 15, the latest 14 days roll forward with today at the bottom and older days moving off the top. Row sizes stay fixed. It captures the current
-panel, including unsaved marks; use **Save** separately to persist panel edits.
+saved panel.
 
-The **Display image** link under the send button is a stable, account-specific
+The **View image** button is a stable, account-specific
 image URL. Configure the frame to fetch that URL on its normal refresh schedule.
 Anyone with this unguessable URL can view the image, so treat it as a private link.
 Uploads require a verified signed-in account and are stored in MongoDB's
 `display_images` collection using the existing v3 database configuration. Responses
-are not cached. Sending confirms image storage, not a hardware refresh acknowledgment.
+are not cached. A successful display update confirms image storage, not a hardware refresh acknowledgment.
 
 The old `/screenshots/currentScreenshot.png` is a bundled historical image and is
 not an upload destination on Vercel. Devices using it must switch to the new link.
+
+Dashboard totals and Top Streak use the selected month, through today for the current month. Unreviewed days break consecutive streaks. Hit Rate is Done / (Done + Missed); no reviewed days displays a dash.

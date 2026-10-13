@@ -59,7 +59,7 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
           </ul>
         )}
       </nav>
-      <nav className="relative max-w-[600px] w-full h-full flex justify-center items-center">
+      <nav className="relative mx-auto max-w-[600px] w-full min-h-0 flex-1 flex justify-center items-center overflow-y-auto py-12">
         <ul className="flex flex-col gap-4 w-full p-4">
           <li>
             <Link href="/about" onClick={handleMenuClick} className={`${pathname === "/about" ? "opacity-50" : ""} cursor-pointer`}>

@@ -31,7 +31,7 @@ export function buildMonthlyGridView(state: State, month: string, today: ISODate
         cells.push({
           habitId: habit.id,
           date,
-          status: dayState.status === "done" ? "done" : "missed",
+          status: dayState.status === "done" ? "done" : dayState.status === "not_done" ? "missed" : "unreviewed",
           note: dayState.note,
         });
       } else {

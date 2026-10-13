@@ -33,17 +33,15 @@ const HeaderItem = ({ column, description, value, isHistory }) => {
     }
 
     setBoard((prevBoard) => {
-      const nameIndex = prevBoard.habitsNames.indexOf(description);
-      const valueIndex = prevBoard.habitsValues.indexOf(value);
-      const newBoard = { ...prevBoard };
+      const nameIndex = column;
+      const valueIndex = column;
+      const newBoard = { ...prevBoard, habitsNames: [...prevBoard.habitsNames], habitsValues: [...prevBoard.habitsValues] };
       newBoard.habitsNames[nameIndex] = field === "activity" ? newValue : activityInputLocal;
       newBoard.habitsValues[valueIndex] = field === "value" ? newValue : valueInputLocal;
       return newBoard;
     });
 
-    if (user) {
-      handelBoards(board, user.email);
-    }
+
   };
 
   useEffect(() => {
