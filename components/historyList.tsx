@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useContext, useMemo } from "react";
+import { useEffect, useRef, useContext, useMemo, useState } from "react";
 import { motion, useAnimation, useInView, useReducedMotion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -29,7 +29,18 @@ interface HistoryListProps {
 }
 
 function HistoryItem({ item, index }: { item: Item; index: number }) {
-  const { board } = useContext(AppContext);
+  const { board, deleteHistoryMonth, panelBusy } = useContext(AppContext);
+  const [confirming, setConfirming] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState("");
+  const monthKey = dayjs(`${item.month} 1, ${item.year}`).format("YYYY-MM");
+  const canDelete = monthKey < dayjs().format("YYYY-MM");
+  async function removeMonth() {
+    setDeleting(true); setError("");
+    try { await deleteHistoryMonth(monthKey); setConfirming(false); }
+    catch (error) { setError(error instanceof Error ? error.message : "The month could not be deleted."); }
+    finally { setDeleting(false); }
+  }
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const controls = useAnimation();
@@ -123,6 +134,16 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
           </CardContent>
         </Card>
       </Link>
+      {canDelete && <div className="mt-2 px-2">
+        {confirming ? <div role="group" aria-label={`Delete ${item.month} ${item.year}`} className="rounded-md border border-[var(--surface-border)] p-3">
+          <p className="text-sm">Delete {item.month} {item.year} from this panel? Its marks and notes will be removed from history and statistics. This cannot be undone in the app.</p>
+          <div className="flex flex-wrap gap-3 mt-2">
+            <button type="button" disabled={panelBusy} onClick={removeMonth} className="min-h-[44px] px-3 rounded border border-[var(--danger)] text-[var(--danger)] disabled:opacity-50">{deleting ? "Deleting..." : "Delete month"}</button>
+            <button type="button" disabled={deleting} onClick={()=>{setConfirming(false);setError("");}} className="min-h-[44px] px-3 underline">Cancel</button>
+          </div>
+        </div> : <button type="button" disabled={panelBusy} onClick={()=>setConfirming(true)} aria-label={`Delete ${item.month} ${item.year}`} className="min-h-[44px] px-3 text-sm text-[var(--danger)] underline disabled:opacity-50">Delete month</button>}
+        {error && <p role="alert" className="text-sm text-[var(--danger)]">{error}</p>}
+      </div>}
     </motion.div>
   );
 }

@@ -43,7 +43,7 @@ export default function usePanelAutosave({ board, isSaved, setIsSaved, email, lo
       .then(res => res.ok ? res.json() : null)
       .then(data => { if (active && data?.url) setDisplayUrl(data.url); }).catch(() => {});
     return () => { active = false; worker.dispose(); queue.current = undefined; };
-  }, [email, panelId, enabled, canDisplay, setIsSaved]);
+  }, [email, panelId, enabled, canDisplay, setIsSaved, board?.historyRevision]);
   useEffect(() => {
     if (enabled && !loading && !isSaved && board?.habitsNames?.length) queue.current?.enqueue(board);
   }, [board, isSaved, loading, email, enabled, canDisplay]);

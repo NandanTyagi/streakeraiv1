@@ -13,6 +13,7 @@ import useV3Engine from "@/utils/useV3Engine";
 import { useToast } from "@/hooks/use-toast";
 
 export const AppContext = createContext({
+  deleteHistoryMonth: async (month) => {},
   panels: [], mainPanelId: null, draft: null, panelBusy: false, panelError: "",
   selectPanel: async (id) => {}, saveDraft: async () => {}, startDraft: async (value) => {}, makeMainPanel: async () => {}, discardDraft: async () => {},
   users: [],
@@ -130,6 +131,27 @@ export function AppContextProvider({ children }) {
     } catch (error) { setPanelError(error.message); }
     finally { setPanelBusy(false); }
   }
+  async function deleteHistoryMonth(month) {
+    if (!board?._id || board.isDraft || panelBusy) throw new Error("Please wait until your panel is ready.");
+    const panelId = board._id;
+    setPanelBusy(true);
+    try {
+      await sync.flushSync();
+      const response = await fetch("/api/history-month", {
+        method: "DELETE", headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({panelId, month, tz:tz()}),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "The month could not be deleted.");
+      const monthName = new Date(`${month}-01T12:00:00`).toLocaleString("en-US", {month:"long"});
+      setBoard(previous => previous?._id === panelId ? {...previous,
+        historyRevision: (previous.historyRevision || 0) + 1,
+        history: (previous.history || []).filter(item => !(String(item.year) === month.slice(0,4) && item.month === monthName)),
+      } : previous);
+      setCurrentHistoryPanel(undefined);
+      setIsSaved(true);
+    } finally { setPanelBusy(false); }
+  }
   async function startDraft(value) {
     if (!board?.isDraft) await sync.flushSync();
     const next = { _id:"", isDraft:true, draftId:crypto.randomUUID(), goalToAchieve:value.title, habitsNames:value.habits.map(h=>h.name), habitsValues:value.habits.map(h=>h.target), explanation:value.explanation || "", days:getDaysInMonth(new Date()), cells:[], history:[] };
@@ -192,7 +214,7 @@ export function AppContextProvider({ children }) {
     <AppContext.Provider
       value={{
         ...sync,
-        panels, mainPanelId, draft, panelBusy, panelError, selectPanel, startDraft, saveDraft, makeMainPanel, discardDraft,
+        deleteHistoryMonth, panels, mainPanelId, draft, panelBusy, panelError, selectPanel, startDraft, saveDraft, makeMainPanel, discardDraft,
         users,
         boardUser,
         boards,

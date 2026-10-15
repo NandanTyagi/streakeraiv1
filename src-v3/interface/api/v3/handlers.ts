@@ -1,3 +1,4 @@
+import { deleteHistoryMonth } from "../../../application/use-cases/delete-history-month";
 import { createPanel } from "../../../application/use-cases/create-panel";
 import {
   archiveHabit,
@@ -298,4 +299,14 @@ export async function createPanelHandler(input: { userId: string; tz: string; dr
   const result = createPanel(state, input, deps.ctx);
   await persistResult(input.userId, result.state, result.events, result.projections, deps);
   return { goalId: result.goalId };
+}
+
+export async function deleteHistoryMonthHandler(input: {userId: string; goalId: string; month: string; tz: string}, deps: HandlerDeps) {
+  const events = await deps.eventStore.listByUser(input.userId);
+  const result = deleteHistoryMonth(events, input, deps.ctx);
+  await persistResult(input.userId, result.state, [result.event], {
+    dashboard: buildDashboardView(result.state),
+    monthlyGrid: buildMonthlyGridView(result.state, input.month, deps.ctx.clock.today(input.tz)),
+    history: buildHistoryTimeline([...events, result.event]),
+  }, deps);
 }

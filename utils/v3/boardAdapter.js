@@ -53,8 +53,12 @@ export function buildBoardFromV3({ goal, habits, grid, month, userId }) {
 export function buildHistoryItemsFromEvents({ events, goal, habits }) {
   const months = new Map();
   const habitIds = new Set(habits.filter(h => h.goalId === goal.id).map(h => h.id));
-  const dayEvents = events.filter((event) => event.type === "DAY_STATE_UPSERTED" && habitIds.has(event.payload.habitId));
-  for (const event of dayEvents) {
+  for (const event of events) {
+    if (event.type === "HISTORY_MONTH_DELETED" && event.payload.goalId === goal.id) {
+      months.delete(event.payload.month);
+      continue;
+    }
+    if (event.type !== "DAY_STATE_UPSERTED" || !habitIds.has(event.payload.habitId)) continue;
     const date = event.payload.date;
     const monthKey = date.slice(0, 7);
     if (!months.has(monthKey)) {

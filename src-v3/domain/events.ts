@@ -9,6 +9,7 @@ export type EventType =
   | "HABIT_UPDATED"
   | "HABIT_ARCHIVED"
   | "HABIT_RESTORED"
+  | "HISTORY_MONTH_DELETED"
   | "DAY_STATE_UPSERTED"
   | "USER_TIMEZONE_UPDATED";
 
@@ -101,5 +102,6 @@ export type DomainEvent =
   | HabitUpdatedEvent
   | HabitArchivedEvent
   | HabitRestoredEvent
+  | DomainEventBase<{ goalId: ID; month: string }, "HISTORY_MONTH_DELETED">
   | DayStateUpsertedEvent
   | UserTimezoneUpdatedEvent;

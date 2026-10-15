@@ -1,3 +1,4 @@
+import {deleteHistoryMonth} from "../src-v3/application/use-cases/delete-history-month";
 import assert from "node:assert/strict";
 import {test} from "node:test";
 import {createPanel} from "../src-v3/application/use-cases/create-panel";
@@ -54,4 +55,26 @@ test("history reconstructs latest reviews, notes and month lengths for only the 
  assert.equal(items[1].cells.filter(c=>c.isDone).length,1);
  assert.equal(items[1].cells.filter(c=>!c.isDone&&!c.isClear).length,1);
  assert.equal(items[1].cells.find(c=>c.id==='29-1').comment,'Away');
+});
+
+test("deleting a history month survives replay and preserves other panels and months",()=>{
+ const first=createPanel(createEmptyState(),{userId:'u',tz:'UTC',draftId:'delete-a',title:'First',habits},ctx);
+ const second=createPanel(first.state,{userId:'u',tz:'UTC',draftId:'delete-b',title:'Second',habits},ctx);
+ const firstHabit=first.state.habits[0].id;
+ const secondHabit=second.state.habits.find(h=>h.goalId===second.goalId).id;
+ const mark=(id,habitId,date)=>({id,userId:'u',type:'DAY_STATE_UPSERTED',version:1,idempotencyKey:id,createdAt:'2026-10-14T12:00:00Z',payload:{habitId,date,status:'done',note:'A note'}});
+ const events=[...first.events,...second.events,mark('m1',firstHabit,'2026-09-01'),mark('m2',firstHabit,'2026-08-01'),mark('m3',secondHabit,'2026-09-01')];
+ const deleteCtx={...ctx,clock:{today:()=>"2026-10-15",now:()=>"2026-10-15T12:00:00Z"}};
+ const input={userId:'u',tz:'UTC',goalId:first.goalId,month:'2026-09'};
+ const result=deleteHistoryMonth(events,input,deleteCtx);
+ const replayed=replayEvents([...events,result.event],'2026-10-15');
+ assert.equal(replayed.dayStates.some(d=>d.habitId===firstHabit&&d.date==='2026-09-01'),false);
+ assert.equal(replayed.dayStates.length,2);
+ assert.equal(replayed.dayStates.find(d=>d.habitId===secondHabit).note,'A note');
+ const list=buildHistoryItemsFromEvents({events:[...events,result.event],goal:first.state.goals[0],habits:replayed.habits});
+ assert.deepEqual(list.map(i=>i.month),['August']);
+ assert.equal(deleteHistoryMonth([...events,result.event],input,deleteCtx).state.dayStates.length,2);
+ for(const month of ['2026-10','2026-11','2026-13','invalid']) assert.throws(()=>deleteHistoryMonth(events,{...input,month},deleteCtx),e=>e.status===400);
+ assert.throws(()=>deleteHistoryMonth(events,{...input,userId:'intruder'},deleteCtx),e=>e.status===404);
+ assert.throws(()=>deleteHistoryMonth(events,{...input,goalId:'missing'},deleteCtx),e=>e.status===404);
 });

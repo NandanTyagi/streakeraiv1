@@ -77,6 +77,11 @@ export function applyEvent(state: State, event: DomainEvent): State {
       );
       return { ...state, habits };
     }
+    case "HISTORY_MONTH_DELETED": {
+      const ids = new Set(state.habits.filter(h => h.goalId === event.payload.goalId).map(h => h.id));
+      return { ...state, dayStates: state.dayStates.filter(day =>
+        !(ids.has(day.habitId) && day.date.slice(0, 7) === event.payload.month)) };
+    }
     case "DAY_STATE_UPSERTED": {
       const result = upsertDayState(state.dayStates, {
         habitId: event.payload.habitId,
