@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import { AppContext } from "../context/appContext";
 import dayjs from "dayjs";
+import { calculateHabitStats } from "@/utils/habitStats";
 
 export interface Item {
   id?: string;
@@ -45,39 +46,12 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const controls = useAnimation();
   const reduceMotion = useReducedMotion();
-  const stats = useMemo(() => {
-    const habitsCount = item.habitsNames?.length || item.habitsValues?.length || 0;
-    const monthRef = dayjs(`${item.month} 1, ${item.year}`);
-    const daysInMonth = item.days || (monthRef.isValid() ? monthRef.daysInMonth() : 0);
-    const totalSlots = habitsCount * daysInMonth;
-    const cells = item.cells || [];
-    let done = 0;
-    let missed = 0;
-    let unreviewed = 0;
-
-    const activeCells = daysInMonth
-      ? cells.filter((cell) => (cell.rowNr ? cell.rowNr <= daysInMonth : true))
-      : cells;
-
-    activeCells.forEach((cell) => {
-      if (cell.isDone) {
-        done += 1;
-        return;
-      }
-      if (cell.isClear === false) {
-        missed += 1;
-        return;
-      }
-      unreviewed += 1;
-    });
-
-    if (totalSlots > 0) {
-      const missing = Math.max(totalSlots - (done + missed + unreviewed), 0);
-      unreviewed += missing;
-    }
-
-    return { done, missed, unreviewed, totalSlots };
-  }, [item]);
+  const habitStats = useMemo<Array<{colNr: number; headerName: string; isDone: number; missed: number; unreviewed: number}>>(() => calculateHabitStats(item), [item]);
+  const stats = useMemo(() => habitStats.reduce((total, habit) => ({
+    done: total.done + habit.isDone,
+    missed: total.missed + habit.missed,
+    unreviewed: total.unreviewed + habit.unreviewed,
+  }), {done: 0, missed: 0, unreviewed: 0}), [habitStats]);
 
   useEffect(() => {
     if (isInView) {
@@ -123,14 +97,34 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
                 Unreviewed {stats.unreviewed}
               </div>
             </div>
-            <div className="flex flex-col items-start gap-2">
-              {item.habitsNames?.map((habit, i) => (
-                <p key={i} className="flex gap-2 text-sm text-muted-foreground">
-                  <span>{habit}</span>
-                  <span className="ml-1">{item.habitsValues[i]}</span>
-                </p>
-              ))}
-            </div>
+            <table className="w-full table-fixed text-[10px] tabular-nums">
+              <caption className="sr-only">Daily counts for each habit in {item.month} {item.year}</caption>
+              <thead>
+                <tr>
+                  <th scope="col" className="w-[22%] text-left py-2 pr-1 font-medium text-[var(--ink-soft)]">Status</th>
+                  {habitStats.map((habit, i) => (
+                    <th key={habit.colNr} scope="col" className="px-1 py-2 align-top text-center font-semibold [overflow-wrap:anywhere]">
+                      {habit.headerName}
+                      <span className="block mt-1 text-[9px] font-normal text-[var(--ink-soft)]">{item.habitsValues?.[i]}</span>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-t border-[var(--surface-border)]">
+                  <th scope="row" className="py-3 pr-1 text-left font-medium">Done</th>
+                  {habitStats.map(habit => <td key={habit.colNr} className="px-1 text-center text-xs font-semibold text-[var(--success)]">{habit.isDone}</td>)}
+                </tr>
+                <tr className="border-t border-[var(--surface-border)]">
+                  <th scope="row" className="py-3 pr-1 text-left font-medium">Missed</th>
+                  {habitStats.map(habit => <td key={habit.colNr} className="px-1 text-center text-xs font-semibold text-[var(--danger)]">{habit.missed}</td>)}
+                </tr>
+                <tr className="border-t border-[var(--surface-border)]">
+                  <th scope="row" className="py-3 pr-1 text-left text-[9px] font-medium">Unreviewed</th>
+                  {habitStats.map(habit => <td key={habit.colNr} className="px-1 text-center text-xs text-[var(--ink-soft)]">{habit.unreviewed}</td>)}
+                </tr>
+              </tbody>
+            </table>
           </CardContent>
         </Card>
       </Link>
