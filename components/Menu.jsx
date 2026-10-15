@@ -13,6 +13,7 @@ import AddToHomeScreen from "./AddToHomeScreen";
 import { usePathname } from "next/navigation"; 
 import { useContext } from "react";
 import { AppContext } from "../context/appContext";
+import PanelSwitcher from "./v1/PanelSwitcher";
 import { LogOutIcon, LogInIcon, PenBoxIcon } from "lucide-react";
 
 const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
@@ -61,6 +62,10 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
       </nav>
       <nav className="relative mx-auto max-w-[600px] w-full min-h-0 flex-1 flex justify-center items-center overflow-y-auto py-12">
         <ul className="flex flex-col gap-4 w-full p-4">
+          {user && <li className="rounded-xl border border-[var(--surface-border)] p-4">
+            <span className="block mb-2 text-sm font-semibold">Switch panel</span>
+            <PanelSwitcher />
+          </li>}
           <li>
             <Link href="/about" onClick={handleMenuClick} className={`${pathname === "/about" ? "opacity-50" : ""} cursor-pointer`}>
               <StandardButton text="About" type="pill" />

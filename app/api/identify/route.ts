@@ -12,6 +12,9 @@ export async function POST(req: Request) {
   try { return Response.json(await generatePanelDraft(parsed.data.goal), { headers: { "Cache-Control": "no-store" } }); }
   catch (error: any) {
     console.error("Identify generation failed", error?.status || error?.name);
+    if (error?.status === 401 || error?.status === 403) {
+      return Response.json({ error: "AI drafting is unavailable because the server's AI credentials need updating. You can enter your practices manually below." }, { status: 503 });
+    }
     return Response.json({ error: error?.status === 429 ? "AI generation is busy or its quota is unavailable. Please try again later." : "A complete draft could not be generated. Your saved panels are unchanged. Please try again." }, { status: 502 });
   }
 }

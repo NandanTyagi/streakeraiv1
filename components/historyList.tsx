@@ -8,16 +8,13 @@ import Link from "next/link";
 import { AppContext } from "../context/appContext";
 import dayjs from "dayjs";
 
-interface Item {
-  id: string;
-  name: string;
-  description: string;
-  createdAt: Date;
+export interface Item {
+  id?: string;
   year: string;
   month: string;
   goalToAchieve: string;
   habitsNames: string[];
-  habitsValues: number[];
+  habitsValues: string[];
   days?: number;
   cells?: Array<{
     rowNr?: number;
@@ -92,7 +89,7 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
       }}
     >
       <Link
-        href={`/history/${board._id}?year=${item.year}&month=${item.month}&index=${index}`}
+        href={`/history/${board._id}?year=${item.year}&month=${item.month}`}
       >
         <Card>
           <CardHeader>
@@ -133,32 +130,16 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
 export default function HistoryList({ items }: HistoryListProps) {
   const { setCurrentHistoryPanel, currentHistoryPanel } = useContext(AppContext);
 
-  // Memoize filtered items so that the filtering is updated whenever items changes.
-  const filteredItems = useMemo(
-    () =>
-      items?.filter(
-        (item) => item.year && item.month !== dayjs().format("MMMM")
-      ),
-    [items]
-  );
-
-  // useEffect(() => {
-  //   console.log("history", items);
-  //   console.log("filteredItems", filteredItems);
-  //   console.log("Current Month:", dayjs().format("MMMM"));
-  //   console.log("Current Year:", dayjs().format("YYYY"));
-  //   console.log("currentHistoryPanel", currentHistoryPanel);
-  //   if (filteredItems && filteredItems.length > 0) {
-  //     setCurrentHistoryPanel(filteredItems[0]);
-  //   }
-  // }, [filteredItems, currentHistoryPanel, items, setCurrentHistoryPanel]);
+  const filteredItems = useMemo(() => [...(items || [])]
+    .filter(item => item.year && item.month)
+    .sort((a, b) => dayjs(`${b.month} 1, ${b.year}`).valueOf() - dayjs(`${a.month} 1, ${a.year}`).valueOf()), [items]);
 
   return (
     <ScrollArea className="h-[calc(100vh-200px)]">
       {filteredItems && filteredItems.length > 0 ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredItems.map((item, index) => (
-            <HistoryItem key={item.id} item={item} index={index} />
+            <HistoryItem key={`${item.year}-${item.month}`} item={item} index={index} />
           ))}
         </div>
       ) : (

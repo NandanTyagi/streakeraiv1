@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useContext } from "react";
-import { useSearchParams, useParams, useRouter } from "next/navigation";
+import { useSearchParams, useParams } from "next/navigation";
 import { AppContext } from "@/context/appContext";
 import fetchPanelById from "@/utils/v2/fetchPanelById";
 import useV3Engine from "@/utils/useV3Engine";
@@ -12,138 +12,62 @@ import StreakerHistoryGrid from "@/components/v1/StreakerHistoryGrid";
 import Nav from "@/components/Nav";
 import Loading from "@/components/Loading";
 
-const PanelPage = () => {
-  const router = useRouter();
+export default function HistoryPanelPage() {
   const searchParams = useSearchParams();
   const { id } = useParams();
-
-  const currentYear = searchParams.get("year");
-  const currentMonth = searchParams.get("month");
-  const indexParam = searchParams.get("index");
-  const historyIndex = indexParam ? parseInt(indexParam, 10) : 0;
-
-  const { currentHistoryPanel, setCurrentHistoryPanel } = useContext(AppContext);
-  const { user } = useAppAuth();
+  const year = searchParams.get("year");
+  const month = searchParams.get("month");
+  const { setCurrentHistoryPanel } = useContext(AppContext);
+  const { user, isLoading } = useAppAuth();
+  const email = user?.email;
   const isV3 = useV3Engine();
+  const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // Initialize state with context value (if available)
-  const [panel, setPanel] = useState(currentHistoryPanel);
-  const [loading, setLoading] = useState(false);
-  const [localHistoryCells, setLocalHistoryCells] = useState(
-    currentHistoryPanel?.cells || []
-  );
-  const [historyItem, setHistoryItem] = useState(null);
-
-  // Fetch the panel whenever the id (or history index) changes.
   useEffect(() => {
-    if (!id) {
-      console.warn("No ID provided. Skipping fetch...");
-      setPanel(null);
-      setLocalHistoryCells([]);
-      return;
-    }
-
-    const fetchPanel = async () => {
+    if (isLoading) return;
+    let cancelled = false;
+    async function load() {
       setLoading(true);
+      setError("");
+      setItem(null);
+      setCurrentHistoryPanel(undefined);
       try {
+        const date = dayjs(`${month} 1, ${year}`);
+        if (!id || !year || !month || !date.isValid()) throw new Error("Choose a valid history month.");
+        if (!email) throw new Error("Please sign in to view your history.");
+        let entry;
         if (isV3) {
-          if (!user?.email) {
-            setPanel(null);
-            return;
-          }
-          const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
-          const monthDate = new Date(`${currentMonth} 1, ${currentYear}`);
-          const monthKey = dayjs(monthDate).format("YYYY-MM");
-          const fetchedPanel = await loadBoardForMonth({
-            userId: user.email,
-            tz,
-            month: monthKey,
-            goalId: id,
-          });
-          setPanel(fetchedPanel);
-          if (fetchedPanel) {
-            const historyItem = {
-              year: currentYear,
-              month: currentMonth,
-              goalToAchieve: fetchedPanel.goalToAchieve,
-              habitsNames: fetchedPanel.habitsNames,
-              habitsValues: fetchedPanel.habitsValues,
-              days: fetchedPanel.days,
-              cells: fetchedPanel.cells,
-              v3: fetchedPanel.v3,
-            };
-            setHistoryItem(historyItem);
-            setCurrentHistoryPanel(historyItem);
-            setLocalHistoryCells(fetchedPanel.cells || []);
-          }
+          const panel = await loadBoardForMonth({userId: email, goalId: id,
+            tz: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+            month: date.format("YYYY-MM")});
+          entry = panel ? {...panel, year, month} : null;
         } else {
-          const fetchedPanel = await fetchPanelById(id);
-          setPanel(fetchedPanel);
-          console.log("Fetched panel:", fetchedPanel);
-          if (fetchedPanel?.history) {
-            // Use the provided index (converted to number) to update the context.
-            setCurrentHistoryPanel(fetchedPanel.history[historyIndex]);
-          }
+          const panel = await fetchPanelById(id);
+          entry = panel?.history?.find(value => String(value.year) === year && value.month === month);
+          if (!entry && panel && date.isSame(dayjs(), "month")) entry = {...panel, year, month};
         }
-      } catch (error) {
-        console.error("Error fetching panel by ID:", error);
+        if (!cancelled) {
+          setItem(entry);
+          setCurrentHistoryPanel(entry);
+        }
+      } catch {
+        if (!cancelled) setError("History could not be loaded. Please reload to try again.");
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
-    };
-
-    fetchPanel();
-  }, [id, historyIndex, currentMonth, currentYear, isV3, setCurrentHistoryPanel, user]);
-
-  // When the panel (or the selected year/month) changes,
-  // find the matching history entry and update local cells.
-  useEffect(() => {
-    if (isV3) {
-      return;
     }
-    if (!panel?.history) {
-      console.warn("No history found in panel. Skipping...");
-      return;
-    }
+    load();
+    return () => { cancelled = true; };
+  }, [id, year, month, email, isLoading, isV3, setCurrentHistoryPanel]);
 
-    const matchedHistoryEntry = panel.history.find(
-      (entry) => entry.year === currentYear && entry.month === currentMonth
-    );
-
-    setHistoryItem(matchedHistoryEntry);
-    setLocalHistoryCells(matchedHistoryEntry?.cells || []);
-  }, [panel, currentYear, currentMonth, isV3]);
-
-  // Show a loading spinner while fetching data.
-  if (loading) {
-    return (
-      <>
-        <Nav isNav={false} isHistory />
-        <Loading />
-      </>
-    );
-  }
-
-  // If no panel is found, show a no-data message.
-  if (!panel) {
-    return (
-      <>
-        <Nav isNav={false} isHistory currentHistoryItem={null} />
-        <p>No panel found (invalid ID or no data)</p>
-      </>
-    );
-  }
-
-  return (
-    <>
-      <Nav isNav={false} isHistory currentHistoryItem={historyItem} />
+  return <>
+    <Nav isNav={false} isHistory currentHistoryItem={item} />
+    {loading || isLoading ? <Loading /> : error || !item ?
+      <p role="status" className="p-4">{error || "No history found for this panel and month."}</p> :
       <main className="overflow-y-scroll relative z-10">
-        {localHistoryCells.length > 0 && (
-          <StreakerHistoryGrid board={panel} cells={localHistoryCells} />
-        )}
-      </main>
-    </>
-  );
-};
-
-export default PanelPage;
+        <StreakerHistoryGrid board={item} cells={item.cells || []} month={month} year={year} />
+      </main>}
+  </>;
+}

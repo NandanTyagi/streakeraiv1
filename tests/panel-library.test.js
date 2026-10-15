@@ -38,3 +38,20 @@ test("switching panels waits for all queued edits and reports failed saves",asyn
  queue.enqueue({id:1});const first=queue.retry();queue.enqueue({id:2});const drained=queue.drain();release();await first;await drained;assert.deepEqual(saved,[1,2]);queue.dispose();
  const broken=createAutosaveQueue({save:async()=>{throw Error()},onState(){},onSaved(){}});broken.enqueue({id:1});await assert.rejects(broken.drain());broken.dispose();
 });
+
+test("history reconstructs latest reviews, notes and month lengths for only the selected panel",()=>{
+ const goal={id:'one',title:'Original'};
+ const selected=[{id:'h1',goalId:'one',name:'Sleep',target:'8 hrs',order:0},{id:'h2',goalId:'one',name:'Read',target:'10 min',order:1}];
+ const event=(habitId,date,status,note='')=>({type:'DAY_STATE_UPSERTED',payload:{habitId,date,status,note}});
+ const items=buildHistoryItemsFromEvents({goal,habits:[...selected,{id:'other',goalId:'two',name:'Other',order:0}],events:[
+   event('h1','2024-02-29','done'),event('h1','2024-02-29','missed','Away'),
+   event('h2','2024-02-29','done'),event('h1','2025-10-01','done'),
+   event('other','2026-01-01','done'),
+ ]});
+ assert.deepEqual(items.map(i=>[i.year,i.month]),[['2025','October'],['2024','February']]);
+ assert.equal(items[1].cells.length,58);
+ assert.equal(items[1].habitsNames.length,2);
+ assert.equal(items[1].cells.filter(c=>c.isDone).length,1);
+ assert.equal(items[1].cells.filter(c=>!c.isDone&&!c.isClear).length,1);
+ assert.equal(items[1].cells.find(c=>c.id==='29-1').comment,'Away');
+});

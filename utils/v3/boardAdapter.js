@@ -58,12 +58,14 @@ export function buildHistoryItemsFromEvents({ events, goal, habits }) {
     const date = event.payload.date;
     const monthKey = date.slice(0, 7);
     if (!months.has(monthKey)) {
-      months.set(monthKey, { monthKey, year: date.slice(0, 4) });
+      months.set(monthKey, { monthKey, year: date.slice(0, 4), cells: new Map() });
     }
+    // Events arrive in replay order; the last review of a day wins.
+    months.get(monthKey).cells.set(`${event.payload.habitId}:${date}`, event.payload);
   }
 
-  const habitsOrdered = [...habits].sort((a, b) => a.order - b.order);
-  return Array.from(months.values()).map(({ monthKey, year }) => ({
+  const habitsOrdered = habits.filter(h => habitIds.has(h.id)).sort((a, b) => a.order - b.order);
+  return Array.from(months.values()).sort((a,b)=>b.monthKey.localeCompare(a.monthKey)).map(({ monthKey, year, cells }) => ({
     id: `${goal?.id || "goal"}-${monthKey}`,
     year,
     month: dayjs(`${monthKey}-01`).format("MMMM"),
@@ -71,6 +73,6 @@ export function buildHistoryItemsFromEvents({ events, goal, habits }) {
     habitsNames: habitsOrdered.map((habit) => habit.name),
     habitsValues: habitsOrdered.map((habit) => habit.target),
     days: dayjs(`${monthKey}-01`).daysInMonth(),
-    cells: [],
+    cells: buildBoardFromV3({goal, habits: habitsOrdered, month: monthKey, grid: {cells: Array.from(cells.values())}}).cells,
   }));
 }
