@@ -54,3 +54,15 @@ test("v3 autosave skips unchanged old marks, writes sequentially and persists cl
   assert.equal(writes.length,2); assert.equal(writes[0].status,'unreviewed'); assert.equal(writes[1].status,'done');
  } finally {globalThis.fetch=originalFetch;delete globalThis.window;}
 });
+
+test("history notes stay with their habit and use the selected month's dates", () => {
+ const stats=calculateHabitStats({year:"2024",month:"February",habitsNames:["Sleep","Meditate","Work"],cells:[
+   {rowNr:29,colNr:1,isDone:true,isClear:false,comment:"Slept well"},
+   {rowNr:3,colNr:2,isDone:false,isClear:true,comment:"First line\nSecond line"},
+   {rowNr:1,colNr:1,isDone:false,isClear:false,comment:"Late night"},
+   {rowNr:30,colNr:1,comment:"Outside February"},
+ ]},new Date(2026,9,15));
+ assert.deepEqual(stats[0].comments,[{text:"Late night",date:"Feb 1, 2024"},{text:"Slept well",date:"Feb 29, 2024"}]);
+ assert.deepEqual(stats[1].comments,[{text:"First line\nSecond line",date:"Feb 3, 2024"}]);
+ assert.deepEqual(stats[2].comments,[]);
+});

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useContext, useMemo, useState } from "react";
+import { useEffect, useRef, useContext, useMemo, useState, useId, Fragment } from "react";
 import { motion, useAnimation, useInView, useReducedMotion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
@@ -17,6 +17,7 @@ export interface Item {
   habitsValues: string[];
   days?: number;
   cells?: Array<{
+    comment?: string;
     rowNr?: number;
     colNr?: number;
     isDone?: boolean;
@@ -30,6 +31,8 @@ interface HistoryListProps {
 
 function HistoryItem({ item, index }: { item: Item; index: number }) {
   const { board, deleteHistoryMonth, panelBusy } = useContext(AppContext);
+  const notesId = useId();
+  const [expandedHabits, setExpandedHabits] = useState<number[]>([]);
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
@@ -45,7 +48,7 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const controls = useAnimation();
   const reduceMotion = useReducedMotion();
-  const habitStats = useMemo<Array<{colNr: number; headerName: string; isDone: number; missed: number; unreviewed: number}>>(() => calculateHabitStats(item), [item]);
+  const habitStats = useMemo<Array<{colNr: number; headerName: string; isDone: number; missed: number; unreviewed: number; comments: Array<{text: string; date: string}>}>>(() => calculateHabitStats(item), [item]);
   const stats = useMemo(() => habitStats.reduce((total, habit) => ({
     done: total.done + habit.isDone,
     missed: total.missed + habit.missed,
@@ -72,13 +75,10 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
         },
       }}
     >
-      <Link
-        href={`/history/${board._id}?year=${item.year}&month=${item.month}`}
-      >
         <Card className="min-h-0 justify-start overflow-hidden">
           <CardHeader className="p-4 pb-2 sm:p-5 sm:pb-2">
             <CardTitle className="text-xl leading-tight">
-              {item.month} {item.year}
+              <Link href={`/history/${board._id}?year=${item.year}&month=${item.month}`} className="hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">{item.month} {item.year}</Link>
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0 sm:p-5 sm:pt-0">
@@ -102,22 +102,39 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
                 </tr>
               </thead>
               <tbody>
-                {habitStats.map((habit, i) => (
-                  <tr key={habit.colNr} className="border-b border-[var(--surface-border)] last:border-0">
+                {habitStats.map((habit, i) => {
+                  const notes = habit.comments.filter(note => note.text.trim());
+                  const expanded = expandedHabits.includes(habit.colNr);
+                  return <Fragment key={habit.colNr}>
+                  <tr className="border-b border-[var(--surface-border)] last:border-0">
                     <th scope="row" className="py-3 pr-2 text-left font-medium [overflow-wrap:anywhere]">
                       {habit.headerName}
                       <span className="mt-0.5 block text-xs font-normal text-[var(--ink-soft)]">{item.habitsValues?.[i]}</span>
+                      {notes.length > 0 ? <button type="button" aria-expanded={expanded} aria-controls={`${notesId}-${habit.colNr}`} aria-label={`${expanded ? "Hide" : "Show"} ${notes.length} ${notes.length === 1 ? "note" : "notes"} for ${habit.headerName}`} onClick={() => setExpandedHabits(previous => expanded ? previous.filter(column => column !== habit.colNr) : [...previous, habit.colNr])} className="block min-h-[44px] text-xs font-normal underline underline-offset-4 hover:text-[var(--ink-soft)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+                        {expanded ? "Hide notes" : `${notes.length} ${notes.length === 1 ? "note" : "notes"}`}
+                      </button> : <span className="mt-1 block text-xs font-normal text-[var(--ink-soft)]">No notes</span>}
                     </th>
                     <td className="text-center font-semibold text-[var(--success)]">{habit.isDone}</td>
                     <td className="text-center font-semibold text-[var(--danger)]">{habit.missed}</td>
                     <td className="text-right text-[var(--ink-soft)]">{habit.unreviewed}</td>
                   </tr>
-                ))}
+                  <tr id={`${notesId}-${habit.colNr}`} hidden={!expanded}>
+                    <td colSpan={4} className="pb-3">
+                      <ul aria-label={`Notes for ${habit.headerName}`} className="space-y-3 rounded-md bg-[var(--paper)] p-3">
+                        {notes.map((note, index) => <li key={`${note.date}-${index}`}>
+                          <p className="mb-1 text-xs font-medium text-[var(--ink-soft)]">{note.date}</p>
+                          <p className="whitespace-pre-wrap text-sm leading-relaxed [overflow-wrap:anywhere]">{note.text}</p>
+                        </li>)}
+                      </ul>
+                    </td>
+                  </tr>
+                  </Fragment>;
+                })}
               </tbody>
             </table>
+            <Link href={`/history/${board._id}?year=${item.year}&month=${item.month}`} className="mt-2 inline-flex min-h-[44px] items-center text-sm underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">View month</Link>
           </CardContent>
         </Card>
-      </Link>
       {canDelete && <div className="mt-2 px-2">
         {confirming ? <div role="group" aria-label={`Delete ${item.month} ${item.year}`} className="rounded-md border border-[var(--surface-border)] p-3">
           <p className="text-sm">Delete {item.month} {item.year} from this panel? Its marks and notes will be removed from history and statistics. This cannot be undone in the app.</p>
