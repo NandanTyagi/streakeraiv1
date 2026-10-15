@@ -3,7 +3,6 @@
 import { useEffect, useRef, useContext, useMemo, useState } from "react";
 import { motion, useAnimation, useInView, useReducedMotion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import { AppContext } from "../context/appContext";
 import dayjs from "dayjs";
@@ -76,53 +75,44 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
       <Link
         href={`/history/${board._id}?year=${item.year}&month=${item.month}`}
       >
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              {item.month} - {item.year}
+        <Card className="min-h-0 justify-start overflow-hidden">
+          <CardHeader className="p-4 pb-2 sm:p-5 sm:pb-2">
+            <CardTitle className="text-xl leading-tight">
+              {item.month} {item.year}
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="mt-2 mb-2 text-base font-semibold text-muted-foreground">
+          <CardContent className="p-4 pt-0 sm:p-5 sm:pt-0">
+            <div className="mb-3 text-sm leading-relaxed text-[var(--ink-soft)]">
               {item.goalToAchieve}
             </div>
-            <div className="mb-3 grid grid-cols-3 gap-2 text-xs font-semibold">
-              <div className="rounded-md border border-[var(--surface-border)] bg-[var(--success-veil)] px-2 py-1 text-center text-[var(--success)]">
-                Done {stats.done}
-              </div>
-              <div className="rounded-md border border-[var(--surface-border)] bg-[var(--danger-veil)] px-2 py-1 text-center text-[var(--danger)]">
-                Missed {stats.missed}
-              </div>
-              <div className="rounded-md border border-[var(--surface-border)] bg-[var(--paper-veil)] px-2 py-1 text-center text-[var(--ink)]">
-                Unreviewed {stats.unreviewed}
-              </div>
+            <div className="mb-4 flex flex-wrap gap-x-4 gap-y-1 text-xs [font-family:var(--font-sans)]">
+              <span className="text-[var(--success)]"><strong>{stats.done}</strong> done</span>
+              <span className="text-[var(--danger)]"><strong>{stats.missed}</strong> missed</span>
+              <span className="text-[var(--ink-soft)]"><strong>{stats.unreviewed}</strong> unreviewed</span>
             </div>
-            <table className="w-full table-fixed text-[10px] tabular-nums">
+            <table className="w-full table-fixed text-sm tabular-nums [font-family:var(--font-sans)]">
               <caption className="sr-only">Daily counts for each habit in {item.month} {item.year}</caption>
+              <colgroup><col className="w-[38%]"/><col className="w-[18%]"/><col className="w-[18%]"/><col className="w-[26%]"/></colgroup>
               <thead>
-                <tr>
-                  <th scope="col" className="w-[22%] text-left py-2 pr-1 font-medium text-[var(--ink-soft)]">Status</th>
-                  {habitStats.map((habit, i) => (
-                    <th key={habit.colNr} scope="col" className="px-1 py-2 align-top text-center font-semibold [overflow-wrap:anywhere]">
-                      {habit.headerName}
-                      <span className="block mt-1 text-[9px] font-normal text-[var(--ink-soft)]">{item.habitsValues?.[i]}</span>
-                    </th>
-                  ))}
+                <tr className="border-b border-[var(--surface-border)] text-[10px] sm:text-xs text-[var(--ink-soft)]">
+                  <th scope="col" className="pb-2 pr-2 text-left font-medium">Habit</th>
+                  <th scope="col" className="pb-2 text-center font-medium">Done</th>
+                  <th scope="col" className="pb-2 text-center font-medium">Missed</th>
+                  <th scope="col" className="pb-2 text-right font-medium">Unreviewed</th>
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-t border-[var(--surface-border)]">
-                  <th scope="row" className="py-3 pr-1 text-left font-medium">Done</th>
-                  {habitStats.map(habit => <td key={habit.colNr} className="px-1 text-center text-xs font-semibold text-[var(--success)]">{habit.isDone}</td>)}
-                </tr>
-                <tr className="border-t border-[var(--surface-border)]">
-                  <th scope="row" className="py-3 pr-1 text-left font-medium">Missed</th>
-                  {habitStats.map(habit => <td key={habit.colNr} className="px-1 text-center text-xs font-semibold text-[var(--danger)]">{habit.missed}</td>)}
-                </tr>
-                <tr className="border-t border-[var(--surface-border)]">
-                  <th scope="row" className="py-3 pr-1 text-left text-[9px] font-medium">Unreviewed</th>
-                  {habitStats.map(habit => <td key={habit.colNr} className="px-1 text-center text-xs text-[var(--ink-soft)]">{habit.unreviewed}</td>)}
-                </tr>
+                {habitStats.map((habit, i) => (
+                  <tr key={habit.colNr} className="border-b border-[var(--surface-border)] last:border-0">
+                    <th scope="row" className="py-3 pr-2 text-left font-medium [overflow-wrap:anywhere]">
+                      {habit.headerName}
+                      <span className="mt-0.5 block text-xs font-normal text-[var(--ink-soft)]">{item.habitsValues?.[i]}</span>
+                    </th>
+                    <td className="text-center font-semibold text-[var(--success)]">{habit.isDone}</td>
+                    <td className="text-center font-semibold text-[var(--danger)]">{habit.missed}</td>
+                    <td className="text-right text-[var(--ink-soft)]">{habit.unreviewed}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </CardContent>
@@ -143,16 +133,15 @@ function HistoryItem({ item, index }: { item: Item; index: number }) {
 }
 
 export default function HistoryList({ items }: HistoryListProps) {
-  const { setCurrentHistoryPanel, currentHistoryPanel } = useContext(AppContext);
 
   const filteredItems = useMemo(() => [...(items || [])]
     .filter(item => item.year && item.month)
     .sort((a, b) => dayjs(`${b.month} 1, ${b.year}`).valueOf() - dayjs(`${a.month} 1, ${a.year}`).valueOf()), [items]);
 
   return (
-    <ScrollArea className="h-[calc(100vh-200px)]">
+    <div>
       {filteredItems && filteredItems.length > 0 ? (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2 xl:grid-cols-3">
           {filteredItems.map((item, index) => (
             <HistoryItem key={`${item.year}-${item.month}`} item={item} index={index} />
           ))}
@@ -162,6 +151,6 @@ export default function HistoryList({ items }: HistoryListProps) {
           Your past history will be displayed here.
         </div>
       )}
-    </ScrollArea>
+    </div>
   );
 }
