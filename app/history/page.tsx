@@ -15,6 +15,6 @@ export default function HistoryPage() {
   return <main className="container mx-auto py-10 px-4 bg-[var(--paper)]">
     <h1 className="text-3xl font-semibold text-center mb-8 text-[var(--ink)]">My History</h1>
     {panelError && <p role="alert">{panelError}</p>}
-    {isAppLoading ? <p>Loading history…</p> : <HistoryList items={items} />}
+    {isAppLoading ? <p>Loading historyâ€¦</p> : <HistoryList items={items} />}
   </main>;
 }
