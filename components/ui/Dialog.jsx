@@ -76,19 +76,19 @@ const DialogButton = ({ habit = null, value, onChange, isHistory }) => {
       <Dialog.Trigger asChild disabled={isHistory}>
         <button
           className={`Button violet cursor-pointer${
-            fitEnabled ? " intention-title" : ""
+            fitEnabled ? " intention-title" : " practice-header"
           }`}
           ref={fitEnabled ? containerRef : null}
           type="button"
           aria-label={habit ? `Edit ${habit}` : "Edit intention"}
         >
           {habit && (
-            <span className="text-[0.8rem] text-center sm:text-[0.9rem] sm:font-semibold">
+            <span className="practice-name">
               {habit}
             </span>
           )}
           {habit && (
-            <span className="text-[0.6rem] text-center sm:font-semibold">
+            <span className="practice-target">
               {value}
             </span>
           )}

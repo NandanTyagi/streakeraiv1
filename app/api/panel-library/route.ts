@@ -33,7 +33,7 @@ export async function POST(req: Request) {
   const user=await getAppUser();
   if (!user?.email) return Response.json({error:"Please sign in."},{status:401});
   const parsed=habitDraftSchema.extend({draftId:z.string().uuid(),tz:z.string().max(100).default("UTC")}).safeParse(await req.json().catch(()=>null));
-  if (!parsed.success) return Response.json({error:"A panel needs a title and five named habits with targets."},{status:400});
+  if (!parsed.success) return Response.json({error:"A panel needs a title and 1 to 5 named practices with targets."},{status:400});
   try {
     if (isV3) {
       const result=await createPanelHandler({...parsed.data,userId:user.email},await buildHandlerDeps());

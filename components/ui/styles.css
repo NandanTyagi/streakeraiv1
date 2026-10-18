@@ -184,3 +184,34 @@ input {
     transform: translate(-50%, -50%) scale(1);
   }
 }
+
+/* Consistent name and target rows keep the five narrow columns aligned. */
+.Button.practice-header {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 44px;
+  gap: 4px;
+  padding: 4px 0;
+}
+.practice-name {
+  width: 100%;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.15;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.practice-target {
+  width: 100%;
+  font-size: 0.65rem;
+  font-weight: 400;
+  line-height: 1.15;
+  text-align: center;
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+@media (min-width: 640px) {
+  .practice-name { font-size: 0.9rem; }
+  .practice-target { font-size: 0.75rem; }
+}

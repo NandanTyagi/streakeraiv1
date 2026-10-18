@@ -47,3 +47,16 @@ test("rows retain size while today moves down then stays at the bottom", () => {
     assert.ok(rects.every((rect,i) => i === 0 || rect.y - rects[i-1].y === 42));
   }
 });
+
+
+test("display renders the selected 1-5 columns at equal widths inside the image", () => {
+  for (let count=1;count<=5;count++) {
+    const rects=[];
+    const ctx={fillRect(){},strokeRect(x,y,w,h){rects.push({x,y,w,h});},beginPath(){},moveTo(){},lineTo(){},stroke(){},measureText(t){return {width:t.length*7};},fillText(){}};
+    drawDisplay({getContext(){return ctx;}},{goalToAchieve:'Routine',habitsNames:['Read','Write','Walk','Rest','Stretch'].slice(0,count),habitsValues:Array(count).fill('10 min'),cells:[]},new Date(2026,9,17));
+    assert.equal(rects.length,count*14);
+    assert.ok(rects.every(rect=>rect.x>=58 && rect.x+rect.w<=466.01));
+    assert.ok(rects.every(rect=>rect.w===rects[0].w));
+    assert.equal(rects.filter(rect=>rect.y===169).length,count);
+  }
+});

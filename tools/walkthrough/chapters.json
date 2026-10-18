@@ -1,0 +1,47 @@
+[
+  {
+    "id": "welcome",
+    "title": "Your practice, made visible",
+    "text": "Welcome to Streaker. This mobile walkthrough uses an example panel to show you how to turn an intention into a daily record."
+  },
+  {
+    "id": "create",
+    "title": "Start a new panel",
+    "text": "Sign in, then tap New panel. Write your intention and choose one to five practices. Tap Draft practices for AI suggestions, or enter your own. Review the draft, then tap Save panel."
+  },
+  {
+    "id": "marks",
+    "title": "Record what happened",
+    "text": "Each column is a practice. Tap a day once for a tick: done. Tap again for a cross: missed. Tap once more to leave it unreviewed. Pause between taps so they register separately."
+  },
+  {
+    "id": "notes",
+    "title": "Add a little context",
+    "text": "To add a note, press and hold a marked cell for two seconds. Write what you want to remember, then tap Done. Hold that cell again whenever you want to edit the note."
+  },
+  {
+    "id": "edit",
+    "title": "Make each column yours",
+    "text": "Tap a column heading to edit it. Change the Activity name and its Value, such as ten minutes. Close the dialog when you finish. Changes to saved panels save automatically. New drafts need Save panel."
+  },
+  {
+    "id": "dashboard",
+    "title": "See the bigger picture",
+    "text": "Open the menu and choose Dashboard. See completed, missed, and unreviewed days, alongside your streaks and trends. Expand Notes under a practice to read the context behind your record."
+  },
+  {
+    "id": "profile",
+    "title": "Find your display link",
+    "text": "In the menu, open Profile and settings. Your display link shows your main panel. Use Copy link, or Open display to preview it. Choose which saved panel appears on the display from the Panels section."
+  },
+  {
+    "id": "display",
+    "title": "Bring your practice into view",
+    "text": "Open the link on a tablet, computer, or a screen that supports a web browser or image URL. It is an image, so refresh the screen to see new changes, or configure automatic refresh on your device. Anyone with the link can view it."
+  },
+  {
+    "id": "finish",
+    "title": "Return, one day at a time",
+    "text": "If the image needs updating, use Update display in your profile. Then return to your ledger. Record the day, add a note when it helps, and let your practice take shape over time."
+  }
+]

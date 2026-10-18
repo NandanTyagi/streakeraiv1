@@ -50,7 +50,7 @@ const HeaderItem = ({ column, description, value, isHistory }) => {
   }, [activityInputLocal, valueInputLocal, board, user]);
 
   return (
-    <div className="flex flex-col justify-center text-[0.65rem] items-center mb-[0]">
+    <div className="flex min-w-0 flex-col justify-center text-[0.65rem] items-center">
       <Dialog
         habit={activityInputLocal || description || ' '}
         value={valueInputLocal || value || ' '}

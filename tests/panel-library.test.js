@@ -29,7 +29,7 @@ test("autosave selects the requested goal, never the first goal",async()=>{
  try{await ensureGoalAndHabits({board:{_id:'second',goalToAchieve:'Reading',habitsNames:habits.map(h=>h.name),habitsValues:habits.map(h=>h.target)},userId:'u',tz:'UTC'});assert.ok(calls.some(([url])=>url.includes('goalId=second')));assert.equal(calls.some(([,options])=>options?.method==='PATCH'),false);await assert.rejects(ensureGoalAndHabits({board:{_id:'missing'},userId:'u',tz:'UTC'}));}finally{globalThis.fetch=original;delete globalThis.window;}
 });
 test("Identify validates complete structured output and surfaces upstream failures",async()=>{
- const valid={title:'Reading',habits,explanation:'Daily reading'};
+ const valid={title:'Reading',habits:['Read','Write','Walk','Rest','Stretch'].map(name=>({name,target:'10 min'})),explanation:'Daily reading'};
  const data=await generatePanelDraft('Read each day',async(url,options)=>{assert.equal(url,'https://api.openai.com/v1/chat/completions');assert.equal(JSON.parse(options.body).response_format.type,'json_schema');return Response.json({choices:[{finish_reason:'stop',message:{content:JSON.stringify(valid)}}]});});assert.equal(data.habits.length,5);
  for(const response of [{choices:[{finish_reason:'length',message:{content:'{}'}}]},{choices:[{finish_reason:'stop',message:{refusal:'No'}}]},{choices:[{finish_reason:'stop',message:{content:JSON.stringify({...valid,habits:[]})}}]}])await assert.rejects(generatePanelDraft('Read',async()=>Response.json(response)));
  await assert.rejects(generatePanelDraft('Read',async()=>new Response('',{status:401})),error=>error.status===401);

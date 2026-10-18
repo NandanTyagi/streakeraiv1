@@ -66,6 +66,11 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
             <span className="block mb-2 text-sm font-semibold">Switch panel</span>
             <PanelSwitcher />
           </li>}
+          {user && <li>
+            <Link href="/profile" onClick={handleMenuClick} aria-current={pathname === "/profile" ? "page" : undefined}>
+              <StandardButton text="Profile & settings" type="pill" />
+            </Link>
+          </li>}
           <li>
             <Link href="/about" onClick={handleMenuClick} className={`${pathname === "/about" ? "opacity-50" : ""} cursor-pointer`}>
               <StandardButton text="About" type="pill" />

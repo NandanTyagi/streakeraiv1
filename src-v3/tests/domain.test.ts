@@ -13,16 +13,18 @@ function test(name: string, run: () => void) {
   tests.push({ name, run });
 }
 
-test("DayState reversal is forbidden by default", () => {
+test("DayState marks can be corrected or cleared with legacy configuration", () => {
+  for (const status of ["done", "not_done", "unreviewed"] as const) {
   const validation = validateDayStateUpsert({
     habitId: "hab_1",
     date: "2025-02-10",
-    status: "not_done",
+    status,
     today: "2025-02-10",
     existing: { habitId: "hab_1", date: "2025-02-10", status: "done", updatedAt: "2025-02-10T00:00:00Z" },
     config: { allowReversal: false, backdateWindowDays: 7 },
   });
-  assert.equal(validation.ok, false);
+  assert.equal(validation.ok, true, status);
+  }
 });
 
 test("Streak computation is deterministic", () => {

@@ -17,10 +17,10 @@ const StreakerGrid = () => {
 
   return (
     <>
-      <section className={`${styles.streakerGrid}`} data-role="streaker-grid">
+      <section className={`${styles.streakerGrid}`} data-role="streaker-grid" style={{ "--practice-count": habits.length || 5 }}>
         <StreakerGridHeaders />
       </section>
-      <section className={styles.streakerGrid} data-role="streaker-grid">
+      <section className={styles.streakerGrid} data-role="streaker-grid" style={{ "--practice-count": habits.length || 5 }}>
         {isAppLoading ? <Loading /> :
           Array.from({ length: days }).map((item, i) =>
             habits.map((habit, j) => {

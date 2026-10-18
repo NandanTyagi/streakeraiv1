@@ -24,7 +24,7 @@ const StreakerEmptyGrid = () => {
   const days = getDaysInMonth(new Date());
   const tagArr = getDayTagArray(new Date(), days);
 
-  useMobileGridFit();
+  useMobileGridFit({ fitDesktop: true });
 
   // useEffect(() => {
   //   const fetchUsersFromDb = async () => {
@@ -56,10 +56,10 @@ const StreakerEmptyGrid = () => {
         <div className="px-4 py-3 text-center text-sm text-[var(--ink-soft)] border-b border-[var(--surface-border)] bg-[var(--paper-veil)]">
           Sign in to preserve the ledger. You can still rehearse the grid below.
         </div>
-        <section className={styles.streakerGrid} data-role="streaker-grid">
+        <section className={styles.streakerGrid} data-role="streaker-grid" style={{ "--practice-count": habits.length || 5 }}>
           <StreakerGridHeaders />
         </section>
-        <section className={styles.streakerGrid} data-role="streaker-grid">
+        <section className={styles.streakerGrid} data-role="streaker-grid" style={{ "--practice-count": habits.length || 5 }}>
           {Array.from({ length: days }).map((_, dayIndex) => {
             const today = dayjs().format("D");
 
@@ -71,8 +71,8 @@ const StreakerEmptyGrid = () => {
               return {
                 rowNr: dayIndex + 1,
                 colNr: colIndex + 1,
-                isDone: cell?.isDone,
-                isClear: cell?.isClear,
+                isDone: cell?.isDone ?? false,
+                isClear: cell?.isClear ?? true,
                 message: cell?.comment || "",
                 isToday: dayIndex + 1 === today,
               };

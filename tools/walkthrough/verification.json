@@ -1,0 +1,72 @@
+{
+  "file": "public/videos/streaker-mobile-walkthrough.mp4",
+  "revision": 2,
+  "bytes": 5706064,
+  "sha256": "683fb584e512a00295f023e98b94c27ffcb3e2a160fabfdc42cc70fcc200476a",
+  "fullDecodePassed": true,
+  "chapters": 9,
+  "captionsMatchNarration": true,
+  "renderTimeGridGutterAssertion": true,
+  "encodedReviewFrames": [
+    {
+      "chapter": "welcome",
+      "seconds": 6.75,
+      "output": "public/review-encoded-welcome-0.6.png"
+    },
+    {
+      "chapter": "create",
+      "seconds": 30.583333333333332,
+      "output": "public/review-encoded-create-0.95.png"
+    },
+    {
+      "chapter": "marks",
+      "seconds": 33.541666666666664,
+      "output": "public/review-encoded-marks-0.1.png"
+    },
+    {
+      "chapter": "marks",
+      "seconds": 37.375,
+      "output": "public/review-encoded-marks-0.3.png"
+    },
+    {
+      "chapter": "marks",
+      "seconds": 43.166666666666664,
+      "output": "public/review-encoded-marks-0.6.png"
+    },
+    {
+      "chapter": "marks",
+      "seconds": 47.041666666666664,
+      "output": "public/review-encoded-marks-0.8.png"
+    },
+    {
+      "chapter": "notes",
+      "seconds": 66.04166666666667,
+      "output": "public/review-encoded-notes-0.95.png"
+    },
+    {
+      "chapter": "edit",
+      "seconds": 84.58333333333333,
+      "output": "public/review-encoded-edit-0.95.png"
+    },
+    {
+      "chapter": "dashboard",
+      "seconds": 96.375,
+      "output": "public/review-encoded-dashboard-0.6.png"
+    },
+    {
+      "chapter": "profile",
+      "seconds": 114.41666666666667,
+      "output": "public/review-encoded-profile-0.6.png"
+    },
+    {
+      "chapter": "display",
+      "seconds": 134.875,
+      "output": "public/review-encoded-display-0.6.png"
+    },
+    {
+      "chapter": "finish",
+      "seconds": 153.58333333333334,
+      "output": "public/review-encoded-finish-0.6.png"
+    }
+  ]
+}

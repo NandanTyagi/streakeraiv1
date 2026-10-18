@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "@remotion/bundler": "^4.0.536",
+    "@remotion/media": "^4.0.536",
+    "@remotion/renderer": "^4.0.536",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.536"
+  },
+  "private": true,
+  "name": "streaker-mobile-walkthrough",
+  "scripts": {
+    "render": "node render.mjs",
+    "stills": "node render.mjs --stills",
+    "voice": "node voice.mjs",
+    "verify": "node verify.mjs"
+  }
+}

@@ -82,11 +82,11 @@ const StreakerHistoryGrid: React.FC<StreakerHistoryGridProps> = ({
       ref={containerRef}
       className="relative max-h-[calc(100vh-180px)] overflow-auto"
     >
-      <section className={styles.streakerGrid} data-role="streaker-grid">
+      <section className={styles.streakerGrid} data-role="streaker-grid" style={{ "--practice-count": habits.length || 5 } as React.CSSProperties}>
         <StreakerGridHeaders isHistory month={month?.substring(0, 3)} />
       </section>
 
-      <section className={`${styles.streakerGrid}`} data-role="streaker-grid">
+      <section className={`${styles.streakerGrid}`} data-role="streaker-grid" style={{ "--practice-count": habits.length || 5 } as React.CSSProperties}>
         {Array.from({ length: days }).map((_, dayIndex) => {
           const today = dayjs().format("D");
 

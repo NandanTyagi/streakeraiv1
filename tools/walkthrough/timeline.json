@@ -1,0 +1,267 @@
+{
+  "fps": 24,
+  "duration": 3845,
+  "chapters": [
+    {
+      "id": "welcome",
+      "title": "Your practice, made visible",
+      "text": "Welcome to Streaker. This mobile walkthrough uses an example panel to show you how to turn an intention into a daily record.",
+      "start": 0,
+      "duration": 271,
+      "captions": [
+        {
+          "text": "Welcome to Streaker. This mobile walkthrough uses",
+          "start": 0.4,
+          "end": 5.093
+        },
+        {
+          "text": "an example panel to show you how to turn an intention",
+          "start": 5.093,
+          "end": 9.072000000000001
+        },
+        {
+          "text": "into a daily record.",
+          "start": 9.072000000000001,
+          "end": 10.48
+        }
+      ]
+    },
+    {
+      "id": "create",
+      "title": "Start a new panel",
+      "text": "Sign in, then tap New panel. Write your intention and choose one to five practices. Tap Draft practices for AI suggestions, or enter your own. Review the draft, then tap Save panel.",
+      "start": 271,
+      "duration": 488,
+      "captions": [
+        {
+          "text": "Sign in, then tap New panel. Write your intention",
+          "start": 0.4,
+          "end": 5.54
+        },
+        {
+          "text": "and choose one to five practices. Tap Draft practices",
+          "start": 5.54,
+          "end": 11.46
+        },
+        {
+          "text": "for AI suggestions, or enter your own. Review the",
+          "start": 11.46,
+          "end": 16.813
+        },
+        {
+          "text": "draft, then tap Save panel.",
+          "start": 16.813,
+          "end": 19.52
+        }
+      ]
+    },
+    {
+      "id": "marks",
+      "title": "Record what happened",
+      "text": "Each column is a practice. Tap a day once for a tick: done. Tap again for a cross: missed. Tap once more to leave it unreviewed. Pause between taps so they register separately.",
+      "start": 759,
+      "duration": 463,
+      "captions": [
+        {
+          "text": "Each column is a practice. Tap a day once for a tick:",
+          "start": 0.4,
+          "end": 5.5840000000000005
+        },
+        {
+          "text": "done. Tap again for a cross: missed. Tap once more",
+          "start": 5.5840000000000005,
+          "end": 12.56
+        },
+        {
+          "text": "to leave it unreviewed. Pause between taps so they",
+          "start": 12.56,
+          "end": 17.413
+        },
+        {
+          "text": "register separately.",
+          "start": 17.413,
+          "end": 18.479999999999997
+        }
+      ]
+    },
+    {
+      "id": "notes",
+      "title": "Add a little context",
+      "text": "To add a note, press and hold a marked cell for two seconds. Write what you want to remember, then tap Done. Hold that cell again whenever you want to edit the note.",
+      "start": 1222,
+      "duration": 383,
+      "captions": [
+        {
+          "text": "To add a note, press and hold a marked cell for two",
+          "start": 0.4,
+          "end": 4.640000000000001
+        },
+        {
+          "text": "seconds. Write what you want to remember, then tap",
+          "start": 4.640000000000001,
+          "end": 9.936
+        },
+        {
+          "text": "Done. Hold that cell again whenever you want to edit",
+          "start": 9.936,
+          "end": 14.5
+        },
+        {
+          "text": "the note.",
+          "start": 14.5,
+          "end": 15.120000000000001
+        }
+      ]
+    },
+    {
+      "id": "edit",
+      "title": "Make each column yours",
+      "text": "Tap a column heading to edit it. Change the Activity name and its Value, such as ten minutes. Close the dialog when you finish. Changes to saved panels save automatically. New drafts need Save panel.",
+      "start": 1605,
+      "duration": 448,
+      "captions": [
+        {
+          "text": "Tap a column heading to edit it. Change the Activity",
+          "start": 0.4,
+          "end": 4.481000000000001
+        },
+        {
+          "text": "name and its Value, such as ten minutes. Close the",
+          "start": 4.481000000000001,
+          "end": 9.361
+        },
+        {
+          "text": "dialog when you finish. Changes to saved panels save",
+          "start": 9.361,
+          "end": 14.298
+        },
+        {
+          "text": "automatically. New drafts need Save panel.",
+          "start": 14.298,
+          "end": 17.840999999999998
+        }
+      ]
+    },
+    {
+      "id": "dashboard",
+      "title": "See the bigger picture",
+      "text": "Open the menu and choose Dashboard. See completed, missed, and unreviewed days, alongside your streaks and trends. Expand Notes under a practice to read the context behind your record.",
+      "start": 2053,
+      "duration": 434,
+      "captions": [
+        {
+          "text": "Open the menu and choose Dashboard. See completed,",
+          "start": 0.4,
+          "end": 5.36
+        },
+        {
+          "text": "missed, and unreviewed days, alongside your streaks",
+          "start": 5.36,
+          "end": 9.860000000000001
+        },
+        {
+          "text": "and trends. Expand Notes under a practice to read",
+          "start": 9.860000000000001,
+          "end": 15.3
+        },
+        {
+          "text": "the context behind your record.",
+          "start": 15.3,
+          "end": 17.279999999999998
+        }
+      ]
+    },
+    {
+      "id": "profile",
+      "title": "Find your display link",
+      "text": "In the menu, open Profile and settings. Your display link shows your main panel. Use Copy link, or Open display to preview it. Choose which saved panel appears on the display from the Panels section.",
+      "start": 2487,
+      "duration": 432,
+      "captions": [
+        {
+          "text": "In the menu, open Profile and settings. Your display",
+          "start": 0.4,
+          "end": 5.344
+        },
+        {
+          "text": "link shows your main panel. Use Copy link, or Open",
+          "start": 5.344,
+          "end": 10.38
+        },
+        {
+          "text": "display to preview it. Choose which saved panel appears",
+          "start": 10.38,
+          "end": 15.173
+        },
+        {
+          "text": "on the display from the Panels section.",
+          "start": 15.173,
+          "end": 17.2
+        }
+      ]
+    },
+    {
+      "id": "display",
+      "title": "Bring your practice into view",
+      "text": "Open the link on a tablet, computer, or a screen that supports a web browser or image URL. It is an image, so refresh the screen to see new changes, or configure automatic refresh on your device. Anyone with the link can view it.",
+      "start": 2919,
+      "duration": 530,
+      "captions": [
+        {
+          "text": "Open the link on a tablet, computer, or a screen",
+          "start": 0.4,
+          "end": 4.5920000000000005
+        },
+        {
+          "text": "that supports a web browser or image URL. It is an",
+          "start": 4.5920000000000005,
+          "end": 10.08
+        },
+        {
+          "text": "image, so refresh the screen to see new changes,",
+          "start": 10.08,
+          "end": 14.64
+        },
+        {
+          "text": "or configure automatic refresh on your device. Anyone",
+          "start": 14.64,
+          "end": 19.567999999999998
+        },
+        {
+          "text": "with the link can view it.",
+          "start": 19.567999999999998,
+          "end": 21.279999999999998
+        }
+      ]
+    },
+    {
+      "id": "finish",
+      "title": "Return, one day at a time",
+      "text": "If the image needs updating, use Update display in your profile. Then return to your ledger. Record the day, add a note when it helps, and let your practice take shape over time.",
+      "start": 3449,
+      "duration": 396,
+      "captions": [
+        {
+          "text": "If the image needs updating, use Update display in",
+          "start": 0.4,
+          "end": 4.416
+        },
+        {
+          "text": "your profile. Then return to your ledger. Record",
+          "start": 4.416,
+          "end": 9.38
+        },
+        {
+          "text": "the day, add a note when it helps, and let your practice",
+          "start": 9.38,
+          "end": 14.144
+        },
+        {
+          "text": "take shape over time.",
+          "start": 14.144,
+          "end": 15.68
+        }
+      ]
+    }
+  ]
+}

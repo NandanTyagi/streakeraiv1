@@ -602,3 +602,18 @@ html[data-render-mode="snapshot-eink"] img[src*="spinner"] {
     gap: var(--m-gap, 4px);
   }
 }
+
+/* Desktop keeps the same compact ledger proportions as the phone. */
+@media (min-width: 768px) {
+  html[data-render-mode="interactive"] .main-layout.panel-layout {
+    max-width: 720px;
+    border-inline: 1px solid var(--surface-border);
+    --grid-gap: 4px;
+    --grid-header-height: 48px;
+  }
+}
+
+/* The introductory home page scrolls as one document, including its footer. */
+.main-layout-landing { height: 100dvh; overflow-y: auto; overflow-x: hidden; }
+.main-layout-landing .main-layout-shell { flex-shrink: 0; min-height: 100%; }
+.main-layout-landing .home-scroll { overflow: visible; flex: 1 0 auto; }

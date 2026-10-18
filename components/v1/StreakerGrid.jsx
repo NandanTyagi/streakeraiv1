@@ -23,7 +23,7 @@ const StreakerGrid = () => {
   const days = getDaysInMonth(new Date());
   const tagArr = getDayTagArray(new Date(), days);
 
-  useMobileGridFit();
+  useMobileGridFit({ fitDesktop: true });
 
   if (!board && !isAppLoading && !isLoading) return <p className="p-6 text-center text-sm">Choose New panel to create your first set of practices.</p>;
 
@@ -33,10 +33,10 @@ const StreakerGrid = () => {
         <Loading />
       ) : (
         <>
-          <section className={`${styles.streakerGrid}`} data-role="streaker-grid">
+          <section className={`${styles.streakerGrid}`} data-role="streaker-grid" style={{ "--practice-count": habits.length || 5 }}>
             <StreakerGridHeaders />
           </section>
-          <section className={styles.streakerGrid} data-role="streaker-grid">
+          <section className={styles.streakerGrid} data-role="streaker-grid" style={{ "--practice-count": habits.length || 5 }}>
             {Array.from({ length: days }).map((_, dayIndex) => {
               const today = dayjs().format("D");
 
