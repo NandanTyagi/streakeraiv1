@@ -630,7 +630,7 @@ html[data-render-mode="snapshot-eink"] img[src*="spinner"] {
   background: var(--paper);
   --grid-gutter: 8px;
   --grid-gap: 4px;
-  --grid-header-height: 64px;
+  --grid-header-height: 76px;
 }
 .frame-view-controls {
   display: flex;
@@ -691,3 +691,15 @@ html[data-render-mode="snapshot-eink"] img[src*="spinner"] {
 .frame-layout-fullscreen .frame-fullscreen-toggle { padding: 10px; background: transparent; opacity: 0.6; }
 .frame-layout-fullscreen .frame-fullscreen-toggle:hover,
 .frame-layout-fullscreen .frame-fullscreen-toggle:focus-visible { opacity: 1; }
+.frame-layout [data-role="streaker-grid"]:first-of-type {
+  background: #e8e1d6;
+  box-shadow: inset 0 -2px 0 #c6baaa;
+}
+.frame-layout .practice-header { gap: 6px; padding: 8px 4px; }
+.frame-layout .practice-name {
+  font-size: clamp(1rem, 2.3vw, 1.35rem);
+  font-weight: 750;
+  line-height: 1.15;
+  color: #24201c;
+}
+.frame-layout .practice-target { font-size: 0.9rem; font-weight: 500; color: #51483e; }
