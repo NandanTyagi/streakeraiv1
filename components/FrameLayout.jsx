@@ -49,6 +49,10 @@ export default function FrameLayout({ children }) {
   }
 
   return <div className={`frame-layout${fullscreen ? " frame-layout-fullscreen" : ""}`}>
+    <div className="frame-brand" aria-label="Streaker Beta">
+      <span className="frame-brand-icon" aria-hidden="true" />
+      <span>Streaker</span><span className="frame-brand-beta">Beta</span>
+    </div>
     <div className="frame-view-controls">
       <Link className="frame-back" href="/panel">Back to panel</Link>
       <button type="button" className="frame-fullscreen-toggle" onClick={toggleFullscreen}
