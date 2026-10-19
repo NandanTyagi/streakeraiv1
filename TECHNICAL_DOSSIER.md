@@ -1,3 +1,5 @@
+> Current fullscreen frame implementation and device evidence: [docs/frame-display.md](docs/frame-display.md).
+
 > Historical architecture snapshot: the authentication sections below predate the Clerk migration. See README.md (Authentication) and lib/auth.js for the current implementation.
 
 # 1. Repository Map

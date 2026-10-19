@@ -62,6 +62,8 @@ To get started with StreakerAi, follow these steps:
 
 ## Contributing
 
+Keep documentation current with behavior and setup changes; see [repository guidance](AGENTS.md).
+
 We welcome contributions from the community! To contribute to StreakerAi, follow these steps:
 
 1. **Fork the repository:**
@@ -138,13 +140,19 @@ For `streaker-v1.vercel.app`, set `NEXT_PUBLIC_CLERK_PROXY_URL=https://streaker-
 
 After deployment, verify the proxy under Clerk > Domains. Google production sign-in also requires custom Google OAuth credentials in Clerk, with `https://streaker-v1.vercel.app/__clerk/v1/oauth_callback` registered as an authorized redirect URI in Google Cloud. Development's shared Google credentials do not work in production.
 
+### Fullscreen frame display
+
+Select **Frame view** on the panel, then **Enter fullscreen**. The display keeps the Streaker logo, intention title, and prominent habit headers while fitting the grid to the screen. Frame view replaces the former View image shortcut.
+
+See [Frame display setup and verification](docs/frame-display.md) for the Android companion, Firefox, switching to Frameo, reboot behavior, and known limitations.
+
 ### E-ink display
 
 Signed-in panel edits save automatically after a short pause. Display-enabled accounts also update the display image after a successful save. The status shows progress or a **Retry** action if persistence or image generation fails. The image is rendered at
 480 Ã— 800 in black and white, showing days 1â€“14 initially as today moves down the grid. From day 15, the latest 14 days roll forward with today at the bottom and older days moving off the top. Row sizes stay fixed. It captures the current
 saved panel.
 
-The **View image** button is a stable, account-specific
+The image display endpoint provides a stable, account-specific
 image URL. Configure the frame to fetch that URL on its normal refresh schedule.
 Anyone with this unguessable URL can view the image, so treat it as a private link.
 Uploads require a verified signed-in account and are stored in MongoDB's
