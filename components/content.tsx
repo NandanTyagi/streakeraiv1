@@ -48,7 +48,7 @@ export default function Content() {
             </Card>
           ))}
         </div>
-        <div>
+        <div id="reading-list">
           <p className="text-sm uppercase tracking-[0.28em] text-[var(--ink-soft)] mb-4 sm:text-center">
             Sources of method
           </p>
@@ -57,7 +57,7 @@ export default function Content() {
             They are references, not prescriptions.
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <AnimatedCard
               title="The Compound Effect"
               tag="Darren Hardy"
@@ -74,6 +74,15 @@ export default function Content() {
               icon={<BookHeartIcon size={32} className="text-[var(--accent-color)]" />}
               btnText="Open"
               href="https://jamesclear.com/atomic-habits"
+              newWindow
+            />
+            <AnimatedCard
+              title="Getting Things Done"
+              tag="David Allen"
+              description="Capture what matters and make space for regular review."
+              icon={<BookHeartIcon size={32} className="text-[var(--accent-color)]" />}
+              btnText="Open"
+              href="https://gettingthingsdone.com/what-is-gtd/"
               newWindow
             />
             <AnimatedCard

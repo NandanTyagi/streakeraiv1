@@ -3,7 +3,7 @@ export default function Hero() {
     <section className="relative py-20 px-6 sm:px-10 border-b border-[var(--surface-border)]">
       <div className="max-w-3xl mx-auto">
         <p className="text-xs uppercase tracking-[0.32em] text-[var(--ink-soft)] mb-4 font-[var(--font-sans)]">
-          Streaker.ai
+          Streaker
         </p>
         <h1 className="text-4xl sm:text-5xl font-semibold text-[var(--ink)]">
           A continuity mirror for daily practice

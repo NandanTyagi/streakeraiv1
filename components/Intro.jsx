@@ -79,7 +79,7 @@ const Intro = () => {
             className={`font-bold  text-5xl sm:text-9xl text-white opacity-[1] mb-4 sm:mb-20`}
             id="streaker"
           >
-            Streaker.ai
+            Streaker
           </h1>
           <div className="w-[100%] flex justify-center items-center max-w-[400px] px-6" id="button">
           <StandardButton onClick={() => router.push("/generategoals")} widthSM="400" width="300" text="Identify your goals now!" type="pill" />

@@ -91,7 +91,7 @@ const Intro = () => {
       </div>
       <div className="flex flex-col justify-center bg-black place-items-center h-[100%] ">
         <h1 className={`font-bold  text-5xl sm:text-9xl text-white opacity-[1] mb-4`} id="streaker">
-          Streaker.ai
+          Streaker
         </h1>
         <Button id="button" type="button" onClick={() => router.push('/generategoals')} className="bg-[#530DA2] font-bold text-[1.1rem] sm:max-w-[300px] max-w-[200px] text-white cursor-pointer w-[stretch]">Identify your goals now!</Button>
       </div>

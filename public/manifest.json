@@ -1,6 +1,6 @@
 {
-  "name": "StreakerAI",
-  "short_name": "StreakerAI",
+  "name": "Streaker",
+  "short_name": "Streaker",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

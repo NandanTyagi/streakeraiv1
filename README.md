@@ -96,7 +96,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For questions or feedback, please contact us at support@streakerai.com.
+Visit [Streaker](https://streaker-v1.vercel.app). For questions or feedback, open an issue in this repository.
 
 ---
 
