@@ -1,7 +1,7 @@
 "use client";
 import { useContext, useState } from "react";
 import Link from "next/link";
-import { CalendarDays, RotateCcw, Plus, Star, Image as ImageIcon, Save, X } from "lucide-react";
+import { CalendarDays, RotateCcw, Plus, Star, Image as ImageIcon, Save, X, Maximize } from "lucide-react";
 import { AppContext } from "@/context/appContext";
 import SyncStatus from "./SyncStatus";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/shad-dialog";
@@ -20,6 +20,7 @@ export default function PanelFooterControls() {
         <button className={style} disabled={!board||panelBusy} onClick={()=>setResetOpen(true)}><RotateCcw size={18}/>Reset</button>
         <button className={style} disabled={!board||panelBusy||isMain} onClick={makeMainPanel} title={isMain?"This panel supplies the display image":"Use this panel for the display image"}><Star size={18} fill={isMain?"currentColor":"none"}/>{isMain?"Main panel":"Make main"}</button>
       </>}
+      <Link href="/panel/frame" className={style} title="Fill a display with this panel"><Maximize size={18}/>Frame view</Link>
       <Link href="/generategoals" className={style}><Plus size={18}/>New panel</Link>
       {!board?.isDraft&&(displayUrl?<a href={displayUrl} target="_blank" rel="noreferrer" className={style} aria-label="View main panel display image"><ImageIcon size={18}/>View image</a>:<button className={style} disabled><ImageIcon size={18}/>View image</button>)}
     </div>

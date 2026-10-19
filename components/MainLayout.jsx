@@ -1,5 +1,6 @@
 "use client";
 import Header from "@/components/Header";
+import FrameLayout from "./FrameLayout";
 import Footer from "@/components/Footer";
 import { usePathname } from "next/navigation";
 import { Toaster } from "./ui/toaster";
@@ -30,6 +31,9 @@ export default function MainLayout({ children }) {
 
 
 
+  if (pathname === "/panel/frame") {
+    return <FrameLayout><Toaster />{children}</FrameLayout>;
+  }
   if (pathname === "/") {
     return (
       <div className="main-layout-container main-layout-landing">

@@ -617,3 +617,54 @@ html[data-render-mode="snapshot-eink"] img[src*="spinner"] {
 .main-layout-landing { height: 100dvh; overflow-y: auto; overflow-x: hidden; }
 .main-layout-landing .main-layout-shell { flex-shrink: 0; min-height: 100%; }
 .main-layout-landing .home-scroll { overflow: visible; flex: 1 0 auto; }
+
+/* Dedicated frame view; normal panel dimensions remain unchanged. */
+.frame-layout {
+  width: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  --grid-gutter: 8px;
+  --grid-gap: 4px;
+  --grid-header-height: 64px;
+}
+.frame-view-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  min-height: 48px;
+  padding: 2px 12px;
+  border-bottom: 1px solid var(--surface-border);
+}
+.frame-back, .frame-fullscreen-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+.frame-fullscreen-toggle { border-radius: 6px; background: var(--paper-veil); }
+.frame-view-error { padding: 8px 16px; flex-shrink: 0; color: var(--danger); }
+.frame-layout > .panel-shell { width: 100%; max-width: none; }
+.frame-layout .panel-header { flex-shrink: 0; padding-inline: 52px; }
+.frame-layout .panel-scroll { width: 100%; max-width: none; overscroll-behavior: contain; }
+.frame-layout-fullscreen .frame-view-controls {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 20;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+}
+.frame-layout-fullscreen .frame-back { display: none; }
+.frame-layout-fullscreen .frame-fullscreen-toggle { padding: 10px; background: transparent; opacity: 0.6; }
+.frame-layout-fullscreen .frame-fullscreen-toggle:hover,
+.frame-layout-fullscreen .frame-fullscreen-toggle:focus-visible { opacity: 1; }
