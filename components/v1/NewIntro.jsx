@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Check, X } from "lucide-react";
 import DownloadApp from "./DownloadApp";
+import WalkthroughVideo from "@/components/WalkthroughVideo";
 import { useAppAuth } from "@/hooks/useAppAuth";
 import styles from "@/styles/Home.module.css";
 
@@ -110,7 +111,7 @@ export default function NewIntro() {
     <div className={styles.home} ref={homeRef}>
       <nav className={styles.nav} aria-label="Home navigation">
         <Link href="/" className={styles.brand} aria-label="Streaker home"><Image src="/streaker-logo.png" alt="" width={36} height={36} priority /><span>Streaker<span className={styles.beta}>BETA</span></span></Link>
-        <div className={styles.navLinks}><Link href="/about">About</Link><Link href={user ? "/panel" : "/sign-in"}>{user ? "Your ledger" : "Log in"}<ArrowRight size={15} aria-hidden="true" /></Link></div>
+        <div className={styles.navLinks}><a href="#walkthrough-title">Watch the guide</a><Link href="/about">About</Link><Link href={user ? "/panel" : "/sign-in"}>{user ? "Your ledger" : "Log in"}<ArrowRight size={15} aria-hidden="true" /></Link></div>
       </nav>
       <section className={styles.hero} aria-labelledby="home-title">
         <div>
@@ -131,6 +132,25 @@ export default function NewIntro() {
         <p className={styles.eyebrow}>From intention to action</p>
         <h2 id="how-title">Turning intention into a record.</h2>
         <ol className={styles.steps}>{steps.map(([title, description], i) => <li key={title}><span className={styles.number}>0{i + 1}</span><h3>{title}</h3><p>{description}</p></li>)}</ol>
+      </section>
+      <WalkthroughVideo />
+      <section className={`${styles.section} ${styles.displayFeature}`} aria-labelledby="display-title">
+        <div className={styles.displayCopy}>
+          <p className={styles.eyebrow}>Your practice, in view</p>
+          <h2 id="display-title">A quiet place<br />in your everyday space.</h2>
+          <p>Keep your record nearby on a compatible display. A wooden e-paper frame is one way to give your daily practice a place beyond your phone.</p>
+          <ol className={styles.displaySteps}>
+            <li><span>01</span><div><h3>Copy your display link</h3><p>Find it in Profile &amp; settings. The image shows your main panel.</p></div></li>
+            <li><span>02</span><div><h3>Open it on your screen</h3><p>Use a device that supports a web browser or an image URL.</p></div></li>
+            <li><span>03</span><div><h3>Keep the image current</h3><p>Refresh to see new marks, or set up automatic refresh on your device.</p></div></li>
+          </ol>
+          <Link className={styles.textLink} href={user ? "/profile" : "/sign-in"}>Find your display link<ArrowRight size={16} aria-hidden="true" /></Link>
+          <p className={styles.displayNote}>Anyone with your display link can view its image.</p>
+        </div>
+        <figure className={styles.displayFigure}>
+          <Image src="/images/display/streaker-oak-studio.jpg" alt="Streaker daily practice grid with ticks and crosses in a wooden e-paper frame and stand" width={896} height={1200} sizes="(max-width: 700px) 90vw, 45vw" />
+          <figcaption>One way to display your practice. Image based on a real Streaker setup.</figcaption>
+        </figure>
       </section>
       <section className={`${styles.section} ${styles.method}`} aria-labelledby="method-title">
         <div className={styles.sectionHeading}><div><p className={styles.eyebrow}>The method</p><h2 id="method-title">The structure beneath<br />the surface.</h2></div><Link className={styles.textLink} href="/about">Explore the philosophy<ArrowRight size={16} aria-hidden="true" /></Link></div>

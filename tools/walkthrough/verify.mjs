@@ -20,6 +20,6 @@ const bytes=fs.readFileSync(file);
 const norm=s=>s.replace(/\s+/g,' ').trim();
 const captionsMatchNarration=timeline.chapters.every(c=>norm(c.captions.map(x=>x.text).join(' '))===norm(c.text));
 if(!captionsMatchNarration)throw new Error('Caption mismatch');
-const verification={file:'public/videos/streaker-mobile-walkthrough.mp4',revision:2,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),fullDecodePassed:true,chapters:timeline.chapters.length,captionsMatchNarration,renderTimeGridGutterAssertion:true,encodedReviewFrames:samples};
+const verification={file:'public/videos/streaker-mobile-walkthrough.mp4',revision:3,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),fullDecodePassed:true,chapters:timeline.chapters.length,captionsMatchNarration,renderTimeGridGutterAssertion:true,encodedReviewFrames:samples};
 fs.writeFileSync('verification.json',JSON.stringify(verification,null,2)+'\n');
 console.log(JSON.stringify(verification,null,2));

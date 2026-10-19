@@ -41,6 +41,7 @@ function Scene({chapter,index}){
  const frame=useCurrentFrame(); const t=frame/timeline.fps; const p=frame/chapter.duration;
  const opacity=interpolate(frame,[0,8,chapter.duration-8,chapter.duration],[0,1,1,0],clamp);
  const id=chapter.id;
+ const productReveal=id==='display'?interpolate(p,[.13,.20],[0,1],clamp):0;
  let view;
  if(id==='create')view=p<.73?<Create p={p}/>:<Ledger mode="create" p={p} t={t}/>;
  else if(id==='dashboard')view=p<.2?<MenuScreen selected="Dashboard"/>:<Dashboard p={p}/>;
@@ -56,7 +57,7 @@ function Scene({chapter,index}){
  if(id==='edit')tap=p<.2?[323,114,.15]:[349,229,.88];
  if(id==='dashboard')tap=p<.2?[190,476,.12]:[280,434,.62];
  if(id==='profile')tap=p<.2?[190,228,.12]:[95,354,.5];
- return <AbsoluteFill style={{opacity}}><div className="chapterLabel">STREAKER / MOBILE GUIDE <span>{String(index+1).padStart(2,'0')} / 09</span></div><h1>{chapter.title}</h1><div className="phone"><div className="screen"><Header/>{view}{tap&&<Tap x={tap[0]} y={tap[1]} at={tap[2]*chapter.duration/timeline.fps} t={t} hold={id==='notes'&&p<.32?2:0}/>}</div></div><div className="demo">Illustrated mobile view / Example data</div><div className="caption">{caption?.text || ''}</div><div className="chapterProgress"><div style={{width:`${p*100}%`}}/></div><Sequence from={Math.round(.4*timeline.fps)}><Audio src={staticFile(`${id}.mp3`)}/></Sequence></AbsoluteFill>
+ return <AbsoluteFill style={{opacity}}><div className="chapterLabel">STREAKER / MOBILE GUIDE <span>{String(index+1).padStart(2,'0')} / 09</span></div><h1>{chapter.title}</h1><div className="phone" style={{opacity:1-productReveal}}><div className="screen"><Header/>{view}{tap&&<Tap x={tap[0]} y={tap[1]} at={tap[2]*chapter.duration/timeline.fps} t={t} hold={id==='notes'&&p<.32?2:0}/>}</div></div>{id==='display'&&<div className="physicalDisplay" style={{opacity:productReveal,transform:`translateY(${(1-productReveal)*22}px)`}}><p className="displayKicker">FROM YOUR PHONE TO YOUR EVERYDAY SPACE</p><Img src={staticFile('display-product.png')} className="productPhoto"/><div className="displayInstructions"><span>Copy your image URL</span><span>Open on a compatible display</span><span>Refresh to see new marks</span></div></div>}<div className="demo">{id==='display'&&productReveal>.5?'Display image based on a real Streaker setup':'Illustrated mobile view / Example data'}</div><div className="caption">{caption?.text || ''}</div><div className="chapterProgress"><div style={{width:`${p*100}%`}}/></div><Sequence from={Math.round(.4*timeline.fps)}><Audio src={staticFile(`${id}.mp3`)}/></Sequence></AbsoluteFill>
 }
 function Video(){return <AbsoluteFill style={{background:'#eee8de',color:C.ink,fontFamily:'Arial, sans-serif'}}>{timeline.chapters.map((c,i)=><Sequence key={c.id} from={c.start} durationInFrames={c.duration}><Scene chapter={c} index={i}/></Sequence>)}</AbsoluteFill>}
 registerRoot(()=> <Composition id="StreakerMobile" component={Video} width={720} height={1280} fps={timeline.fps} durationInFrames={timeline.duration}/>);

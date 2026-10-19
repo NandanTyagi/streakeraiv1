@@ -36,3 +36,8 @@ Voice API reference: https://elevenlabs.io/docs/api-reference/text-to-speech/con
 
 ## Framing verification
 The ledger reserves the footer height in normal flow and a 16 px gutter below its last row. A render-time layout assertion rejects overlap or a gutter below 15 px. The example-data label sits outside the phone. `npm run stills` includes tick, cross, blank, and closed-dialog grid states for visual review. Re-render the whole composition after layout changes; do not splice earlier clips into it.
+
+## Display photograph (revision 3)
+The display chapter transitions from the mobile image preview to a product cutout derived from the user's real oak-frame photograph. Narration, captions, chapter timing, and the corrected ledger gutter are retained. `render-display.mjs` renders this chapter and assembles it with the verified revision 2 video, preserving its audio; `render.mjs` still rebuilds the entire current composition from source.
+The homepage now includes the walkthrough and a display feature. The old YouTube embed has been removed from About.
+Image provenance and prompts: `../../public/images/display/README.md`.

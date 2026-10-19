@@ -1,7 +1,6 @@
 "use client";
 
 import Hero from "./hero";
-import VideoBlock from "./video-block";
 import WalkthroughVideo from "./WalkthroughVideo";
 import Content from "./content";
 import StandardButton from "./v1/StandardButton";
@@ -79,7 +78,6 @@ export default function About() {
         </div>
       </section>
       <Content />
-      <VideoBlock />
       <WalkthroughVideo />
     </div>
   );

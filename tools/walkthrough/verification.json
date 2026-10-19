@@ -1,8 +1,8 @@
 {
   "file": "public/videos/streaker-mobile-walkthrough.mp4",
-  "revision": 2,
-  "bytes": 5706064,
-  "sha256": "683fb584e512a00295f023e98b94c27ffcb3e2a160fabfdc42cc70fcc200476a",
+  "revision": 3,
+  "bytes": 6355145,
+  "sha256": "0d807f7927f4958f13a2dff1b7c01b6e060cb29ff28d768611f094676f249718",
   "fullDecodePassed": true,
   "chapters": 9,
   "captionsMatchNarration": true,

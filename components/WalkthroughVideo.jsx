@@ -24,12 +24,12 @@ export default function WalkthroughVideo() {
         <p className="mt-3 max-w-2xl text-[var(--ink-soft)]">A narrated mobile walkthrough: create a panel, record your days, add notes, and bring your practice onto a screen.</p>
         <div className="mt-8 grid items-start gap-8 md:grid-cols-[minmax(0,420px)_minmax(0,1fr)]">
           <div>
-            <video ref={video} controls playsInline preload="metadata" poster="/videos/streaker-mobile-poster.png?v=2" aria-label="Streaker mobile instruction video" className="mx-auto aspect-[9/16] w-full max-w-[420px] md:max-h-[70svh] md:w-auto rounded-xl border border-[var(--surface-border)] bg-[var(--paper)]">
-              <source src="/videos/streaker-mobile-walkthrough.mp4?v=2" type="video/mp4" />
+            <video ref={video} controls playsInline preload="metadata" poster="/videos/streaker-mobile-poster.png?v=3" aria-label="Streaker mobile instruction video" className="mx-auto aspect-[9/16] w-full max-w-[420px] md:max-h-[70svh] md:w-auto rounded-xl border border-[var(--surface-border)] bg-[var(--paper)]">
+              <source src="/videos/streaker-mobile-walkthrough.mp4?v=3" type="video/mp4" />
               <track kind="captions" src="/videos/streaker-mobile-walkthrough.vtt" srcLang="en" label="English" />
-              Your browser does not support embedded video. <a href="/videos/streaker-mobile-walkthrough.mp4?v=2">Download the walkthrough</a>.
+              Your browser does not support embedded video. <a href="/videos/streaker-mobile-walkthrough.mp4?v=3">Download the walkthrough</a>.
             </video>
-            <p className="mt-3 text-xs leading-relaxed text-[var(--ink-soft)]">2 min 40 sec | Illustrated mobile demonstration with example data. Includes on-screen captions and AI narration.</p>
+            <p className="mt-3 text-xs leading-relaxed text-[var(--ink-soft)]">2 min 40 sec | Mobile demonstration with example data and a real display setup. Includes captions and AI narration.</p>
           </div>
           <div>
             <h3 className="mb-3 text-lg font-semibold">Jump to a step</h3>
@@ -40,7 +40,7 @@ export default function WalkthroughVideo() {
               <summary className="min-h-[44px] cursor-pointer text-sm font-semibold">Read the full transcript</summary>
               <div className="space-y-5 pt-2 text-sm leading-relaxed">{chapters.map(chapter => <div key={chapter.id}><h4 className="font-semibold">{chapter.title}</h4><p className="mt-1 text-[var(--ink-soft)]">{chapter.text}</p></div>)}</div>
             </details>
-            <a href="/videos/streaker-mobile-walkthrough.mp4?v=2" download className="mt-5 inline-flex min-h-[44px] items-center text-sm underline underline-offset-4">Download the video</a>
+            <a href="/videos/streaker-mobile-walkthrough.mp4?v=3" download className="mt-5 inline-flex min-h-[44px] items-center text-sm underline underline-offset-4">Download the video</a>
           </div>
         </div>
       </div>
