@@ -10,7 +10,7 @@ Browser fullscreen requires a user gesture. After leaving the browser, reopening
 
 ## Android Frameo companion
 
-The tested frame is a Sandstrom SDPF1025 running Android 10 (API 29), with a 1200 x 1920 display. Frame Modes 0.1.4 (`dev.streaker.framemodes`) is a separate sideloaded companion, not part of this web repository. Its source/APK were delivered separately; do not assume this checkout can rebuild that APK.
+The tested frame is a Sandstrom SDPF1025 running Android 10 (API 29), with a 1200 x 1920 display. Frame Modes 0.1.5 (`dev.streaker.framemodes`) is a separate sideloaded companion, not part of this web repository. Its source/APK were delivered separately; do not assume this checkout can rebuild that APK.
 
 Configure the companion with:
 
@@ -18,13 +18,13 @@ Configure the companion with:
 - **Web dashboard** enabled.
 - **Open web dashboard in Firefox** enabled; Firefox must be installed separately.
 - Floating **Modes** button enabled. Tap it to switch modes; drag to reposition it.
-- **Restore the floating button after reboot** requests restoration, but actual reboot tests on this device failed. Do not rely on it for USB-free recovery after power cycling.
+- **Restore the floating button after reboot** enabled. Version 0.1.5 briefly shows Restoring Modes during boot, restores the overlay, and closes back to Frameo.
 
 The companion explicitly opens Firefox (`org.mozilla.firefox`). Firefox stores its own sign-in. The frame's old system WebView showed an application error during login; Firefox 158.0 ARMv7 successfully rendered the signed-in panel. The system WebView was not replaced.
 
 Frameo (`net.frameo.frame`) stays installed and remains the default Home app. No root, firmware replacement, disabling of apps, or default-launcher change is needed. After setup, USB is unnecessary for everyday use; the frame still needs power and internet access to load online content. For shutdown, use the frame's own shutdown controls before disconnecting power.
 
-The reboot option is intended to restore the floating button, not automatic Streaker launch or browser fullscreen. On this SDPF1025 it did not restore the button in repeated reboot tests. To undo it, turn off the option in companion settings. To return to family photos, use Modes and select Frameo.
+The reboot option restores the floating button, not automatic Streaker launch or browser fullscreen. The vendor background manager blocks direct background service starts, so 0.1.5 briefly opens a dedicated startup activity, starts the companion service while visible, and finishes back to Frameo. It does not modify the vendor allow-list, firmware, or default Home app. To undo it, turn off the option in companion settings. To return to family photos, use Modes and select Frameo.
 
 ## Implementation pointers
 
@@ -43,8 +43,9 @@ The reboot option is intended to restore the floating button, not automatic Stre
 - On the connected SDPF1025, the signed-in frame view displayed the logo, intention title, prominent headers, fitted rows through today, and one draggable Modes overlay. Fullscreen removed browser bars.
 - Firefox initially opened a blank tab; restarting the browser without clearing its data recovered the page and preserved sign-in.
 - Frameo still resolved as the default Home activity.
-- Actual reboot tests: Frameo started normally and the restore setting and overlay permission persisted, but Modes did not return. The boot receiver ran; its immediate foreground-service request returned null. Companion 0.1.4 added bounded overlay readiness retries and a one-shot delayed service retry; automatic restoration still failed. Manually opening the companion restored one overlay. Keep USB available for recovery after a restart. Prolonged sleep, overnight operation, and Firefox login persistence after reboot remain unverified.
-- Installed diagnostic companion 0.1.4 APK SHA-256: `5731e6f9d351e1efbbfbd5df8c5e6e478c7c640dff22fd97404eb574c6430f66`. This is not a verified fix for reboot restoration.
+- Earlier versions failed automatic restoration: the Allwinner background manager returned null for service starts outside its protected foreground task. Delayed retries did not fix this. Version 0.1.5 uses a brief visible startup activity instead; the overlay then restored automatically and Frameo resumed in two consecutive real reboot tests, without manually opening the companion. The restored Modes button opened the switcher successfully.
+- Firefox retained the signed-in panel after reboot. Its initial page briefly appeared signed out; a browser refresh restored the existing session. If this occurs, refresh before attempting sign-in again. Prolonged sleep, overnight operation, and a physical unplug/replug power cycle remain untested.
+- Installed companion 0.1.5 APK SHA-256: `d1cabae5707e279e12a631c930f0c676f7bb489ab268a91dc7222dd32cd14a49`.
 
 ## Image display remains separate
 
