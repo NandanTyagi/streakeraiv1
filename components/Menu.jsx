@@ -8,16 +8,20 @@ import {
   LogoutLink
 } from "@/components/auth/AuthLinks";
 import Footer from "@/components/Footer";
-import StandardButton from "./v1/StandardButton";
-import AddToHomeScreen from "./AddToHomeScreen";
 import { usePathname } from "next/navigation"; 
-import { useContext } from "react";
-import { AppContext } from "../context/appContext";
 import PanelSwitcher from "./v1/PanelSwitcher";
-import { LogOutIcon, LogInIcon, PenBoxIcon } from "lucide-react";
+import { LogOutIcon, LogInIcon, PenBoxIcon, Target, ListChecks, LayoutDashboard, History, Info, Settings } from "lucide-react";
+
+const navigationItems = [
+  { href: "/generategoals", label: "Identify", icon: Target },
+  { href: "/panel", label: "Track", icon: ListChecks },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, requiresUser: true },
+  { href: "/history", label: "My History", icon: History, requiresUser: true },
+  { href: "/about", label: "About", icon: Info },
+  { href: "/profile", label: "Profile & settings", icon: Settings, requiresUser: true },
+];
 
 const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
-  const { board } = useContext(AppContext);
   const pathname = usePathname();
   const handleMenuClick = () => {
     setIsMenuOpen();
@@ -62,40 +66,23 @@ const Menu = ({ user, isMenuOpen, setIsMenuOpen }) => {
       </nav>
       <nav className="relative mx-auto max-w-[600px] w-full min-h-0 flex-1 flex justify-center items-center overflow-y-auto py-12">
         <ul className="flex flex-col gap-4 w-full p-4">
+          {navigationItems.filter(item => !item.requiresUser || user).map(({ href, label, icon: Icon }) => (
+            <li key={href}>
+              <Link
+                href={href}
+                onClick={handleMenuClick}
+                aria-current={pathname === href ? "page" : undefined}
+                className={`inline-flex min-h-[44px] w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-[var(--ink)] bg-[var(--paper-veil)] px-4 py-2 text-center text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:bg-[var(--surface)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--focus-ring)] focus-visible:outline-offset-2 sm:text-base ${pathname === href ? "opacity-50" : ""}`}
+              >
+                <Icon size={20} className="shrink-0" aria-hidden="true" />
+                <span>{label}</span>
+              </Link>
+            </li>
+          ))}
           {user && <li className="rounded-xl border border-[var(--surface-border)] p-4">
             <span className="block mb-2 text-sm font-semibold">Switch panel</span>
             <PanelSwitcher />
           </li>}
-          {user && <li>
-            <Link href="/profile" onClick={handleMenuClick} aria-current={pathname === "/profile" ? "page" : undefined}>
-              <StandardButton text="Profile & settings" type="pill" />
-            </Link>
-          </li>}
-          <li>
-            <Link href="/about" onClick={handleMenuClick} className={`${pathname === "/about" ? "opacity-50" : ""} cursor-pointer`}>
-              <StandardButton text="About" type="pill" />
-            </Link>
-          </li>
-          <li>
-            <Link href="/generategoals" onClick={handleMenuClick} className={`${pathname === "/generategoals" ? "opacity-50" : ""} cursor-pointer`}>
-              <StandardButton text="Identify" type="pill" />
-            </Link>
-          </li>
-          <li>
-            <Link href="/panel" onClick={handleMenuClick} className={`${pathname === "/panel" ? "opacity-50" : ""} cursor-pointer`}>
-              <StandardButton text="Track" type="pill" />
-            </Link>
-          </li>
-          <li>
-            <Link href="/dashboard/" onClick={handleMenuClick} className={`${pathname === "/dashboard" ? "opacity-50" : ""} ${user ? "" : "hidden"} cursor-pointer`}>
-              <StandardButton text="Dashboard" type="pill" />
-            </Link>
-          </li>
-          <li>
-            <Link href="/history/" onClick={handleMenuClick} className={`${pathname === "/history" ? "opacity-50" : ""} ${user ? "" : "hidden"} cursor-pointer`}>
-              <StandardButton text="My History" type="pill" />
-            </Link>
-          </li>
         </ul>
       </nav>
       <Footer />
