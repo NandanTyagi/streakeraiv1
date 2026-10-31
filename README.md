@@ -51,7 +51,7 @@ To get started with StreakerAi, follow these steps:
 
 ## Usage
 
-The menu lists **Identify**, **Track**, **Dashboard**, **My History**, **About**, and **Profile & settings**, each with a matching icon. **Switch panel** sits below the navigation links. Dashboard, My History, Profile & settings, and the panel selector appear when signed in.
+The menu lists **Identify**, **Track**, **Dashboard**, **My History**, **About**, and **Profile & settings** in a left-aligned list with a fixed icon column. A tinted row and dot mark the current section; a divider separates About and Profile from the main activities. **Switch panel** sits at the bottom. Dashboard, My History, Profile & settings, and the panel selector appear when signed in. The entire menu scrolls on short screens.
 
 1. **Set Your Goal:**
    - Upon logging in, you will be prompted to set your personal goal.
